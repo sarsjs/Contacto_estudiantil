@@ -1,4 +1,4 @@
-﻿export type UserRole = "director" | "orientador" | "profesor" | "estudiante";
+export type UserRole = "director" | "orientador" | "profesor" | "estudiante";
 
 export interface User {
   id: string;
@@ -19,6 +19,7 @@ export interface Group {
 export interface Student {
   id: string;
   name: string;
+  email: string;
   avatarUrl: string;
   groupId: string;
   grades: { subjectId: string; grade: number | null }[];

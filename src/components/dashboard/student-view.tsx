@@ -27,7 +27,7 @@ import {
   fetchStudentByEmail,
   fetchSubjects,
   fetchTimetableByGroup,
-} from "@/lib/supabase/data";
+} from "@/lib/firebase/data";
 import type { Student, TimetableEntry } from "@/lib/types";
 
 const daysOfWeek: TimetableEntry["day"][] = [
@@ -107,7 +107,7 @@ export function StudentView() {
   const handleSendMessage = () => {
     const trimmed = newMessage.trim();
     if (!trimmed) return;
-    const updated = [
+    const updated: { sender: "student" | "counselor"; text: string }[] = [
       ...chatMessages,
       { sender: "student", text: trimmed },
       {

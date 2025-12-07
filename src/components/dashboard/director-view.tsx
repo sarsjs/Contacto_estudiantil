@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react";
-import { School, Users, User, FolderKanban, Trash2 } from "lucide-react";
+import { School, Users, User as UserIcon, FolderKanban, Trash2 } from "lucide-react";
 import { StatCard } from "./stat-card";
 import {
   Card,
@@ -41,8 +41,8 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { securityAlerts } from "@/lib/data";
 import { SecurityAlerts } from "./security-alerts";
-import type { Group, UserRole } from "@/lib/types";
-import { createGroup, createUser, fetchGroups, fetchUsers, removeUser } from "@/lib/supabase/data";
+import type { Group, User, UserRole } from "@/lib/types";
+import { addUser, fetchUsers, deleteUser, addGroup, fetchGroups } from "@/lib/firebase/data";
 
 export function DirectorView() {
   const [staffList, setStaffList] = React.useState<User[]>([]);
@@ -75,7 +75,7 @@ export function DirectorView() {
       setStaffList(users);
       setGroupList(groupsData);
     } catch (error) {
-      console.error("Error loading Supabase data", error);
+      console.error("Error loading Firebase data", error);
       toast({
         title: "Error al cargar datos",
         description: "No se pudieron obtener los datos del servidor.",
@@ -116,11 +116,10 @@ export function DirectorView() {
     const avatarUrl = `https://picsum.photos/seed/${avatarSeed}/100/100`;
 
     try {
-      await createUser({
+      await addUser({
         name: newStaffName,
         role: newStaffRole,
         email: newStaffEmail,
-        phone: "",
         avatarUrl,
       });
       toast({
@@ -143,7 +142,7 @@ export function DirectorView() {
 
   const handleRemoveStaff = async (staffId: string) => {
     try {
-      await removeUser(staffId);
+      await deleteUser(staffId);
       toast({
         title: "Personal eliminado",
         description: "El staff ya no aparece en el panel.",
@@ -168,7 +167,7 @@ export function DirectorView() {
     }
 
     try {
-      await createGroup({
+      await addGroup({
         name: newGroupName,
         cycleId: newGroupCycleId,
         counselorId: newGroupCounselorId,
@@ -231,7 +230,7 @@ export function DirectorView() {
           <StatCard
             title="Orientadores"
             value={counselorsList.length.toString()}
-            icon={User}
+            icon={UserIcon}
             description="Gestionando grupos de estudiantes"
           />
           <StatCard

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "372671275190",
+    "project_id": "educhain-ccb42",
+    "storage_bucket": "educhain-ccb42.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:372671275190:android:38fb8d52d64974d4fc4617",
+        "android_client_info": {
+          "package_name": "com.educhain.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATtgLSefQWnAY8-HX-fxHhuVRkJGE1D1w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
