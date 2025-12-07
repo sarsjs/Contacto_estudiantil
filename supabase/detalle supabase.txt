@@ -1,0 +1,284 @@
+Documentación del Proyecto Supabase
+Índice
+Resumen del proyecto
+Esquemas y tablas clave (detalle)
+Extensiones instaladas y su propósito
+Autenticación y roles
+Row-Level Security (RLS): estrategias y políticas existentes
+Funciones helper y SECURITY DEFINER
+Realtime: triggers, broadcast y convenios
+Storage: configuración y políticas
+Edge Functions desplegadas y convenciones
+Buenas prácticas y reglas estrictas al modificar
+Procedimientos comunes (crear tabla multi-tenant, bucket, edge function)
+Comprobaciones y tests recomendados
+Scripts útiles y SQL de ejemplo
+Contacto y escalado de problemas
+Anexos: estado detectado automáticamente
+1) Resumen del proyecto
+Este proyecto usa Supabase como backend (Postgres + Auth + Realtime + Storage). La arquitectura prioriza:
+
+Seguridad mediante RLS.
+Realtime mediante triggers con realtime.broadcast_changes y canales privados.
+Edge Functions en Deno para tareas de sincronización y procesos asíncronos.
+Storage con políticas para aislar archivos por usuario/bucket.
+El objetivo de esta documentación es que cualquier desarrollador pueda entender, mantener y extender sin romper integridad o seguridad.
+
+En este repositorio sólo se materializa la capa mínima detallada más adelante: las tablas `public.users`,
+`public.groups`, `public.subjects`, `public.students` y `public.timetables` con las columnas que consume el
+frontend. Ese modelo está definido en `supabase/schema.sql` y se asegura con las políticas de
+`supabase/policies.sql`. El resto de los recursos mencionados (helpers de vault, storage, Realtime amplios o
+Edge Functions extras) todavía no existen localmente; se mantienen ahí como guía de lo que habría que incorporar
+si la instancia en la nube los expone.
+
+2) Esquemas y tablas clave (detalle)
+Esquemas presentes:
+
+auth (tablas de Supabase Auth)
+storage (buckets, objects, multipart uploads)
+realtime (mensajería y sistema de suscripciones)
+public (tablas de dominio de la aplicación)
+vault (almacenamiento de secretos cifrados)
+graphql, graphql_public, extensions, pgbouncer (soporte)
+Tablas más relevantes y observaciones:
+
+auth.users (rls: true) — usuarios de autenticación. PK: id (uuid). Campos clave: email, role, raw_user_meta_data, is_super_admin.
+auth.sessions, auth.refresh_tokens, auth.identities, etc. (rls: true en muchas).
+storage.buckets (rls: true) — buckets existentes.
+storage.objects (rls: true) — archivos almacenados. Campos importantes: id, bucket_id, name, path_tokens, owner_id, metadata.
+public.users (rls: false) — tabla de usuarios de la aplicación.
+public.groups, public.students, public.subjects, public.grades, public.timetables, public.teacher_assignments, public.orientator_assignments, public.audit_logs, public.security_alerts — varias con RLS habilitado.
+realtime.messages (rls: true) — registros de mensajes/broadcasts con topic, payload, event, private.
+Notas:
+
+Muchas tablas RLS-enabled ya existen; revisar políticas específicas antes de cambios.
+Existen índices y FK entre tablas; revisar constraints al renombrar columnas.
+3) Extensiones instaladas y su propósito
+Principales extensiones detectadas:
+
+pg_graphql: GraphQL support.
+supabase_vault: manejo de secretos (schema vault).
+uuid-ossp, pgcrypto: generación de UUID y funciones criptográficas.
+pg_stat_statements, pg_stat_monitor, index_advisor: monitorización y diagnóstico.
+vector, pgroonga, pg_trgm: búsqueda de texto y vectores.
+postgis, pgrouting, postgis_tiger_geocoder: geolocalización (si aplica).
+wal2json, tcn: replicación/streaming y cambio notificaciones.
+pgtap, pg_repack, pg_sodium, entre otras utilidades.
+Recomendación: no eliminar extensiones sin validar dependencias y pruebas.
+
+4) Autenticación y roles
+Supabase Auth (JWT).
+Roles:
+anon — público.
+authenticated — usuarios logueados.
+service_role — clave secreta con privilegios totales (bypass RLS).
+Funciones/claims en políticas: auth.uid(), auth.jwt().
+Consejo: envolver auth.uid() con SELECT (SELECT auth.uid()) para mejor caching en policies.
+
+5) Row-Level Security (RLS): estrategias y políticas existentes
+Patrones implementados:
+
+Propietario: user_id = auth.uid().
+Multi-tenant: tenant_id = (auth.jwt() ->> 'tenant_id')::uuid o helper get_user_tenant().
+Role-based checks: (auth.jwt() ->> 'user_role') = 'admin'.
+Policies separadas por operación (SELECT, INSERT, UPDATE, DELETE) y con TO authenticated.
+Reglas estrictas:
+
+Siempre especificar TO en CREATE POLICY.
+Agregar índices en columnas usadas por policies.
+Testear que auth.uid() esté presente en escenarios esperados.
+Errores comunes:
+
+No habilitar RLS tras crear tabla.
+No usar WITH CHECK en INSERT/UPDATE, permitiendo insertar filas con otro user_id.
+Policies con joins pesados → preferir helper functions bien indexadas.
+6) Funciones helper y SECURITY DEFINER
+Existen helpers SECURITY DEFINER para checks complejos (resolver tenant, validar membresías).
+Al crear helpers:
+Declarar SECURITY DEFINER si se necesita elevar permisos.
+REVOKE EXECUTE FROM anon, authenticated si no deben ser invocadas por usuarios.
+Documentar comportamiento, efectos y permisos.
+7) Realtime: triggers, broadcast y convenios
+Patrón: triggers AFTER INSERT/UPDATE/DELETE llaman a realtime.broadcast_changes.
+Convenios:
+Topics: scope:entity o scope:entity:id (ej. room:123:messages).
+Events: snake_case (ej. message_created).
+Canales privados (private: true) cuando dependen de RLS.
+En realtime.messages hay policies que validan suscripciones con SPLIT_PART(topic, ':', 2)::uuid y tablas de miembros.
+Reglas:
+
+Broadcast solo en cambios significativos (comprobar OLD vs NEW).
+Mantener topics granulares.
+Canales privados para RLS-dependientes.
+8) Storage: configuración y políticas
+Buckets: storage.buckets.
+Archivos: storage.objects con path_tokens = string_to_array(name, '/').
+Policies típicas:
+INSERT WITH CHECK: bucket_id = 'mi-bucket' AND (storage.foldername(name))[1] = (SELECT auth.uid())::text
+SELECT USING: bucket_id = 'mi-bucket' AND (storage.foldername(name))[1] = (SELECT auth.uid())::text
+Reglas:
+
+Si cambias el esquema de paths, actualizar policies que usan foldername(name) o path_tokens.
+Crear policies nuevas al añadir buckets.
+9) Edge Functions desplegadas y convenciones
+Funciones Edge detectadas:
+
+auth-sync — active, verify_jwt = true
+sync-avatars — active, verify_jwt = true
+audit-log — active, verify_jwt = true
+Convenciones:
+
+Usar Deno y Deno.serve.
+Preferir Web APIs y Deno core.
+Importar con npm:paquete@versión si se usan paquetes externos.
+Rutas prefijadas /function-name.
+Variables disponibles: SUPABASE_URL, SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY, SUPABASE_DB_URL.
+Escribir en /tmp si es necesario.
+Usar EdgeRuntime.waitUntil() para tareas en background.
+Reglas:
+
+No exponer service_role en cliente.
+Documentar permisos y efectos secundarios.
+10) Buenas prácticas y reglas estrictas al modificar (minimizar errores)
+Checklist obligatorio antes de cambios:
+
+Buscar dependencias (functions, triggers, policies, Edge Functions).
+Crear nuevas policies/funciones primero y testear; luego eliminar las antiguas.
+Añadir índices si introduces columnas usadas en policies.
+Probar en staging con usuarios anon y authenticated, y con distintos claims JWT.
+No ejecutar SQL destructivo sin aprobación explícita.
+Documentar cambios (changelog).
+Mantener naming conventions (snake_case).
+Ejecutar get_advisors y revisar logs tras cambios DDL.
+Errores frecuentes a evitar:
+
+Romper RLS al renombrar columnas sin actualizar policies/triggers.
+Exponer service_role key en repositorio.
+No revocar permisos de EXECUTE en helpers SECURITY DEFINER.
+11) Procedimientos comunes (paso a paso)
+A) Crear una tabla multi-tenant
+
+Crear tabla con tenant_id uuid, created_by uuid, id uuid PK.
+CREATE INDEX idx_table_tenant ON public.mi_tabla (tenant_id);
+ALTER TABLE public.mi_tabla ENABLE ROW LEVEL SECURITY;
+(Opcional) helper get_user_tenant() security definer; REVOKE EXECUTE FROM anon, authenticated;
+Policies:
+CREATE POLICY "Tenant select" ON public.mi_tabla FOR SELECT TO authenticated USING (tenant_id = get_user_tenant());
+CREATE POLICY "Tenant insert" ON public.mi_tabla FOR INSERT TO authenticated WITH CHECK (tenant_id = get_user_tenant());
+Tests con tokens de distintos tenants.
+B) Crear bucket y políticas de storage
+
+Crear bucket via dashboard/SQL.
+Policies en storage.objects:
+FOR INSERT TO authenticated WITH CHECK (bucket_id = 'mi-bucket' AND (storage.foldername(name))[1] = (SELECT auth.uid())::text);
+FOR SELECT TO authenticated USING (bucket_id = 'mi-bucket' AND (storage.foldername(name))[1] = (SELECT auth.uid())::text);
+C) Añadir trigger para Realtime broadcasting
+
+Crear función trigger (SECURITY DEFINER) que llame a realtime.broadcast_changes y valide cambios.
+CREATE TRIGGER ... AFTER INSERT OR UPDATE OR DELETE ON public.messages FOR EACH ROW EXECUTE FUNCTION public.trigger_fn();
+D) Desplegar/actualizar Edge Function
+
+Implementar con Deno.serve, documentar envs requeridas.
+Deploy con supabase CLI.
+Verificar logs y comportamiento en staging.
+12) Comprobaciones y tests recomendados
+Test funcionales: acceso RLS (anon vs authenticated), tenant isolation, storage uploads, realtime subscriptions.
+Post-DDL: ejecutar get_advisors y revisar recomendaciones.
+Revisar logs (get_logs) para errores en Edge Functions o Postgres.
+Auditar funciones SECURITY DEFINER.
+Revisar pg_stat_statements y aplicar índices sugeridos.
+13) Scripts útiles y SQL de ejemplo
+A) Habilitar RLS:
+
+SQL Query
+
+
+
+ALTER TABLE public.mi_tabla ENABLE ROW LEVEL SECURITY;
+
+B) Políticas owner-based:
+
+SQL Query
+
+
+
+CREATE POLICY "Owner select" ON public.mi_tabla
+  FOR SELECT TO authenticated
+  USING ((SELECT auth.uid()) = user_id);
+
+CREATE POLICY "Owner insert" ON public.mi_tabla
+  FOR INSERT TO authenticated
+  WITH CHECK ((SELECT auth.uid()) = user_id);
+
+CREATE POLICY "Owner update" ON public.mi_tabla
+  FOR UPDATE TO authenticated
+  USING ((SELECT auth.uid()) = user_id)
+  WITH CHECK ((SELECT auth.uid()) = user_id);
+
+CREATE POLICY "Owner delete" ON public.mi_tabla
+  FOR DELETE TO authenticated
+  USING ((SELECT auth.uid()) = user_id);
+
+C) Trigger broadcasting (ejemplo):
+
+SQL Query
+
+
+
+CREATE OR REPLACE FUNCTION public.broadcast_changes_trigger()
+RETURNS TRIGGER AS $$
+SECURITY DEFINER
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  IF TG_OP = 'UPDATE' AND OLD.some_field IS NOT DISTINCT FROM NEW.some_field THEN
+    RETURN NEW;
+  END IF;
+
+  PERFORM realtime.broadcast_changes(
+    'room:' || COALESCE(NEW.room_id, OLD.room_id)::text,
+    TG_OP,
+    TG_OP,
+    TG_TABLE_NAME,
+    TG_TABLE_SCHEMA,
+    NEW,
+    OLD
+  );
+
+  RETURN COALESCE(NEW, OLD);
+END;
+$$;
+
+CREATE TRIGGER broadcast_trigger
+  AFTER INSERT OR UPDATE OR DELETE ON public.messages
+  FOR EACH ROW EXECUTE FUNCTION public.broadcast_changes_trigger();
+
+D) Helper SECURITY DEFINER (ejemplo):
+
+SQL Query
+
+
+
+CREATE OR REPLACE FUNCTION public.get_user_tenant() RETURNS uuid
+LANGUAGE sql SECURITY DEFINER STABLE AS $$
+  SELECT tenant_id FROM public.user_profiles WHERE auth_user_id = auth.uid();
+$$;
+
+REVOKE EXECUTE ON FUNCTION public.get_user_tenant() FROM anon, authenticated;
+
+14) Contacto y escalado de problemas
+Antes de cambios disruptivos (DDL, renombres, borrados), contactar al responsable del proyecto.
+Registrar cambios importantes en el changelog del repo.
+Si necesitas soporte de infra (extensiones, permisos), abrir ticket con logs y pasos reproducibles.
+15) Anexos: estado detectado automáticamente
+Tablas con RLS habilitada: varias en auth, storage, realtime, y public (groups, students, timetables, teacher_assignments, grades, audit_logs...).
+Extensiones clave: pg_graphql, supabase_vault, pg_stat_statements, vector, pg_trgm, postgis, pgcrypto, uuid-ossp, entre otras.
+Edge Functions desplegadas: auth-sync, sync-avatars, audit-log (todas activas, verify_jwt = true).
+
+16) Manejo del callback de autenticación
+La página `src/app/auth/callback/page.tsx` procesa la redirección del magic link: invoca
+`supabase.auth.getSessionFromUrl()`, recupera la sesión, lee el rol desde la tabla `public.profiles`
+(también disponible en `supabase/schema.sql`) y redirige según `ROLE_REDIRECTS`. Por ahora todas las
+rutas apuntan a `/`, pero puedes ampliar el mapa con `/alumno`, `/orientador`, `/admin`, etc.,
+según cómo evolucione el dashboard. Si la tabla `profiles` falta o no tiene registro para el usuario,
+la página aterriza en el inicio y puedes completar el perfil desde un onboarding.
