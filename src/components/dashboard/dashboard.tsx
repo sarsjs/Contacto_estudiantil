@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import * as React from "react";
+import * as React from 'react';
 import {
   BookCopy,
   Calendar,
@@ -12,7 +12,7 @@ import {
   Users,
   ClipboardList,
   UserCog,
-} from "lucide-react";
+} from 'lucide-react';
 
 import {
   SidebarProvider,
@@ -26,23 +26,23 @@ import {
   SidebarInset,
   SidebarTrigger,
   useSidebar,
-} from "@/components/ui/sidebar";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { User, UserRole } from "@/lib/types";
-import { users } from "@/lib/data";
-import { Logo } from "@/components/icons";
+} from '@/components/ui/sidebar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { User, UserRole } from '@/lib/types';
+import { fetchUsers } from '@/lib/firebase/data';
+import { Logo } from '@/components/icons';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { DirectorView } from "./director-view";
-import { CounselorView } from "./counselor-view";
-import { TeacherView } from "./teacher-view";
-import { StudentView } from "./student-view";
-import { Button } from "../ui/button";
+} from '@/components/ui/select';
+import { DirectorView } from './director-view';
+import { CounselorView } from './counselor-view';
+import { TeacherView } from './teacher-view';
+import { StudentView } from './student-view';
+import { Button } from '../ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -50,50 +50,53 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Badge } from "../ui/badge";
+} from '@/components/ui/dropdown-menu';
 
 const navItems = {
   director: [
-    { href: "#panel", icon: Home, label: "Panel Principal" },
-    { href: "#personal", icon: Users, label: "Personal" },
-    { href: "#estructura", icon: School, label: "Estructura" },
+    { href: '#panel', icon: Home, label: 'Panel Principal' },
+    { href: '#personal', icon: Users, label: 'Personal' },
+    { href: '#estructura', icon: School, label: 'Estructura' },
   ],
   orientador: [
-    { href: "#", icon: Home, label: "Panel Principal" },
-    { href: "#", icon: ClipboardList, label: "Estudiantes" },
-    { href: "#", icon: Calendar, label: "Horarios" },
-    { href: "#", icon: BookCopy, label: "Materias" },
+    { href: '#', icon: Home, label: 'Panel Principal' },
+    { href: '#', icon: ClipboardList, label: 'Estudiantes' },
+    { href: '#', icon: Calendar, label: 'Horarios' },
+    { href: '#', icon: BookCopy, label: 'Materias' },
   ],
   profesor: [
-    { href: "#", icon: LayoutGrid, label: "Mis Clases" },
-    { href: "#", icon: ClipboardCheck, label: "Asistencia" },
-    { href: "#", icon: GraduationCap, label: "Calificaciones" },
+    { href: '#', icon: LayoutGrid, label: 'Mis Clases' },
+    { href: '#', icon: ClipboardCheck, label: 'Asistencia' },
+    { href: '#', icon: GraduationCap, label: 'Calificaciones' },
   ],
   estudiante: [
-    { href: "#", icon: LayoutGrid, label: "Panel Principal" },
-    { href: "#", icon: Calendar, label: "Mi Horario" },
-    { href: "#", icon: GraduationCap, label: "Mis Calificaciones" },
+    { href: '#', icon: LayoutGrid, label: 'Panel Principal' },
+    { href: '#', icon: Calendar, label: 'Mi Horario' },
+    { href: '#', icon: GraduationCap, label: 'Mis Calificaciones' },
   ],
 };
 
 const viewTitles = {
-    director: "Portal del Director",
-    orientador: "Portal del Orientador",
-    profesor: "App del Profesor",
-    estudiante: "Portal del Estudiante"
+    director: 'Portal del Director',
+    orientador: 'Portal del Orientador',
+    profesor: 'App del Profesor',
+    estudiante: 'Portal del Estudiante'
 }
 
 function RoleSwitcher({
   user,
   setUser,
+  allUsers,
 }: {
   user: User;
   setUser: (user: User) => void;
+  allUsers: User[];
 }) {
   const handleRoleChange = (role: UserRole) => {
-    const newUser = users.find((u) => u.role === role) || users[0];
-    setUser(newUser);
+    const newUser = allUsers.find((u) => u.role === role);
+    if (newUser) {
+      setUser(newUser);
+    }
   }
   return (
     <Select value={user.role} onValueChange={(value) => handleRoleChange(value as UserRole)}>
@@ -109,7 +112,6 @@ function RoleSwitcher({
     </Select>
   );
 }
-
 
 function AppSidebar({ user }: { user: User }) {
   const { open } = useSidebar();
@@ -134,7 +136,7 @@ function AppSidebar({ user }: { user: User }) {
 
             return (
               <SidebarMenuItem key={item.label}>
-                {item.href && item.href !== "#" ? (
+                {item.href && item.href !== '#' ? (
                   <SidebarMenuButton
                     asChild
                     tooltip={{ children: item.label, hidden: open }}
@@ -172,15 +174,11 @@ function AppSidebar({ user }: { user: User }) {
 }
 
 function UserMenu({
-  user,
   setUser,
-  isSubstitute,
-  setIsSubstitute
+  allUsers
 }: {
-  user: User;
   setUser: (role: User) => void;
-  isSubstitute: boolean;
-  setIsSubstitute: (isSub: boolean) => void;
+  allUsers: User[];
 }) {
   return (
     <DropdownMenu>
@@ -193,84 +191,73 @@ function UserMenu({
       <DropdownMenuContent align="end">
         <DropdownMenuLabel>Simular Rol</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        {users.map((u) => (
+        {allUsers.map((u) => (
           <DropdownMenuItem key={u.id} onSelect={() => setUser(u)}>
             {u.name} ({u.role})
           </DropdownMenuItem>
         ))}
-         {user.role === 'director' && (
-            <>
-                <DropdownMenuSeparator />
-                <DropdownMenuLabel>Acciones de Director</DropdownMenuLabel>
-                 <DropdownMenuItem onSelect={() => setIsSubstitute(!isSubstitute)}>
-                    {isSubstitute ? "Quitar" : "Asignar"} suplencia a orientador
-                </DropdownMenuItem>
-            </>
-         )}
       </DropdownMenuContent>
     </DropdownMenu>
   );
 }
 
-
 function AppHeader({
     user,
     setUser,
     title,
-    isSubstitute,
-    setIsSubstitute
+    allUsers
 }: {
     user: User,
     setUser: (user: User) => void;
     title: string;
-    isSubstitute: boolean;
-    setIsSubstitute: (isSub: boolean) => void;
+    allUsers: User[];
 }) {
-    const role = user.role;
-    const showSubstituteBadge = (role === 'orientador' || role === 'director') && isSubstitute;
-
     return (
         <header className="flex h-14 items-center gap-4 border-b bg-card px-4 lg:h-[60px] lg:px-6">
             <SidebarTrigger className="md:hidden" />
             <div className="flex-1">
                  <div className="flex items-center gap-2">
                     <h1 className="text-lg font-semibold md:text-2xl">{title}</h1>
-                    {showSubstituteBadge && <Badge variant="destructive">SUPLENTE</Badge>}
                 </div>
             </div>
             <div className="flex items-center gap-2">
-                <RoleSwitcher user={user} setUser={setUser} />
-                 <UserMenu user={user} setUser={setUser} isSubstitute={isSubstitute} setIsSubstitute={setIsSubstitute} />
+                <RoleSwitcher user={user} setUser={setUser} allUsers={allUsers} />
+                 <UserMenu setUser={setUser} allUsers={allUsers} />
             </div>
         </header>
     )
 }
 
 export function Dashboard() {
-  const [currentUser, setCurrentUser] = React.useState<User>(users.find(u => u.role === 'director') || users[0]);
-  const [isSubstitute, setIsSubstitute] = React.useState(false);
-  
-  // Logic to handle substitute counselor
-  const substituteUser = users.find(u => u.id === 'user-5'); // Lic. Marcus Holloway
+  const [allUsers, setAllUsers] = React.useState<User[]>([]);
+  const [currentUser, setCurrentUser] = React.useState<User | null>(null);
+  const [loading, setLoading] = React.useState(true);
 
-  const effectiveUser = isSubstitute && (currentUser.role === 'director' || currentUser.id === 'user-2') && substituteUser ? substituteUser : currentUser;
-
+  React.useEffect(() => {
+    const loadUsers = async () => {
+      try {
+        const users = await fetchUsers();
+        setAllUsers(users);
+        const director = users.find(u => u.role === 'director');
+        setCurrentUser(director || users[0] || null);
+      } catch (error) {
+        console.error("Error loading users", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadUsers();
+  }, []);
 
   const handleSetUser = (user: User) => {
-    if (user.role !== 'director' && isSubstitute) {
-        setIsSubstitute(false);
-    }
     setCurrentUser(user);
   }
 
-  const getTitle = () => {
-    if (isSubstitute && (currentUser.role === 'director' || currentUser.role === 'orientador')) {
-      const substituteTarget = users.find(u => u.id === 'user-2');
-      return `Portal del Orientador (Supliendo a ${substituteTarget?.name || ''})`;
-    }
-    return viewTitles[currentUser.role];
+  if (loading || !currentUser) {
+    return <div className="flex h-screen items-center justify-center">Cargando panel...</div>;
   }
 
+  const title = viewTitles[currentUser.role];
 
   return (
     <SidebarProvider defaultOpen>
@@ -279,13 +266,12 @@ export function Dashboard() {
         <AppHeader 
             user={currentUser} 
             setUser={handleSetUser} 
-            title={getTitle()}
-            isSubstitute={isSubstitute}
-            setIsSubstitute={setIsSubstitute}
+            title={title}
+            allUsers={allUsers}
         />
         <main className="flex-1 overflow-auto p-4 lg:p-6">
             {currentUser.role === 'director' && <DirectorView />}
-            {currentUser.role === 'orientador' && <CounselorView currentUser={effectiveUser} />}
+            {currentUser.role === 'orientador' && <CounselorView currentUser={currentUser} />}
             {currentUser.role === 'profesor' && <TeacherView />}
             {currentUser.role === 'estudiante' && <StudentView />}
         </main>

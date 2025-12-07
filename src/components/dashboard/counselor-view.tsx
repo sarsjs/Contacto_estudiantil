@@ -1,16 +1,21 @@
-"use client"
+'use client';
 
-import * as React from "react";
-import { ClipboardList, Calendar, BookCopy, Users } from "lucide-react";
-import { StatCard } from "./stat-card";
+import * as React from 'react';
+import {
+  ClipboardList,
+  Calendar,
+  BookCopy,
+  Users,
+} from 'lucide-react';
+import { StatCard } from './stat-card';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import {
   Table,
   TableBody,
@@ -18,11 +23,19 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { students, groups, subjects, timetable, securityAlerts } from "@/lib/data";
-import type { TimetableEntry } from "@/lib/types";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/table';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import {
+  fetchStudents,
+  fetchGroups,
+  fetchSubjects,
+  fetchAllTimetables,
+  fetchSecurityAlerts,
+  addStudent,
+  addTimetableEntry,
+} from '@/lib/firebase/data';
+import type { Student, Group, Subject, TimetableEntry, SecurityAlert, User } from '@/lib/types';
+import { Input } from '@/components/ui/input';
 import {
   Dialog,
   DialogTrigger,
@@ -31,158 +44,194 @@ import {
   DialogTitle,
   DialogDescription,
   DialogFooter,
-} from "@/components/ui/dialog";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useToast } from "@/hooks/use-toast";
-import { useAuth } from "@/context/auth-context";
-import { User } from "@/lib/types";
-import { SecurityAlerts } from "./security-alerts";
-import { IdCard } from "./id-card";
+} from '@/components/ui/dialog';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/context/auth-context';
+import { SecurityAlerts } from './security-alerts';
+import { IdCard } from './id-card';
 
 export function CounselorView({ currentUser }: { currentUser: User }) {
-  // Determine which groups are supervised by the current counselor
+  const [students, setStudents] = React.useState<Student[]>([]);
+  const [groups, setGroups] = React.useState<Group[]>([]);
+  const [subjects, setSubjects] = React.useState<Subject[]>([]);
+  const [timetable, setTimetable] = React.useState<TimetableEntry[]>([]);
+  const [securityAlerts, setSecurityAlerts] = React.useState<SecurityAlert[]>([]);
+  const [loading, setLoading] = React.useState(true);
+
+  const { toast } = useToast();
+  const { profile } = useAuth();
+
   const assignedGroups = groups.filter((g) => g.counselorId === currentUser.id);
   const assignedGroupIds = assignedGroups.map((g) => g.id);
 
-  // Local state for students and timetable to enable dynamic additions
-  const [studentsState, setStudentsState] = React.useState(() => students);
-  const [timetableState, setTimetableState] = React.useState(() => timetable);
-
-  const assignedStudents = studentsState.filter((s) => assignedGroupIds.includes(s.groupId));
+  const assignedStudents = students.filter((s) => assignedGroupIds.includes(s.groupId));
   const assignedStudentIds = assignedStudents.map((s) => s.id);
-  const assignedTimetable = timetableState.filter((t) => assignedGroupIds.includes(t.groupId));
+  const assignedTimetable = timetable.filter((t) => assignedGroupIds.includes(t.groupId));
   const assignedAlerts = securityAlerts.filter((a) => assignedStudentIds.includes(a.studentId));
 
   const totalStudents = assignedStudents.length;
 
-  // Toast hook for notifications
-  const { toast } = useToast();
-  const { profile } = useAuth();
-
-  // Dialog state and form fields for adding a student
   const [addStudentOpen, setAddStudentOpen] = React.useState(false);
-  const [newStudentName, setNewStudentName] = React.useState("");
+  const [newStudentName, setNewStudentName] = React.useState('');
+  const [newStudentEmail, setNewStudentEmail] = React.useState('');
   const [newStudentGroupId, setNewStudentGroupId] = React.useState(
-    assignedGroupIds[0] ?? ""
+    assignedGroupIds[0] ?? ''
   );
 
-  // Dialog state and form fields for adding a new schedule entry
   const [addScheduleOpen, setAddScheduleOpen] = React.useState(false);
-  const [newScheduleDay, setNewScheduleDay] = React.useState<TimetableEntry["day"]>("Lunes");
-  const [newScheduleTime, setNewScheduleTime] = React.useState("");
+  const [newScheduleDay, setNewScheduleDay] = React.useState<TimetableEntry['day']>('Lunes');
+  const [newScheduleTime, setNewScheduleTime] = React.useState('');
   const [newScheduleSubjectId, setNewScheduleSubjectId] = React.useState(
-    subjects[0]?.id ?? ""
+    subjects[0]?.id ?? ''
   );
   const [newScheduleGroupId, setNewScheduleGroupId] = React.useState(
-    assignedGroupIds[0] ?? ""
+    assignedGroupIds[0] ?? ''
   );
 
-  // Days of week options
-  const daysOfWeek: TimetableEntry["day"][] = [
-    "Lunes",
-    "Martes",
-    "Miércoles",
-    "Jueves",
-    "Viernes",
+  const daysOfWeek: TimetableEntry['day'][] = [
+    'Lunes',
+    'Martes',
+    'Miércoles',
+    'Jueves',
+    'Viernes',
   ];
 
-  const handleAddStudent = () => {
-    if (!newStudentName || !newStudentGroupId) {
+  const loadData = React.useCallback(async () => {
+    try {
+      const [studentsData, groupsData, subjectsData, timetablesData, alertsData] = await Promise.all([
+        fetchStudents(),
+        fetchGroups(),
+        fetchSubjects(),
+        fetchAllTimetables(),
+        fetchSecurityAlerts(),
+      ]);
+      setStudents(studentsData);
+      setGroups(groupsData);
+      setSubjects(subjectsData);
+      setTimetable(timetablesData);
+      setSecurityAlerts(alertsData);
+    } catch (error) {
+      console.error('Failed to load data', error);
+      toast({ title: 'Error', description: 'Failed to load data from the server.' });
+    } finally {
+      setLoading(false);
+    }
+  }, [toast]);
+
+  React.useEffect(() => {
+    loadData();
+  }, [loadData]);
+
+  const handleAddStudent = async () => {
+    if (!newStudentName || !newStudentGroupId || !newStudentEmail) {
       toast({
-        title: "Datos incompletos",
-        description: "Por favor ingresa el nombre y selecciona un grupo.",
+        title: 'Datos incompletos',
+        description: 'Por favor ingresa el nombre, correo y selecciona un grupo.',
       });
       return;
     }
-    const id = `student-${Date.now()}`;
     const avatarSeed = Math.floor(Math.random() * 1000);
     const avatarUrl = `https://picsum.photos/seed/${avatarSeed}/100/100`;
     const gradeList = subjects.map((s) => ({ subjectId: s.id, grade: null }));
-    setStudentsState([
-      ...studentsState,
-      {
-        id,
-        name: newStudentName,
-        avatarUrl,
-        groupId: newStudentGroupId,
-        grades: gradeList,
-      },
-    ]);
-    setNewStudentName("");
-    setNewStudentGroupId(assignedGroupIds[0] ?? "");
-    setAddStudentOpen(false);
-    toast({
-      title: "Estudiante inscrito",
-      description: `Se inscribió a ${newStudentName}.`,
-    });
+
+    try {
+        await addStudent({
+            name: newStudentName,
+            email: newStudentEmail,
+            avatarUrl,
+            groupId: newStudentGroupId,
+            grades: gradeList,
+        });
+
+        setNewStudentName('');
+        setNewStudentEmail('');
+        setNewStudentGroupId(assignedGroupIds[0] ?? '');
+        setAddStudentOpen(false);
+        toast({
+            title: 'Estudiante inscrito',
+            description: `Se inscribió a ${newStudentName}.`,
+        });
+        loadData();
+    } catch (error) {
+        console.error('Failed to add student', error);
+        toast({ title: 'Error', description: 'Failed to inscribe the student.' });
+    }
   };
 
-  const handleAddSchedule = () => {
+  const handleAddSchedule = async () => {
     if (!newScheduleTime || !newScheduleSubjectId || !newScheduleGroupId) {
       toast({
-        title: "Datos incompletos",
-        description: "Completa todos los campos del horario.",
+        title: 'Datos incompletos',
+        description: 'Completa todos los campos del horario.',
       });
       return;
     }
-    const id = `tt-${Date.now()}`;
-    setTimetableState([
-      ...timetableState,
-      {
-        id,
-        groupId: newScheduleGroupId,
-        subjectId: newScheduleSubjectId,
-        day: newScheduleDay,
-        time: newScheduleTime,
-      },
-    ]);
-    setNewScheduleDay("Lunes");
-    setNewScheduleTime("");
-    setNewScheduleSubjectId(subjects[0]?.id ?? "");
-    setNewScheduleGroupId(assignedGroupIds[0] ?? "");
-    setAddScheduleOpen(false);
-    toast({
-      title: "Horario agregado",
-      description: `Se agregó la clase al horario.`,
-    });
+
+    try {
+        await addTimetableEntry({
+            groupId: newScheduleGroupId,
+            subjectId: newScheduleSubjectId,
+            day: newScheduleDay,
+            time: newScheduleTime,
+        });
+
+        setNewScheduleDay('Lunes');
+        setNewScheduleTime('');
+        setNewScheduleSubjectId(subjects[0]?.id ?? '');
+        setNewScheduleGroupId(assignedGroupIds[0] ?? '');
+        setAddScheduleOpen(false);
+        toast({
+            title: 'Horario agregado',
+            description: `Se agregó la clase al horario.`,
+        });
+        loadData();
+    } catch (error) {
+        console.error('Failed to add schedule', error);
+        toast({ title: 'Error', description: 'Failed to add the schedule.' });
+    }
   };
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
-    <div className="space-y-6">
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+    <div className='space-y-6'>
+      <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-4'>
         <StatCard
-          title="Total de Estudiantes"
+          title='Total de Estudiantes'
           value={totalStudents.toString()}
           icon={Users}
-          description="En tus grupos gestionados"
+          description='En tus grupos gestionados'
         />
         <StatCard
-          title="Grupos Gestionados"
+          title='Grupos Gestionados'
           value={assignedGroups.length.toString()}
           icon={ClipboardList}
-          description="Grupos bajo tu supervisión"
+          description='Grupos bajo tu supervisión'
         />
         <StatCard
-          title="Materias"
+          title='Materias'
           value={subjects.length.toString()}
           icon={BookCopy}
-          description="Disponibles en el plan de estudios"
+          description='Disponibles en el plan de estudios'
         />
         <StatCard
-          title="Clases Programadas"
+          title='Clases Programadas'
           value={assignedTimetable.length.toString()}
           icon={Calendar}
-          description="Total de clases por semana"
+          description='Total de clases por semana'
         />
       </div>
 
        {assignedAlerts.length > 0 && (
-         <div className="grid grid-cols-1 gap-6">
+         <div className='grid grid-cols-1 gap-6'>
            <SecurityAlerts alerts={assignedAlerts} />
          </div>
        )}
 
-      {profile?.role === "orientador" && (
+      {profile?.role === 'orientador' && (
         <Card>
           <CardHeader>
             <CardTitle>Identificación digital</CardTitle>
@@ -191,8 +240,8 @@ export function CounselorView({ currentUser }: { currentUser: User }) {
           <CardContent>
             <IdCard
               name={currentUser.name}
-              role="Orientador"
-              cycle="Orientación"
+              role='Orientador'
+              cycle='Orientación'
               avatarUrl={currentUser.avatarUrl}
               idLabel={currentUser.id.slice(0, 6).toUpperCase()}
             />
@@ -200,10 +249,10 @@ export function CounselorView({ currentUser }: { currentUser: User }) {
         </Card>
       )}
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+      <div className='grid grid-cols-1 gap-6 lg:grid-cols-2'>
         <Card>
           <CardHeader>
-            <div className="flex items-center justify-between">
+            <div className='flex items-center justify-between'>
               <div>
                 <CardTitle>Inscripción de Estudiantes</CardTitle>
                 <CardDescription>
@@ -222,23 +271,32 @@ export function CounselorView({ currentUser }: { currentUser: User }) {
                       Proporciona la información del estudiante para inscribirlo en uno de tus grupos.
                     </DialogDescription>
                   </DialogHeader>
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <label className="block text-sm font-medium">Nombre</label>
+                  <div className='space-y-4'>
+                    <div className='space-y-2'>
+                      <label className='block text-sm font-medium'>Nombre</label>
                       <Input
                         value={newStudentName}
                         onChange={(e) => setNewStudentName(e.target.value)}
-                        placeholder="Nombre del estudiante"
+                        placeholder='Nombre del estudiante'
                       />
                     </div>
-                    <div className="space-y-2">
-                      <label className="block text-sm font-medium">Grupo</label>
+                    <div className='space-y-2'>
+                      <label className='block text-sm font-medium'>Email</label>
+                      <Input
+                        value={newStudentEmail}
+                        onChange={(e) => setNewStudentEmail(e.target.value)}
+                        placeholder='Email del estudiante'
+                        type='email'
+                      />
+                    </div>
+                    <div className='space-y-2'>
+                      <label className='block text-sm font-medium'>Grupo</label>
                       <Select
                         value={newStudentGroupId}
                         onValueChange={(value) => setNewStudentGroupId(value)}
                       >
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Seleccionar grupo" />
+                        <SelectTrigger className='w-full'>
+                          <SelectValue placeholder='Seleccionar grupo' />
                         </SelectTrigger>
                         <SelectContent>
                           {assignedGroups.map((g) => (
@@ -250,7 +308,7 @@ export function CounselorView({ currentUser }: { currentUser: User }) {
                       </Select>
                     </div>
                   </div>
-                  <DialogFooter className="mt-4">
+                  <DialogFooter className='mt-4'>
                     <Button onClick={handleAddStudent}>Inscribir</Button>
                   </DialogFooter>
                 </DialogContent>
@@ -271,12 +329,12 @@ export function CounselorView({ currentUser }: { currentUser: User }) {
                   return (
                   <TableRow key={student.id}>
                     <TableCell>
-                      <div className="flex items-center gap-3">
-                        <Avatar className="h-8 w-8">
+                      <div className='flex items-center gap-3'>
+                        <Avatar className='h-8 w-8'>
                           <AvatarImage src={student.avatarUrl} alt={student.name} />
                           <AvatarFallback>{student.name.charAt(0)}</AvatarFallback>
                         </Avatar>
-                        <span className="font-medium">{student.name}</span>
+                        <span className='font-medium'>{student.name}</span>
                       </div>
                     </TableCell>
                     <TableCell>{group?.name || 'N/A'}</TableCell>
@@ -289,7 +347,7 @@ export function CounselorView({ currentUser }: { currentUser: User }) {
 
         <Card>
           <CardHeader>
-             <div className="flex items-center justify-between">
+             <div className='flex items-center justify-between'>
                 <div>
                     <CardTitle>Gestión de Horarios</CardTitle>
                     <CardDescription>
@@ -308,15 +366,15 @@ export function CounselorView({ currentUser }: { currentUser: User }) {
                         Completa la información para programar una nueva clase.
                       </DialogDescription>
                     </DialogHeader>
-                    <div className="space-y-4">
-                      <div className="space-y-2">
-                        <label className="block text-sm font-medium">Día</label>
+                    <div className='space-y-4'>
+                      <div className='space-y-2'>
+                        <label className='block text-sm font-medium'>Día</label>
                         <Select
                           value={newScheduleDay}
-                          onValueChange={(value) => setNewScheduleDay(value)}
+                          onValueChange={(value) => setNewScheduleDay(value as TimetableEntry['day'])}
                         >
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Seleccionar día" />
+                          <SelectTrigger className='w-full'>
+                            <SelectValue placeholder='Seleccionar día' />
                           </SelectTrigger>
                           <SelectContent>
                             {daysOfWeek.map((day) => (
@@ -327,22 +385,22 @@ export function CounselorView({ currentUser }: { currentUser: User }) {
                           </SelectContent>
                         </Select>
                       </div>
-                      <div className="space-y-2">
-                        <label className="block text-sm font-medium">Hora</label>
+                      <div className='space-y-2'>
+                        <label className='block text-sm font-medium'>Hora</label>
                         <Input
                           value={newScheduleTime}
                           onChange={(e) => setNewScheduleTime(e.target.value)}
-                          placeholder="Ej. 10:00 - 11:00"
+                          placeholder='Ej. 10:00 - 11:00'
                         />
                       </div>
-                      <div className="space-y-2">
-                        <label className="block text-sm font-medium">Materia</label>
+                      <div className='space-y-2'>
+                        <label className='block text-sm font-medium'>Materia</label>
                         <Select
                           value={newScheduleSubjectId}
                           onValueChange={(value) => setNewScheduleSubjectId(value)}
                         >
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Seleccionar materia" />
+                          <SelectTrigger className='w-full'>
+                            <SelectValue placeholder='Seleccionar materia' />
                           </SelectTrigger>
                           <SelectContent>
                             {subjects.map((s) => (
@@ -353,14 +411,14 @@ export function CounselorView({ currentUser }: { currentUser: User }) {
                           </SelectContent>
                         </Select>
                       </div>
-                      <div className="space-y-2">
-                        <label className="block text-sm font-medium">Grupo</label>
+                      <div className='space-y-2'>
+                        <label className='block text-sm font-medium'>Grupo</label>
                         <Select
                           value={newScheduleGroupId}
                           onValueChange={(value) => setNewScheduleGroupId(value)}
                         >
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Seleccionar grupo" />
+                          <SelectTrigger className='w-full'>
+                            <SelectValue placeholder='Seleccionar grupo' />
                           </SelectTrigger>
                           <SelectContent>
                             {assignedGroups.map((g) => (
@@ -372,7 +430,7 @@ export function CounselorView({ currentUser }: { currentUser: User }) {
                         </Select>
                       </div>
                     </div>
-                    <DialogFooter className="mt-4">
+                    <DialogFooter className='mt-4'>
                       <Button onClick={handleAddSchedule}>Agregar</Button>
                     </DialogFooter>
                   </DialogContent>
@@ -390,12 +448,12 @@ export function CounselorView({ currentUser }: { currentUser: User }) {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {assignedTimetable.sort((a,b) => a.day.localeCompare(b.day)).map((entry) => {
+                {assignedTimetable.sort((a,b) => daysOfWeek.indexOf(a.day) - daysOfWeek.indexOf(b.day)).map((entry) => {
                   const subject = subjects.find(s => s.id === entry.subjectId);
                   const group = groups.find(g => g.id === entry.groupId);
                   return (
                   <TableRow key={entry.id}>
-                    <TableCell className="font-medium">{entry.day}</TableCell>
+                    <TableCell className='font-medium'>{entry.day}</TableCell>
                     <TableCell>{entry.time}</TableCell>
                     <TableCell>{subject?.name || 'N/A'}</TableCell>
                     <TableCell>{group?.name || 'N/A'}</TableCell>

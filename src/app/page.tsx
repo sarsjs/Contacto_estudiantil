@@ -10,26 +10,26 @@ import { useAuth } from "@/context/auth-context";
 export default function Home() {
   const { profile, loading, signIn } = useAuth();
   const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
   const [pending, setPending] = React.useState(false);
   const { toast } = useToast();
 
   const handleLogin = async () => {
-    if (!email) {
-      toast({ title: "Ingresa un correo", description: "Necesitamos un email para enviarte el link." });
+    if (!email || !password) {
+      toast({ title: "Email and password are required" });
       return;
     }
     setPending(true);
     try {
-      await signIn(email);
+      await signIn(email, password);
       toast({
-        title: "Revísalo en tu correo",
-        description: "Te enviamos un enlace mágico para iniciar sesión.",
+        title: "Signed in successfully",
       });
     } catch (error) {
       console.error("sign in error", error);
       toast({
-        title: "No se pudo iniciar sesión",
-        description: "Intenta nuevamente con un correo válido.",
+        title: "Sign in failed",
+        description: "Please check your credentials and try again.",
       });
     } finally {
       setPending(false);
@@ -39,7 +39,7 @@ export default function Home() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center text-muted-foreground">
-        Cargando sesión…
+        Loading session...
       </div>
     );
   }
@@ -48,20 +48,27 @@ export default function Home() {
     return (
       <main className="min-h-screen flex items-center justify-center bg-background px-6">
         <div className="w-full max-w-md space-y-6 rounded-lg border bg-card p-6 shadow-lg">
-          <h1 className="text-2xl font-semibold">Bienvenido a EduChain</h1>
+          <h1 className="text-2xl font-semibold">Welcome to EduChain</h1>
           <p className="text-sm text-muted-foreground">
-            Ingresa tu correo para recibir un enlace mágico que te permitirá acceder al panel.
+            Enter your credentials to access the dashboard.
           </p>
           <div className="space-y-3">
             <Input
               type="email"
               value={email}
               onChange={(event) => setEmail(event.target.value)}
-              placeholder="correo@escuela.edu"
+              placeholder="email@school.edu"
+              className="w-full"
+            />
+            <Input
+              type="password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              placeholder="Password"
               className="w-full"
             />
             <Button className="w-full" onClick={handleLogin} disabled={pending}>
-              {pending ? "Enviando…" : "Enviar enlace"}
+              {pending ? "Signing in..." : "Sign in"}
             </Button>
           </div>
         </div>

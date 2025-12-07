@@ -1,4 +1,4 @@
-﻿import { User, Student, Group, Subject, SchoolCycle, TimetableEntry, Attendance, SecurityAlert } from './types';
+import { User, Student, Group, Subject, SchoolCycle, TimetableEntry, Attendance, SecurityAlert } from './types';
 
 export const users: User[] = [
   { id: 'user-1', name: 'Dra. Evelyn Reed', role: 'director', avatarUrl: 'https://picsum.photos/seed/1/100/100', email: 'e.reed@school.com' },
@@ -24,28 +24,28 @@ export const groups: Group[] = [
 
 export const subjects: Subject[] = [
   { id: 'subj-1', name: 'MatemÃ¡ticas', teacherId: 'user-3' },
-  { id: 'subj-2', name: 'FÃ­sica', teacherId: 'user-6' },
+  { id: 'subj-2', name: 'FÃsica', teacherId: 'user-6' },
   { id: 'subj-3', name: 'Historia', teacherId: 'user-7' },
   { id: 'subj-4', name: 'Literatura', teacherId: 'user-3' },
 ];
 
 export const students: Student[] = [
-  { id: 'student-1', name: 'Alex Johnson', avatarUrl: 'https://picsum.photos/seed/4/100/100', groupId: 'group-1', grades: [
+  { id: 'student-1', name: 'Alex Johnson', email: 'a.johnson@student.com', avatarUrl: 'https://picsum.photos/seed/4/100/100', groupId: 'group-1', grades: [
     { subjectId: 'subj-1', grade: 88 },
     { subjectId: 'subj-2', grade: 92 },
     { subjectId: 'subj-3', grade: 76 },
   ]},
-  { id: 'student-2', name: 'Maria Garcia', avatarUrl: 'https://picsum.photos/seed/11/100/100', groupId: 'group-1', grades: [
+  { id: 'student-2', name: 'Maria Garcia', email: 'm.garcia@student.com', avatarUrl: 'https://picsum.photos/seed/11/100/100', groupId: 'group-1', grades: [
     { subjectId: 'subj-1', grade: 95 },
     { subjectId: 'subj-2', grade: 89 },
     { subjectId: 'subj-3', grade: 91 },
   ]},
-  { id: 'student-3', name: 'Ben Carter', avatarUrl: 'https://picsum.photos/seed/12/100/100', groupId: 'group-2', grades: [
+  { id: 'student-3', name: 'Ben Carter', email: 'b.carter@student.com', avatarUrl: 'https://picsum.photos/seed/12/100/100', groupId: 'group-2', grades: [
     { subjectId: 'subj-1', grade: 75 },
     { subjectId: 'subj-2', grade: 82 },
     { subjectId: 'subj-3', grade: 88 },
   ]},
-  { id: 'student-4', name: 'Chloe Kim', avatarUrl: 'https://picsum.photos/seed/13/100/100', groupId: 'group-3', grades: [
+  { id: 'student-4', name: 'Chloe Kim', email: 'c.kim@student.com', avatarUrl: 'https://picsum.photos/seed/13/100/100', groupId: 'group-3', grades: [
     { subjectId: 'subj-1', grade: 91 },
     { subjectId: 'subj-2', grade: null },
     { subjectId: 'subj-3', grade: 85 },
