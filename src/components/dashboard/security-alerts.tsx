@@ -18,10 +18,9 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ShieldAlert, ShieldCheck } from "lucide-react";
-import { students } from "@/lib/data";
-import { SecurityAlert } from "@/lib/types";
+import type { SecurityAlert, Student } from "@/lib/types";
 
-export function SecurityAlerts({ alerts }: { alerts: SecurityAlert[] }) {
+export function SecurityAlerts({ alerts, students }: { alerts: SecurityAlert[], students: Student[] }) {
   return (
     <Card className="border-destructive/50">
       <CardHeader>

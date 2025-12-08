@@ -11,7 +11,6 @@ import {
   School,
   Users,
   ClipboardList,
-  UserCog,
 } from 'lucide-react';
 
 import {
@@ -28,29 +27,14 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { User, UserRole } from '@/lib/types';
-import { fetchUsers } from '@/lib/firebase/data';
+import { User } from '@/lib/types';
 import { Logo } from '@/components/icons';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { DirectorView } from './director-view';
 import { CounselorView } from './counselor-view';
 import { TeacherView } from './teacher-view';
 import { StudentView } from './student-view';
 import { Button } from '../ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { useAuth } from '@/context/auth-context';
 
 const navItems = {
   director: [
@@ -81,36 +65,6 @@ const viewTitles = {
     orientador: 'Portal del Orientador',
     profesor: 'App del Profesor',
     estudiante: 'Portal del Estudiante'
-}
-
-function RoleSwitcher({
-  user,
-  setUser,
-  allUsers,
-}: {
-  user: User;
-  setUser: (user: User) => void;
-  allUsers: User[];
-}) {
-  const handleRoleChange = (role: UserRole) => {
-    const newUser = allUsers.find((u) => u.role === role);
-    if (newUser) {
-      setUser(newUser);
-    }
-  }
-  return (
-    <Select value={user.role} onValueChange={(value) => handleRoleChange(value as UserRole)}>
-      <SelectTrigger className="w-auto border-0 bg-transparent shadow-none focus:ring-0">
-        <SelectValue placeholder="Seleccionar Rol" />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectItem value="director">Director</SelectItem>
-        <SelectItem value="orientador">Orientador</SelectItem>
-        <SelectItem value="profesor">Profesor</SelectItem>
-        <SelectItem value="estudiante">Estudiante</SelectItem>
-      </SelectContent>
-    </Select>
-  );
 }
 
 function AppSidebar({ user }: { user: User }) {
@@ -173,44 +127,12 @@ function AppSidebar({ user }: { user: User }) {
   );
 }
 
-function UserMenu({
-  setUser,
-  allUsers
-}: {
-  setUser: (role: User) => void;
-  allUsers: User[];
-}) {
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="rounded-full">
-          <UserCog className="h-5 w-5" />
-          <span className="sr-only">Menú de usuario</span>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuLabel>Simular Rol</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        {allUsers.map((u) => (
-          <DropdownMenuItem key={u.id} onSelect={() => setUser(u)}>
-            {u.name} ({u.role})
-          </DropdownMenuItem>
-        ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
-}
-
 function AppHeader({
-    user,
-    setUser,
     title,
-    allUsers
+    signOut
 }: {
-    user: User,
-    setUser: (user: User) => void;
     title: string;
-    allUsers: User[];
+    signOut: () => Promise<void>;
 }) {
     return (
         <header className="flex h-14 items-center gap-4 border-b bg-card px-4 lg:h-[60px] lg:px-6">
@@ -221,59 +143,34 @@ function AppHeader({
                 </div>
             </div>
             <div className="flex items-center gap-2">
-                <RoleSwitcher user={user} setUser={setUser} allUsers={allUsers} />
-                 <UserMenu setUser={setUser} allUsers={allUsers} />
+                 <Button onClick={signOut} variant="outline">Cerrar Sesión</Button>
             </div>
         </header>
     )
 }
 
 export function Dashboard() {
-  const [allUsers, setAllUsers] = React.useState<User[]>([]);
-  const [currentUser, setCurrentUser] = React.useState<User | null>(null);
-  const [loading, setLoading] = React.useState(true);
+  const { profile, signOut } = useAuth();
 
-  React.useEffect(() => {
-    const loadUsers = async () => {
-      try {
-        const users = await fetchUsers();
-        setAllUsers(users);
-        const director = users.find(u => u.role === 'director');
-        setCurrentUser(director || users[0] || null);
-      } catch (error) {
-        console.error("Error loading users", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadUsers();
-  }, []);
-
-  const handleSetUser = (user: User) => {
-    setCurrentUser(user);
+  if (!profile) {
+    return <div className="flex h-screen items-center justify-center">Cargando perfil...</div>;
   }
 
-  if (loading || !currentUser) {
-    return <div className="flex h-screen items-center justify-center">Cargando panel...</div>;
-  }
-
-  const title = viewTitles[currentUser.role];
+  const title = viewTitles[profile.role];
 
   return (
     <SidebarProvider defaultOpen>
-      <AppSidebar user={currentUser} />
+      <AppSidebar user={profile} />
       <SidebarInset>
         <AppHeader 
-            user={currentUser} 
-            setUser={handleSetUser} 
             title={title}
-            allUsers={allUsers}
+            signOut={signOut}
         />
         <main className="flex-1 overflow-auto p-4 lg:p-6">
-            {currentUser.role === 'director' && <DirectorView />}
-            {currentUser.role === 'orientador' && <CounselorView currentUser={currentUser} />}
-            {currentUser.role === 'profesor' && <TeacherView />}
-            {currentUser.role === 'estudiante' && <StudentView />}
+            {profile.role === 'director' && <DirectorView />}
+            {profile.role === 'orientador' && <CounselorView currentUser={profile} />}
+            {profile.role === 'profesor' && <TeacherView />}
+            {profile.role === 'estudiante' && <StudentView />}
         </main>
       </SidebarInset>
     </SidebarProvider>
