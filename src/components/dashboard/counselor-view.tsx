@@ -227,7 +227,7 @@ export function CounselorView({ currentUser }: { currentUser: User }) {
 
        {assignedAlerts.length > 0 && (
          <div className='grid grid-cols-1 gap-6'>
-           <SecurityAlerts alerts={assignedAlerts} />
+           <SecurityAlerts alerts={assignedAlerts} students={students} />
          </div>
        )}
 

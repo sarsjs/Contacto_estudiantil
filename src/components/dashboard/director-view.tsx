@@ -39,13 +39,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { securityAlerts } from "@/lib/data";
 import { SecurityAlerts } from "./security-alerts";
-import type { Group, User, UserRole } from "@/lib/types";
-import { addUser, fetchUsers, deleteUser, addGroup, fetchGroups } from "@/lib/firebase/data";
+import type { Group, SecurityAlert, User, UserRole, Student } from "@/lib/types";
+import { addUser, fetchUsers, deleteUser, addGroup, fetchGroups, fetchSecurityAlerts, fetchStudents } from "@/lib/firebase/data";
 
 export function DirectorView() {
   const [staffList, setStaffList] = React.useState<User[]>([]);
+  const [studentList, setStudentList] = React.useState<Student[]>([]);
+  const [securityAlerts, setSecurityAlerts] = React.useState<SecurityAlert[]>([]);
   const [groupList, setGroupList] = React.useState<Group[]>([]);
   const [cycleList, setCycleList] = React.useState<string[]>([]);
   const [dataLoading, setDataLoading] = React.useState(false);
@@ -71,9 +72,11 @@ export function DirectorView() {
   const loadData = React.useCallback(async () => {
     setDataLoading(true);
     try {
-      const [users, groupsData] = await Promise.all([fetchUsers(), fetchGroups()]);
+      const [users, groupsData, alertsData, studentsData] = await Promise.all([fetchUsers(), fetchGroups(), fetchSecurityAlerts(), fetchStudents()]);
       setStaffList(users);
       setGroupList(groupsData);
+      setSecurityAlerts(alertsData);
+      setStudentList(studentsData);
     } catch (error) {
       console.error("Error loading Firebase data", error);
       toast({
@@ -242,7 +245,7 @@ export function DirectorView() {
         </div>
 
         <div className="grid grid-cols-1 gap-6">
-          <SecurityAlerts alerts={securityAlerts} />
+          <SecurityAlerts alerts={securityAlerts} students={studentList} />
         </div>
       </section>
 

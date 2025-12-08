@@ -23,8 +23,8 @@ export const groups: Group[] = [
 ];
 
 export const subjects: Subject[] = [
-  { id: 'subj-1', name: 'MatemÃ¡ticas', teacherId: 'user-3' },
-  { id: 'subj-2', name: 'FÃsica', teacherId: 'user-6' },
+  { id: 'subj-1', name: 'Matemáticas', teacherId: 'user-3' },
+  { id: 'subj-2', name: 'Física', teacherId: 'user-6' },
   { id: 'subj-3', name: 'Historia', teacherId: 'user-7' },
   { id: 'subj-4', name: 'Literatura', teacherId: 'user-3' },
 ];
