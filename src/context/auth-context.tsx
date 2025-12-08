@@ -5,14 +5,14 @@ import { createContext, useContext, useEffect, useState, useMemo } from "react";
 import { onAuthStateChanged, User as FirebaseUser } from "firebase/auth";
 import { auth } from "@/lib/firebase/client";
 import { fetchUsers } from "@/lib/firebase/data";
-import { signInWithEmail } from "@/lib/firebase/auth"; // Import the signInWithEmail function
+import { signInWithEmail } from "@/lib/firebase/auth";
 import type { User } from "@/lib/types";
 
 type AuthContextValue = {
   user: FirebaseUser | null;
   profile: User | null;
   loading: boolean;
-  signIn: (email: string, pass: string) => Promise<void>; // Update the signIn type
+  signIn: (email: string, pass: string) => Promise<void>;
   signOut: () => Promise<void>;
 };
 
@@ -26,8 +26,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<FirebaseUser | null>(null);
   const [profile, setProfile] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isClient) return;
+
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setUser(user);
       if (user) {
@@ -38,14 +45,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
         } catch (error) {
           console.error("refresh profile", error);
           setProfile(null);
-        }       
+        }
       } else {
         setProfile(null);
       }
       setLoading(false);
     });
     return () => unsubscribe();
-  }, []);
+  }, [isClient]);
 
   const value: AuthContextValue = useMemo(
     () => ({
@@ -62,7 +69,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     [user, profile, loading]
   );
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={value}>{isClient ? children : null}</AuthContext.Provider>;
 }
 
 export function useAuth() {
