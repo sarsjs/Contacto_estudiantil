@@ -7,7 +7,6 @@
       "**/node_modules/**"
     ],
     "frameworksBackend": {
-      "id": "fir08121146",
       "region": "us-central1",
       "availableSecrets": [
         "NEXT_PUBLIC_FIREBASE_API_KEY",
