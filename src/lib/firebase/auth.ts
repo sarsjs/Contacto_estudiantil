@@ -6,7 +6,13 @@ import {
 } from 'firebase/auth';
 
 export async function signInWithEmail(email: string, password: string) {
-  return await signInWithEmailAndPassword(auth, email, password);
+  try {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    return userCredential;
+  } catch (error) {
+    console.error("Error signing in with email and password:", error);
+    throw error;
+  }
 }
 
 export async function signOutUser() {

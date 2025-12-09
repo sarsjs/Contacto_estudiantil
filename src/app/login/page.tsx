@@ -32,6 +32,7 @@ export default function LoginPage() {
       toast({ title: "Inicio de sesión exitoso", description: "Bienvenido de nuevo." });
       router.push("/");
     } catch (error) {
+      console.log(error);
       console.error("Sign in failed", error);
       toast({
         title: "Error en el inicio de sesión",
