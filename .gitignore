@@ -1,4 +1,15 @@
 
-# Firebase credentials
+# Managed by IDX - https://goo.gle/is-managed-by-idx
+
+.DS_Store
+
+
+# IDE files
+
+.idea
+
+
+# Firebase files
+
 .firebase/
 node_modules
