@@ -1,0 +1,183 @@
+[debug] [2025-12-09T05:09:46.030Z] Object "/hosting/frameworksBackend" in "firebase.json" has unknown property: {"additionalProperty":"id"}
+[debug] [2025-12-09T05:09:46.033Z] Field "/hosting" in "firebase.json" is possibly invalid: must be array
+[debug] [2025-12-09T05:09:46.033Z] Field "/hosting" in "firebase.json" is possibly invalid: must match a schema in anyOf
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2025-12-09T05:09:46.036Z] Object "/hosting/frameworksBackend" in "firebase.json" has unknown property: {"additionalProperty":"id"}
+[debug] [2025-12-09T05:09:46.036Z] Field "/hosting" in "firebase.json" is possibly invalid: must be array
+[debug] [2025-12-09T05:09:46.036Z] Field "/hosting" in "firebase.json" is possibly invalid: must match a schema in anyOf
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2025-12-09T05:09:46.038Z] Object "/hosting/frameworksBackend" in "firebase.json" has unknown property: {"additionalProperty":"id"}
+[debug] [2025-12-09T05:09:46.038Z] Field "/hosting" in "firebase.json" is possibly invalid: must be array
+[debug] [2025-12-09T05:09:46.038Z] Field "/hosting" in "firebase.json" is possibly invalid: must match a schema in anyOf
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2025-12-09T05:09:46.039Z] Object "/hosting/frameworksBackend" in "firebase.json" has unknown property: {"additionalProperty":"id"}
+[debug] [2025-12-09T05:09:46.039Z] Field "/hosting" in "firebase.json" is possibly invalid: must be array
+[debug] [2025-12-09T05:09:46.040Z] Field "/hosting" in "firebase.json" is possibly invalid: must match a schema in anyOf
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2025-12-09T05:09:46.040Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2025-12-09T05:09:46.041Z] > authorizing via signed-in user (sarsjs@gmail.com)
+[debug] [2025-12-09T05:09:46.041Z] Object "/hosting/frameworksBackend" in "firebase.json" has unknown property: {"additionalProperty":"id"}
+[debug] [2025-12-09T05:09:46.041Z] Field "/hosting" in "firebase.json" is possibly invalid: must be array
+[debug] [2025-12-09T05:09:46.041Z] Field "/hosting" in "firebase.json" is possibly invalid: must match a schema in anyOf
+[debug] [2025-12-09T05:09:46.046Z] Checked if tokens are valid: false, expires at: 1765249037372
+[debug] [2025-12-09T05:09:46.047Z] Checked if tokens are valid: false, expires at: 1765249037372
+[debug] [2025-12-09T05:09:46.047Z] > refreshing access token with scopes: []
+[debug] [2025-12-09T05:09:46.049Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-12-09T05:09:46.049Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-12-09T05:09:46.052Z] Checked if tokens are valid: false, expires at: 1765249037372
+[debug] [2025-12-09T05:09:46.052Z] Checked if tokens are valid: false, expires at: 1765249037372
+[debug] [2025-12-09T05:09:46.052Z] > refreshing access token with scopes: []
+[debug] [2025-12-09T05:09:46.052Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-12-09T05:09:46.052Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-12-09T05:09:46.054Z] Checked if tokens are valid: false, expires at: 1765249037372
+[debug] [2025-12-09T05:09:46.054Z] Checked if tokens are valid: false, expires at: 1765249037372
+[debug] [2025-12-09T05:09:46.054Z] > refreshing access token with scopes: []
+[debug] [2025-12-09T05:09:46.055Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-12-09T05:09:46.055Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-12-09T05:09:46.064Z] Checked if tokens are valid: false, expires at: 1765249037372
+[debug] [2025-12-09T05:09:46.064Z] Checked if tokens are valid: false, expires at: 1765249037372
+[debug] [2025-12-09T05:09:46.064Z] > refreshing access token with scopes: []
+[debug] [2025-12-09T05:09:46.064Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-12-09T05:09:46.064Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-12-09T05:09:46.065Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2025-12-09T05:09:46.066Z] > authorizing via signed-in user (sarsjs@gmail.com)
+[debug] [2025-12-09T05:09:46.066Z] Object "/hosting/frameworksBackend" in "firebase.json" has unknown property: {"additionalProperty":"id"}
+[debug] [2025-12-09T05:09:46.066Z] Field "/hosting" in "firebase.json" is possibly invalid: must be array
+[debug] [2025-12-09T05:09:46.066Z] Field "/hosting" in "firebase.json" is possibly invalid: must match a schema in anyOf
+[debug] [2025-12-09T05:09:46.067Z] Checked if tokens are valid: false, expires at: 1765249037372
+[debug] [2025-12-09T05:09:46.067Z] Checked if tokens are valid: false, expires at: 1765249037372
+[debug] [2025-12-09T05:09:46.067Z] > refreshing access token with scopes: []
+[debug] [2025-12-09T05:09:46.067Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-12-09T05:09:46.067Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-12-09T05:09:46.069Z] Checked if tokens are valid: false, expires at: 1765249037372
+[debug] [2025-12-09T05:09:46.069Z] Checked if tokens are valid: false, expires at: 1765249037372
+[debug] [2025-12-09T05:09:46.069Z] > refreshing access token with scopes: []
+[debug] [2025-12-09T05:09:46.070Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-12-09T05:09:46.070Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-12-09T05:09:46.071Z] Checked if tokens are valid: false, expires at: 1765249037372
+[debug] [2025-12-09T05:09:46.071Z] Checked if tokens are valid: false, expires at: 1765249037372
+[debug] [2025-12-09T05:09:46.071Z] > refreshing access token with scopes: []
+[debug] [2025-12-09T05:09:46.071Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-12-09T05:09:46.071Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-12-09T05:09:46.074Z] Checked if tokens are valid: false, expires at: 1765249037372
+[debug] [2025-12-09T05:09:46.074Z] Checked if tokens are valid: false, expires at: 1765249037372
+[debug] [2025-12-09T05:09:46.074Z] > refreshing access token with scopes: []
+[debug] [2025-12-09T05:09:46.075Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-12-09T05:09:46.075Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-12-09T05:09:46.167Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-12-09T05:09:46.167Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-12-09T05:09:46.227Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/contacto-estudiantil/services/firebasedataconnect.googleapis.com [none]
+[debug] [2025-12-09T05:09:46.228Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/contacto-estudiantil/services/firebasedataconnect.googleapis.com x-goog-quota-user=projects/contacto-estudiantil
+[debug] [2025-12-09T05:09:46.230Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-12-09T05:09:46.230Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-12-09T05:09:46.251Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/contacto-estudiantil/services/firestore.googleapis.com [none]
+[debug] [2025-12-09T05:09:46.251Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/contacto-estudiantil/services/firestore.googleapis.com x-goog-quota-user=projects/contacto-estudiantil
+[debug] [2025-12-09T05:09:46.268Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-12-09T05:09:46.268Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-12-09T05:09:46.301Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/contacto-estudiantil/services/firebaseio.com [none]
+[debug] [2025-12-09T05:09:46.301Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/contacto-estudiantil/services/firebaseio.com x-goog-quota-user=projects/contacto-estudiantil
+[debug] [2025-12-09T05:09:46.312Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-12-09T05:09:46.312Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-12-09T05:09:46.350Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/contacto-estudiantil/services/firebasedataconnect.googleapis.com [none]
+[debug] [2025-12-09T05:09:46.350Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/contacto-estudiantil/services/firebasedataconnect.googleapis.com x-goog-quota-user=projects/contacto-estudiantil
+[debug] [2025-12-09T05:09:46.355Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-12-09T05:09:46.355Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-12-09T05:09:46.388Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/contacto-estudiantil/services/cloudfunctions.googleapis.com [none]
+[debug] [2025-12-09T05:09:46.388Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/contacto-estudiantil/services/cloudfunctions.googleapis.com x-goog-quota-user=projects/contacto-estudiantil
+[debug] [2025-12-09T05:09:46.407Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-12-09T05:09:46.407Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-12-09T05:09:46.437Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/contacto-estudiantil/services/cloudfunctions.googleapis.com [none]
+[debug] [2025-12-09T05:09:46.437Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/contacto-estudiantil/services/cloudfunctions.googleapis.com x-goog-quota-user=projects/contacto-estudiantil
+[debug] [2025-12-09T05:09:46.440Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-12-09T05:09:46.441Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-12-09T05:09:46.474Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/contacto-estudiantil/services/firebaseio.com [none]
+[debug] [2025-12-09T05:09:46.474Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/contacto-estudiantil/services/firebaseio.com x-goog-quota-user=projects/contacto-estudiantil
+[debug] [2025-12-09T05:09:46.477Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-12-09T05:09:46.477Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-12-09T05:09:46.505Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/contacto-estudiantil/services/firestore.googleapis.com [none]
+[debug] [2025-12-09T05:09:46.505Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/contacto-estudiantil/services/firestore.googleapis.com x-goog-quota-user=projects/contacto-estudiantil
+[debug] [2025-12-09T05:09:46.530Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/contacto-estudiantil/services/firebasedataconnect.googleapis.com 200
+[debug] [2025-12-09T05:09:46.530Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/contacto-estudiantil/services/firebasedataconnect.googleapis.com [omitted]
+[debug] [2025-12-09T05:09:46.539Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/contacto-estudiantil/services/firebaseio.com 403
+[debug] [2025-12-09T05:09:46.539Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/contacto-estudiantil/services/firebaseio.com [omitted]
+[debug] [2025-12-09T05:09:46.541Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/contacto-estudiantil/services/firestore.googleapis.com 200
+[debug] [2025-12-09T05:09:46.541Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/contacto-estudiantil/services/firestore.googleapis.com [omitted]
+[debug] [2025-12-09T05:09:46.542Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/contacto-estudiantil/services/firebaseio.com 403
+[debug] [2025-12-09T05:09:46.542Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/contacto-estudiantil/services/firebaseio.com [omitted]
+[debug] [2025-12-09T05:09:46.550Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/contacto-estudiantil/services/cloudfunctions.googleapis.com 200
+[debug] [2025-12-09T05:09:46.550Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/contacto-estudiantil/services/cloudfunctions.googleapis.com [omitted]
+[debug] [2025-12-09T05:09:46.551Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/contacto-estudiantil/services/firebasedataconnect.googleapis.com 200
+[debug] [2025-12-09T05:09:46.551Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/contacto-estudiantil/services/firebasedataconnect.googleapis.com [omitted]
+[debug] [2025-12-09T05:09:46.564Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/contacto-estudiantil/services/cloudfunctions.googleapis.com 200
+[debug] [2025-12-09T05:09:46.564Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/contacto-estudiantil/services/cloudfunctions.googleapis.com [omitted]
+[debug] [2025-12-09T05:09:46.645Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/contacto-estudiantil/services/firestore.googleapis.com 200
+[debug] [2025-12-09T05:09:46.645Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/contacto-estudiantil/services/firestore.googleapis.com [omitted]
+[debug] [2025-12-09T05:09:46.646Z] Object "/hosting/frameworksBackend" in "firebase.json" has unknown property: {"additionalProperty":"id"}
+[debug] [2025-12-09T05:09:46.646Z] Field "/hosting" in "firebase.json" is possibly invalid: must be array
+[debug] [2025-12-09T05:09:46.646Z] Field "/hosting" in "firebase.json" is possibly invalid: must match a schema in anyOf
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2025-12-09T05:09:46.650Z] Object "/hosting/frameworksBackend" in "firebase.json" has unknown property: {"additionalProperty":"id"}
+[debug] [2025-12-09T05:09:46.650Z] Field "/hosting" in "firebase.json" is possibly invalid: must be array
+[debug] [2025-12-09T05:09:46.650Z] Field "/hosting" in "firebase.json" is possibly invalid: must match a schema in anyOf
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2025-12-09T05:09:46.651Z] Object "/hosting/frameworksBackend" in "firebase.json" has unknown property: {"additionalProperty":"id"}
+[debug] [2025-12-09T05:09:46.651Z] Field "/hosting" in "firebase.json" is possibly invalid: must be array
+[debug] [2025-12-09T05:09:46.651Z] Field "/hosting" in "firebase.json" is possibly invalid: must match a schema in anyOf
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2025-12-09T05:09:46.652Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2025-12-09T05:09:46.652Z] > authorizing via signed-in user (sarsjs@gmail.com)
+[debug] [2025-12-09T05:09:46.652Z] Object "/hosting/frameworksBackend" in "firebase.json" has unknown property: {"additionalProperty":"id"}
+[debug] [2025-12-09T05:09:46.652Z] Field "/hosting" in "firebase.json" is possibly invalid: must be array
+[debug] [2025-12-09T05:09:46.652Z] Field "/hosting" in "firebase.json" is possibly invalid: must match a schema in anyOf
+[debug] [2025-12-09T05:09:46.653Z] Object "/hosting/frameworksBackend" in "firebase.json" has unknown property: {"additionalProperty":"id"}
+[debug] [2025-12-09T05:09:46.653Z] Field "/hosting" in "firebase.json" is possibly invalid: must be array
+[debug] [2025-12-09T05:09:46.653Z] Field "/hosting" in "firebase.json" is possibly invalid: must match a schema in anyOf
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2025-12-09T05:09:46.654Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2025-12-09T05:09:46.654Z] > authorizing via signed-in user (sarsjs@gmail.com)
+[debug] [2025-12-09T05:09:46.661Z] Object "/hosting/frameworksBackend" in "firebase.json" has unknown property: {"additionalProperty":"id"}
+[debug] [2025-12-09T05:09:46.661Z] Field "/hosting" in "firebase.json" is possibly invalid: must be array
+[debug] [2025-12-09T05:09:46.661Z] Field "/hosting" in "firebase.json" is possibly invalid: must match a schema in anyOf
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2025-12-09T05:09:46.663Z] Object "/hosting/frameworksBackend" in "firebase.json" has unknown property: {"additionalProperty":"id"}
+[debug] [2025-12-09T05:09:46.663Z] Field "/hosting" in "firebase.json" is possibly invalid: must be array
+[debug] [2025-12-09T05:09:46.663Z] Field "/hosting" in "firebase.json" is possibly invalid: must match a schema in anyOf
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2025-12-09T05:09:46.666Z] Object "/hosting/frameworksBackend" in "firebase.json" has unknown property: {"additionalProperty":"id"}
+[debug] [2025-12-09T05:09:46.666Z] Field "/hosting" in "firebase.json" is possibly invalid: must be array
+[debug] [2025-12-09T05:09:46.666Z] Field "/hosting" in "firebase.json" is possibly invalid: must match a schema in anyOf
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2025-12-09T05:09:46.667Z] Object "/hosting/frameworksBackend" in "firebase.json" has unknown property: {"additionalProperty":"id"}
+[debug] [2025-12-09T05:09:46.667Z] Field "/hosting" in "firebase.json" is possibly invalid: must be array
+[debug] [2025-12-09T05:09:46.667Z] Field "/hosting" in "firebase.json" is possibly invalid: must match a schema in anyOf
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2025-12-09T05:09:46.667Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2025-12-09T05:09:46.667Z] > authorizing via signed-in user (sarsjs@gmail.com)
+[debug] [2025-12-09T05:09:46.667Z] Object "/hosting/frameworksBackend" in "firebase.json" has unknown property: {"additionalProperty":"id"}
+[debug] [2025-12-09T05:09:46.668Z] Field "/hosting" in "firebase.json" is possibly invalid: must be array
+[debug] [2025-12-09T05:09:46.668Z] Field "/hosting" in "firebase.json" is possibly invalid: must match a schema in anyOf
+[debug] [2025-12-09T05:09:46.668Z] Object "/hosting/frameworksBackend" in "firebase.json" has unknown property: {"additionalProperty":"id"}
+[debug] [2025-12-09T05:09:46.668Z] Field "/hosting" in "firebase.json" is possibly invalid: must be array
+[debug] [2025-12-09T05:09:46.668Z] Field "/hosting" in "firebase.json" is possibly invalid: must match a schema in anyOf
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2025-12-09T05:09:46.668Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2025-12-09T05:09:46.668Z] > authorizing via signed-in user (sarsjs@gmail.com)
+[debug] [2025-12-09T05:09:46.677Z] Object "/hosting/frameworksBackend" in "firebase.json" has unknown property: {"additionalProperty":"id"}
+[debug] [2025-12-09T05:09:46.677Z] Field "/hosting" in "firebase.json" is possibly invalid: must be array
+[debug] [2025-12-09T05:09:46.678Z] Field "/hosting" in "firebase.json" is possibly invalid: must match a schema in anyOf
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2025-12-09T05:09:46.678Z] Object "/hosting/frameworksBackend" in "firebase.json" has unknown property: {"additionalProperty":"id"}
+[debug] [2025-12-09T05:09:46.678Z] Field "/hosting" in "firebase.json" is possibly invalid: must be array
+[debug] [2025-12-09T05:09:46.678Z] Field "/hosting" in "firebase.json" is possibly invalid: must match a schema in anyOf
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2025-12-09T05:09:46.679Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2025-12-09T05:09:46.679Z] > authorizing via signed-in user (sarsjs@gmail.com)
+[debug] [2025-12-09T05:09:46.680Z] Object "/hosting/frameworksBackend" in "firebase.json" has unknown property: {"additionalProperty":"id"}
+[debug] [2025-12-09T05:09:46.680Z] Field "/hosting" in "firebase.json" is possibly invalid: must be array
+[debug] [2025-12-09T05:09:46.680Z] Field "/hosting" in "firebase.json" is possibly invalid: must match a schema in anyOf
+[debug] [2025-12-09T05:09:46.680Z] Object "/hosting/frameworksBackend" in "firebase.json" has unknown property: {"additionalProperty":"id"}
+[debug] [2025-12-09T05:09:46.680Z] Field "/hosting" in "firebase.json" is possibly invalid: must be array
+[debug] [2025-12-09T05:09:46.680Z] Field "/hosting" in "firebase.json" is possibly invalid: must match a schema in anyOf
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2025-12-09T05:09:46.680Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2025-12-09T05:09:46.681Z] > authorizing via signed-in user (sarsjs@gmail.com)
