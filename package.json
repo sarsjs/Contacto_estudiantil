@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "serve": "next start -p 8080"
+    "serve": "next start -p 8080",
+    "migrate": "dotenv -e .env.local -- npx tsx src/migrate.ts"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.12",
@@ -22,7 +23,7 @@
     "@radix-ui/react-tooltip": "^1.2.8",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
-    "firebase": "^10.12.3",
+    "firebase": "^12.6.0",
     "html-to-image": "^1.11.13",
     "lucide-react": "^0.400.0",
     "next": "14.2.4",
@@ -35,6 +36,7 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "dotenv-cli": "^7.4.2",
     "eslint": "^8",
     "eslint-config-next": "14.2.4",
     "postcss": "^8",
