@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { useRouter } from 'next/navigation';
 import {
   BookCopy,
   Calendar,
@@ -150,10 +151,17 @@ function AppHeader({
 }
 
 export function Dashboard() {
-  const { profile, signOut } = useAuth();
+  const { profile, loading, signOut } = useAuth();
+  const router = useRouter();
 
-  if (!profile) {
-    return <div className="flex h-screen items-center justify-center">Cargando perfil...</div>;
+  React.useEffect(() => {
+    if (!loading && !profile) {
+      router.push('/login');
+    }
+  }, [loading, profile, router]);
+
+  if (loading || !profile) {
+    return <div className="flex h-screen items-center justify-center">Cargando...</div>;
   }
 
   const title = viewTitles[profile.role];
