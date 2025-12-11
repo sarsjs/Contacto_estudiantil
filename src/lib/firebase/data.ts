@@ -8,6 +8,16 @@ export const fetchUsers = async (): Promise<User[]> => {
   return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as unknown as User));
 };
 
+export const fetchUserByEmail = async (email: string): Promise<User | null> => {
+    const q = query(collection(db, "users"), where("email", "==", email));
+    const querySnapshot = await getDocs(q);
+    if (querySnapshot.empty) {
+        return null;
+    }
+    const userDoc = querySnapshot.docs[0];
+    return { id: userDoc.id, ...userDoc.data() } as unknown as User;
+};
+
 export const fetchGroups = async (): Promise<Group[]> => {
   const querySnapshot = await getDocs(collection(db, "groups"));
   return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as unknown as Group));

@@ -4,7 +4,7 @@ import * as React from "react";
 import { createContext, useContext, useEffect, useState, useMemo } from "react";
 import { onAuthStateChanged, User as FirebaseUser } from "firebase/auth";
 import { auth } from "@/lib/firebase/client";
-import { fetchUsers } from "@/lib/firebase/data";
+import { fetchUserByEmail } from "@/lib/firebase/data";
 import { signInWithEmail } from "@/lib/firebase/auth";
 import type { User } from "@/lib/types";
 
@@ -39,9 +39,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setUser(user);
       if (user) {
         try {
-          const users = await fetchUsers();
-          const match = users.find((stored) => stored.email === user.email);
-          if (match) setProfile(match);
+          const userProfile = await fetchUserByEmail(user.email!);
+          if (userProfile) setProfile(userProfile);
         } catch (error) {
           console.error("refresh profile", error);
           setProfile(null);
@@ -60,7 +59,28 @@ export function AuthProvider({ children }: AuthProviderProps) {
       profile,
       loading,
       signIn: async (email: string, pass: string) => {
-        await signInWithEmail(email, pass);
+        setLoading(true);
+        try {
+          const userCredential = await signInWithEmail(email, pass);
+          if (userCredential?.user) {
+            const userProfile = await fetchUserByEmail(
+              userCredential.user.email!
+            );
+            if (userProfile) {
+              setUser(userCredential.user);
+              setProfile(userProfile);
+            } else {
+              await auth.signOut();
+              throw new Error("User profile not found.");
+            }
+          }
+        } catch (error) {
+          setUser(null);
+          setProfile(null);
+          throw error;
+        } finally {
+          setLoading(false);
+        }
       },
       signOut: async () => {
         await auth.signOut();
