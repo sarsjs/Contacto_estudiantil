@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/auth-context";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,7 +20,6 @@ export default function LoginPage() {
   const [password, setPassword] = React.useState("");
   const [loading, setLoading] = React.useState(false);
   const { signIn } = useAuth();
-  const router = useRouter();
   const { toast } = useToast();
 
   const handleSignIn = async (e: React.FormEvent) => {
@@ -30,7 +28,7 @@ export default function LoginPage() {
     try {
       await signIn(email, password);
       toast({ title: "Inicio de sesión exitoso", description: "Bienvenido de nuevo." });
-      router.push("/");
+      // La redireccion ahora es manejada por el AuthGuard
     } catch (error) {
       console.log(error);
       console.error("Sign in failed", error);
@@ -39,6 +37,7 @@ export default function LoginPage() {
         description: "Credenciales inválidas. Por favor, intenta de nuevo.",
         variant: "destructive",
       });
+    } finally {
       setLoading(false);
     }
   };

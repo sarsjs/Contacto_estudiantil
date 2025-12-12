@@ -3,6 +3,7 @@ import type {ReactNode} from 'react';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { AuthProvider } from '@/context/auth-context';
+import { AuthGuard } from '@/components/auth-guard';
 
 export const metadata: Metadata = {
   title: 'EduChain',
@@ -23,8 +24,10 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased">
         <AuthProvider>
-          {children}
-          <Toaster />
+          <AuthGuard>
+            {children}
+            <Toaster />
+          </AuthGuard>
         </AuthProvider>
       </body>
     </html>
