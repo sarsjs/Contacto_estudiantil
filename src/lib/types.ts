@@ -19,7 +19,9 @@ export interface Student {
     id: string;
     name: string;
     email: string;
-    groupId: string;
+    groupId?: string;
+    matricula?: string;
+    avatarUrl?: string;
 }
 
 export interface Subject {
