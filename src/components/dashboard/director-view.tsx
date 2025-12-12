@@ -32,12 +32,10 @@ export function DirectorView() {
   const [groupList, setGroupList] = React.useState<Group[]>([]);
   const [cycleList, setCycleList] = React.useState<string[]>([]);
   const [isSending, setIsSending] = React.useState(false);
-  const [shouldReloadMessages, setShouldReloadMessages] = React.useState(false);
-
   const [message, setMessage] = React.useState("");
   const [recipientFilter, setRecipientFilter] = React.useState<RecipientFilter>("all");
-
   const [date, setDate] = React.useState<Date | undefined>(new Date());
+  const [reloadKey, setReloadKey] = React.useState(0);
 
   const { toast } = useToast();
 
@@ -93,7 +91,7 @@ export function DirectorView() {
             description: `Tu mensaje ha sido enviado a ${recipientFilter}.`,
         });
         setMessage("");
-        setShouldReloadMessages(true); // Disparar la recarga del historial
+        setReloadKey(prevKey => prevKey + 1);
 
       } catch (error) {
           console.error("Error sending message:", error);
@@ -106,6 +104,14 @@ export function DirectorView() {
           setIsSending(false);
       }
   }
+
+  const handleDateSelect = (selectedDate: Date | undefined) => {
+    setDate(selectedDate);
+    toast({
+        title: "Calendario Interactivo",
+        description: "Funcionalidad para añadir eventos próximamente.",
+    });
+  };
 
   return (
     <div className="space-y-6">
@@ -173,8 +179,7 @@ export function DirectorView() {
                         </div>
                     </CardContent>
                 </Card>
-                {/* El nuevo componente se añade aquí */}
-                <MessageHistory key={shouldReloadMessages ? 'reload' : 'initial'} />
+                <MessageHistory key={reloadKey} />
             </div>
 
             <Card>
@@ -182,11 +187,11 @@ export function DirectorView() {
                     <CardTitle>Calendario Escolar</CardTitle>
                     <CardDescription>Gestiona los eventos y fechas importantes.</CardDescription>
                 </CardHeader>
-                <CardContent className="flex justify-center">
+                <CardContent>
                 <Calendar
                     mode="single"
                     selected={date}
-                    onSelect={setDate}
+                    onSelect={handleDateSelect}
                     className="rounded-md border"
                 />
                 </CardContent>
