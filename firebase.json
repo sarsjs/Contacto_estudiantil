@@ -17,5 +17,11 @@
         "NEXT_PUBLIC_FIREBASE_APP_ID"
       ]
     }
+  },
+  "firestore": {
+    "database": "(default)",
+    "location": "nam5",
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
   }
 }
