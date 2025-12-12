@@ -1,0 +1,223 @@
+'use client';
+
+import * as React from 'react';
+import { useParams } from 'next/navigation';
+import { useUser } from '@/context/user-context';
+import {
+  fetchSubjects,
+  fetchGroupsBySubject,
+  fetchStudentsByGroup,
+  fetchGradesBySubjectAndGroup,
+  setGradeBatch
+} from '@/lib/firebase/data';
+import type { Subject, Group, Student, Grade } from '@/lib/types';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from '@/components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Input } from "@/components/ui/input";
+import { useToast } from "@/hooks/use-toast";
+
+function GradeSheet({ students, groupId, subjectId, partial }: { students: Student[], groupId: string, subjectId: string, partial: number }) {
+  const [grades, setGrades] = React.useState<Record<string, number | string>>({});
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [isSaving, setIsSaving] = React.useState(false);
+  const { toast } = useToast();
+
+  React.useEffect(() => {
+    const loadGrades = async () => {
+      setIsLoading(true);
+      const existingGrades = await fetchGradesBySubjectAndGroup(subjectId, groupId);
+      const gradeMap: Record<string, number> = {};
+      students.forEach(student => {
+        const record = existingGrades.find(g => g.studentId === student.id && g.partial === partial);
+        gradeMap[student.id] = record ? record.grade : 0;
+      });
+      setGrades(gradeMap);
+      setIsLoading(false);
+    };
+
+    loadGrades();
+  }, [students, subjectId, groupId, partial]);
+
+  const handleSave = async () => {
+    setIsSaving(true);
+    const recordsToSave = Object.entries(grades).map(([studentId, grade]) => ({
+      studentId,
+      subjectId,
+      groupId, // Assuming groupId is needed in the grade record
+      partial: partial as (1 | 2 | 3),
+      grade: Number(grade),
+    }));
+
+    try {
+      await setGradeBatch(recordsToSave as any);
+      toast({ title: "Calificaciones Guardadas", description: "El registro se ha guardado correctamente." });
+    } catch (error) {
+      console.error(error);
+      toast({ title: "Error al guardar", description: "No se pudieron guardar las calificaciones.", variant: "destructive" });
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleGradeChange = (studentId: string, value: string) => {
+    const numValue = value === '' ? '' : Math.max(0, Math.min(10, Number(value)));
+    setGrades(prev => ({...prev, [studentId]: numValue }));
+  }
+
+  if (isLoading) {
+    return <p>Cargando hoja de calificaciones...</p>;
+  }
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Registro de Calificaciones - {partial}er Parcial</CardTitle>
+        <CardDescription>Introduzca la calificación (0-10) para cada alumno.</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Table>
+          <TableHeader><TableRow><TableHead>Alumno</TableHead><TableHead className="text-right">Calificación</TableHead></TableRow></TableHeader>
+          <TableBody>
+            {students.map(student => (
+              <TableRow key={student.id}>
+                <TableCell>{student.name}</TableCell>
+                <TableCell className="text-right">
+                  <Input
+                    type="number"
+                    className="w-24 float-right"
+                    min={0}
+                    max={10}
+                    value={grades[student.id] || ''}
+                    onChange={(e) => handleGradeChange(student.id, e.target.value)}
+                  />
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+        <Button onClick={handleSave} disabled={isSaving} className="mt-6 w-full">
+          {isSaving ? "Guardando..." : "Guardar Calificaciones"}
+        </Button>
+      </CardContent>
+    </Card>
+  );
+}
+
+export default function GradingPage() {
+  const params = useParams();
+  const subjectId = params.subjectId as string;
+
+  const [subject, setSubject] = React.useState<Subject | null>(null);
+  const [groups, setGroups] = React.useState<Group[]>([]);
+  const [selectedGroup, setSelectedGroup] = React.useState<string>("");
+  const [selectedPartial, setSelectedPartial] = React.useState<number>(0);
+  const [students, setStudents] = React.useState<Student[]>([]);
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [error, setError] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    if (!subjectId) return;
+
+    const loadInitialData = async () => {
+      try {
+        const [allSubjects, subjectGroups] = await Promise.all([
+          fetchSubjects(),
+          fetchGroupsBySubject(subjectId)
+        ]);
+        
+        const currentSubject = allSubjects.find(s => s.id === subjectId);
+        if (!currentSubject) {
+          setError("La materia no existe.");
+          return;
+        }
+        
+        setSubject(currentSubject);
+        setGroups(subjectGroups);
+
+        if (subjectGroups.length === 1) {
+          setSelectedGroup(subjectGroups[0].id);
+        }
+      } catch (err) {
+        console.error(err);
+        setError("Error al cargar la información.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    loadInitialData();
+  }, [subjectId]);
+
+  React.useEffect(() => {
+    if (!selectedGroup) {
+      setStudents([]);
+      return;
+    }
+
+    const loadStudents = async () => {
+      try {
+        const studentData = await fetchStudentsByGroup(selectedGroup);
+        setStudents(studentData);
+      } catch (err) {
+        console.error(err);
+        setError("Error al cargar los alumnos.");
+      }
+    };
+    loadStudents();
+  }, [selectedGroup]);
+  
+  if (isLoading) {
+    return <p>Cargando...</p>;
+  }
+
+  if (error) {
+    return <p className="text-red-500">{error}</p>;
+  }
+
+  const showGradingSheet = selectedGroup && selectedPartial > 0;
+
+  return (
+    <div className="space-y-6">
+      <h1 className="text-2xl font-bold">Calificar: {subject?.name}</h1>
+
+      <div className="grid md:grid-cols-2 gap-4">
+        <Card>
+          <CardHeader><CardTitle>1. Seleccionar Grupo</CardTitle></CardHeader>
+          <CardContent>
+            <Select onValueChange={setSelectedGroup} value={selectedGroup} disabled={groups.length <= 1}>
+              <SelectTrigger><SelectValue placeholder="Elige un grupo..." /></SelectTrigger>
+              <SelectContent>
+                {groups.map(group => (
+                  <SelectItem key={group.id} value={group.id}>{group.name} - {group.cycleId}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader><CardTitle>2. Seleccionar Parcial</CardTitle></CardHeader>
+          <CardContent>
+            <Select onValueChange={(val) => setSelectedPartial(Number(val))} value={String(selectedPartial)} disabled={!selectedGroup}>
+              <SelectTrigger><SelectValue placeholder="Elige un parcial..." /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="1">1er Parcial</SelectItem>
+                <SelectItem value="2">2do Parcial</SelectItem>
+                <SelectItem value="3">3er Parcial</SelectItem>
+              </SelectContent>
+            </Select>
+          </CardContent>
+        </Card>
+      </div>
+
+      {showGradingSheet && students.length > 0 && (
+        <GradeSheet students={students} groupId={selectedGroup} subjectId={subjectId} partial={selectedPartial} />
+      )}
+
+      {showGradingSheet && students.length === 0 && (
+        <p>No hay alumnos registrados en el grupo seleccionado.</p>
+      )}
+    </div>
+  );
+}

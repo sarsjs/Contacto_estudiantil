@@ -21,17 +21,17 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 import { Calendar } from '@/components/ui/calendar';
 import { useToast } from '@/hooks/use-toast';
-import { SecurityAlerts } from './security-alerts';
-import type { Group, SecurityAlert, User, Student, RecipientFilter } from '@/lib/types';
-import { fetchUsers, fetchGroups, fetchSecurityAlerts, fetchStudents, addMessage } from "@/lib/firebase/data";
+import { MessageHistory } from './message-history'; 
+import type { Group, User, Student, RecipientFilter } from '@/lib/types';
+import { fetchUsers, fetchGroups, fetchStudents, addMessage } from "@/lib/firebase/data";
 
 export function DirectorView() {
   const [staffList, setStaffList] = React.useState<User[]>([]);
   const [studentList, setStudentList] = React.useState<Student[]>([]);
-  const [securityAlerts, setSecurityAlerts] = React.useState<SecurityAlert[]>([]);
   const [groupList, setGroupList] = React.useState<Group[]>([]);
   const [cycleList, setCycleList] = React.useState<string[]>([]);
   const [isSending, setIsSending] = React.useState(false);
+  const [shouldReloadMessages, setShouldReloadMessages] = React.useState(false);
 
   const [message, setMessage] = React.useState("");
   const [recipientFilter, setRecipientFilter] = React.useState<RecipientFilter>("all");
@@ -42,10 +42,9 @@ export function DirectorView() {
 
   const loadData = React.useCallback(async () => {
     try {
-      const [users, groupsData, alertsData, studentsData] = await Promise.all([fetchUsers(), fetchGroups(), fetchSecurityAlerts(), fetchStudents()]);
+      const [users, groupsData, studentsData] = await Promise.all([fetchUsers(), fetchGroups(), fetchStudents()]);
       setStaffList(users);
       setGroupList(groupsData);
-      setSecurityAlerts(alertsData);
       setStudentList(studentsData);
     } catch (error) {
       console.error("Error loading Firebase data", error);
@@ -65,7 +64,6 @@ export function DirectorView() {
     const uniqueCycles = Array.from(new Set(groupList.map((group) => group.cycleId))).filter(Boolean);
     setCycleList(uniqueCycles);
   }, [groupList]);
-
 
   const totalCycles = cycleList.length;
   const totalGroups = groupList.length;
@@ -94,6 +92,7 @@ export function DirectorView() {
             description: `Tu mensaje ha sido enviado a ${recipientFilter}.`,
         });
         setMessage("");
+        setShouldReloadMessages(true); // Disparar la recarga del historial
 
       } catch (error) {
           console.error("Error sending message:", error);
@@ -137,41 +136,45 @@ export function DirectorView() {
         </div>
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-            <Card>
-                <CardHeader>
-                    <CardTitle>Comunicados</CardTitle>
-                    <CardDescription>Envía mensajes a toda la comunidad escolar.</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                    <Textarea 
-                        value={message} 
-                        onChange={(e) => setMessage(e.target.value)} 
-                        placeholder="Escribe tu mensaje aquí..."
-                        disabled={isSending}
-                    />
-                    <div className="flex items-center gap-4">
-                        <Select value={recipientFilter} onValueChange={(value) => setRecipientFilter(value as RecipientFilter)} disabled={isSending}>
-                            <SelectTrigger className="w-full md:w-1/2">
-                                <SelectValue placeholder="Enviar a..." />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="all">Todos</SelectItem>
-                                <SelectItem value="teachers">Solo Maestros</SelectItem>
-                                <SelectItem value="counselors">Solo Orientadores</SelectItem>
-                                <SelectItem value="students">Solo Alumnos</SelectItem>
-                            </SelectContent>
-                        </Select>
-                        <Button onClick={handleSendMessage} disabled={isSending} className="w-full md:w-auto">
-                            {isSending ? "Enviando..." : (
-                                <>
-                                    <Send className="mr-2 h-4 w-4" />
-                                    Enviar
-                                </>
-                            )}
-                        </Button>
-                    </div>
-                </CardContent>
-            </Card>
+            <div className="space-y-6">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Comunicados</CardTitle>
+                        <CardDescription>Envía mensajes a toda la comunidad escolar.</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <Textarea 
+                            value={message} 
+                            onChange={(e) => setMessage(e.target.value)} 
+                            placeholder="Escribe tu mensaje aquí..."
+                            disabled={isSending}
+                        />
+                        <div className="flex items-center gap-4">
+                            <Select value={recipientFilter} onValueChange={(value) => setRecipientFilter(value as RecipientFilter)} disabled={isSending}>
+                                <SelectTrigger className="w-full md:w-1/2">
+                                    <SelectValue placeholder="Enviar a..." />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="all">Todos</SelectItem>
+                                    <SelectItem value="teachers">Solo Maestros</SelectItem>
+                                    <SelectItem value="counselors">Solo Orientadores</SelectItem>
+                                    <SelectItem value="students">Solo Alumnos</SelectItem>
+                                </SelectContent>
+                            </Select>
+                            <Button onClick={handleSendMessage} disabled={isSending} className="w-full md:w-auto">
+                                {isSending ? "Enviando..." : (
+                                    <>
+                                        <Send className="mr-2 h-4 w-4" />
+                                        Enviar
+                                    </>
+                                )}
+                            </Button>
+                        </div>
+                    </CardContent>
+                </Card>
+                {/* El nuevo componente se añade aquí */}
+                <MessageHistory key={shouldReloadMessages ? 'reload' : 'initial'} />
+            </div>
 
             <Card>
                 <CardHeader>
@@ -187,10 +190,6 @@ export function DirectorView() {
                 />
                 </CardContent>
             </Card>
-        </div>
-
-        <div className="grid grid-cols-1 gap-6">
-          <SecurityAlerts alerts={securityAlerts} students={studentList} />
         </div>
     </div>
   );
