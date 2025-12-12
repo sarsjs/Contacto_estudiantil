@@ -36,14 +36,21 @@ export function AuthProvider({ children }: AuthProviderProps) {
     if (!isClient) return;
 
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      setLoading(true);
       setUser(user);
       if (user) {
         try {
           const userProfile = await fetchUserByEmail(user.email!);
-          if (userProfile) setProfile(userProfile);
+          if (userProfile) {
+            setProfile(userProfile);
+          } else {
+            setProfile(null);
+            await auth.signOut(); 
+          }
         } catch (error) {
           console.error("refresh profile", error);
           setProfile(null);
+          await auth.signOut();
         }
       } else {
         setProfile(null);
@@ -58,29 +65,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
       user,
       profile,
       loading,
-      signIn: async (email: string, pass: string) => {
-        setLoading(true);
-        try {
-          const userCredential = await signInWithEmail(email, pass);
-          if (userCredential?.user) {
-            const userProfile = await fetchUserByEmail(
-              userCredential.user.email!
-            );
-            if (userProfile) {
-              setUser(userCredential.user);
-              setProfile(userProfile);
-            } else {
-              await auth.signOut();
-              throw new Error("User profile not found.");
-            }
-          }
-        } catch (error) {
-          setUser(null);
-          setProfile(null);
-          throw error;
-        } finally {
-          setLoading(false);
-        }
+      signIn: async (email: string, pass:string) => {
+        await signInWithEmail(email, pass);
       },
       signOut: async () => {
         await auth.signOut();
