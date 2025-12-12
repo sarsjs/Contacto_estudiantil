@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { useParams } from 'next/navigation';
-import { useUser } from '@/context/user-context';
+import { useAuth } from '@/context/auth-context';
 import {
   fetchSubjects,
   fetchGroupsBySubject,

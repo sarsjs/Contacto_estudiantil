@@ -36,14 +36,6 @@ export interface TimetableEntry {
     timeSlot: string; // e.g., "09:00-10:00"
 }
 
-export interface SecurityAlert {
-    id: string;
-    studentId: string;
-    timestamp: FieldValue;
-    authorized: boolean;
-    authorizerId?: string; // ID of director/counselor who authorized
-}
-
 export interface Attendance {
     id: string;
     studentId: string;
@@ -53,13 +45,15 @@ export interface Attendance {
     groupId: string;
 }
 
+export type RecipientFilter = "all" | "teachers" | "counselors" | "students";
+
 export interface Message {
     id: string;
-    senderId: string;
-    role: string;
     content: string;
+    recipientFilter: RecipientFilter;
     timestamp: FieldValue;
 }
+
 
 // NUEVO TIPO PARA CALIFICACIONES
 export interface Grade {

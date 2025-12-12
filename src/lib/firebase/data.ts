@@ -1,6 +1,6 @@
 import { collection, getDocs, addDoc, doc, deleteDoc, query, where, updateDoc, writeBatch, orderBy, serverTimestamp } from "firebase/firestore";
 import { db } from "./client";
-import type { User, Group, Student, Subject, TimetableEntry, SecurityAlert, Attendance, Message, Grade } from "@/lib/types";
+import type { User, Group, Student, Subject, TimetableEntry, Attendance, Message, Grade } from "@/lib/types";
 
 // Fetch functions
 export const fetchUsers = async (): Promise<User[]> => {

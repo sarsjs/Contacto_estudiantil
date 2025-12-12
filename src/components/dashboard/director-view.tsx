@@ -24,6 +24,7 @@ import { useToast } from '@/hooks/use-toast';
 import { MessageHistory } from './message-history'; 
 import type { Group, User, Student, RecipientFilter } from '@/lib/types';
 import { fetchUsers, fetchGroups, fetchStudents, addMessage } from "@/lib/firebase/data";
+import { serverTimestamp } from 'firebase/firestore';
 
 export function DirectorView() {
   const [staffList, setStaffList] = React.useState<User[]>([]);
@@ -84,7 +85,7 @@ export function DirectorView() {
         await addMessage({
           content: message,
           recipientFilter: recipientFilter,
-          timestamp: new Date().toISOString(),
+          timestamp: serverTimestamp(),
         });
 
         toast({
