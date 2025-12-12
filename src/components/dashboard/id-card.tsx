@@ -1,88 +1,71 @@
-"use client";
+'use client';
 
-import * as React from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import * as htmlToImage from "html-to-image";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { User, Student } from "@/lib/types";
+import { Pencil, Trash2, Mail, GraduationCap } from "lucide-react";
 
-type Props = {
-  name: string;
-  role: string;
-  cycle?: string;
-  avatarUrl?: string;
-  idLabel: string;
-};
+interface IdCardProps {
+  user: User | Student;
+  onEdit: (user: User | Student) => void;
+  onDelete: (userId: string) => void;
+}
 
-export function IdCard({ name, role, cycle, avatarUrl, idLabel }: Props) {
-  const cardRef = React.useRef<HTMLDivElement | null>(null);
-  const [generating, setGenerating] = React.useState(false);
+export function IdCard({ user, onEdit, onDelete }: IdCardProps) {
+  const isStudent = 'matricula' in user;
+  const role = isStudent ? 'Estudiante' : (user as User).role;
 
-  const handleDownload = async () => {
-    if (!cardRef.current) return;
-    setGenerating(true);
-    try {
-      const dataUrl = await htmlToImage.toPng(cardRef.current, {
-        pixelRatio: 2,
-        backgroundColor: "#fff",
-        cacheBust: true,
-      });
-      const link = document.createElement("a");
-      link.href = dataUrl;
-      link.download = `${name.replace(/\s+/g, "_")}_credencial.png`;
-      link.click();
-    } catch (error) {
-      console.error("ID card download error", error);
-    } finally {
-      setGenerating(false);
+  const getBadgeVariant = () => {
+    if (isStudent) return "default";
+    switch ((user as User).role) {
+      case "director": return "destructive";
+      case "orientador": return "secondary";
+      case "profesor": return "outline";
+      default: return "default";
     }
   };
 
   return (
-    <div className="space-y-3">
-      <div
-        ref={cardRef}
-        className="w-full max-w-sm rounded-2xl border border-border bg-gradient-to-br from-slate-900 to-blue-900 px-6 py-5 text-white shadow-xl"
-      >
-        <div className="flex items-center gap-4">
-          <div className="h-20 w-20 overflow-hidden rounded-2xl border border-white/60 bg-white/20">
-            {avatarUrl ? (
-              <img
-                src={avatarUrl}
-                alt={name}
-                className="h-full w-full object-cover"
-              />
-            ) : (
-              <span className="flex h-full w-full items-center justify-center text-lg font-semibold uppercase">
-                {name.charAt(0)}
-              </span>
+    <Card>
+      <CardContent className="pt-6">
+        <div className="flex flex-col items-center text-center">
+          <Avatar className="h-20 w-20 mb-4">
+            <AvatarImage src={user.avatarUrl} alt={user.name} />
+            <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+          </Avatar>
+          <h3 className="text-lg font-semibold">{user.name}</h3>
+          
+          <Badge variant={getBadgeVariant()} className="capitalize mt-1">
+            {role}
+          </Badge>
+
+          <div className="mt-4 text-sm text-muted-foreground space-y-2">
+             <div className="flex items-center gap-2 justify-center">
+                <Mail className="h-4 w-4" />
+                <span>{user.email}</span>
+            </div>
+            {isStudent && (user as Student).matricula && (
+                 <div className="flex items-center gap-2 justify-center">
+                    <GraduationCap className="h-4 w-4" />
+                    <span>{(user as Student).matricula}</span>
+                </div>
             )}
           </div>
-          <div className="flex-1">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/70">
-              EDCHAIN MEMBER
-            </p>
-            <p className="text-lg font-bold leading-snug">{name}</p>
-            <p className="text-sm text-white/70">{role}</p>
-          </div>
+
         </div>
-        {cycle && (
-          <div className="mt-4 flex items-center justify-between">
-            <span className="rounded-full border border-white/40 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-white/80">
-              {cycle}
-            </span>
-            <span className="text-xs font-semibold tracking-[0.3em] text-white/70">
-              {idLabel}
-            </span>
-          </div>
-        )}
-      </div>
-      <Button
-        variant="ghost"
-        className="w-full max-w-sm"
-        onClick={handleDownload}
-        disabled={generating}
-      >
-        {generating ? "Generando..." : "Descargar credencial"}
-      </Button>
-    </div>
+        <div className="flex justify-center gap-2 mt-6">
+          <Button variant="outline" size="sm" onClick={() => onEdit(user)}>
+            <Pencil className="h-4 w-4 mr-2" />
+            Editar
+          </Button>
+          <Button variant="destructive" size="sm" onClick={() => onDelete(user.id)}>
+            <Trash2 className="h-4 w-4 mr-2" />
+            Eliminar
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
   );
 }

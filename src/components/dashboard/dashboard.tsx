@@ -1,7 +1,8 @@
 'use client';
 
 import * as React from 'react';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 import {
   BookCopy,
   Calendar,
@@ -30,18 +31,15 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { User } from '@/lib/types';
 import { Logo } from '@/components/icons';
-import { DirectorView } from './director-view';
-import { CounselorView } from './counselor-view';
-import { TeacherView } from './teacher-view';
-import { StudentView } from './student-view';
 import { Button } from '../ui/button';
 import { useAuth } from '@/context/auth-context';
 
 const navItems = {
   director: [
-    { href: '#panel', icon: Home, label: 'Panel Principal' },
-    { href: '#personal', icon: Users, label: 'Personal' },
-    { href: '#estructura', icon: School, label: 'Estructura' },
+    { href: '/dashboard/director', icon: Home, label: 'Panel Principal' },
+    { href: '/dashboard/director/personal', icon: Users, label: 'Personal' },
+    { href: '/dashboard/director/alumnos', icon: GraduationCap, label: 'Alumnos' },
+    { href: '/dashboard/director/estructura', icon: School, label: 'Estructura' },
   ],
   orientador: [
     { href: '#', icon: Home, label: 'Panel Principal' },
@@ -70,7 +68,9 @@ const viewTitles = {
 
 function AppSidebar({ user }: { user: User }) {
   const { open } = useSidebar();
+  const pathname = usePathname();
   const currentNav = navItems[user.role];
+
   return (
     <Sidebar>
       <SidebarHeader>
@@ -81,7 +81,8 @@ function AppSidebar({ user }: { user: User }) {
       </SidebarHeader>
       <SidebarContent>
         <SidebarMenu>
-          {currentNav.map((item, index) => {
+          {currentNav.map((item) => {
+            const isActive = pathname === item.href || (item.href !== '/dashboard/director' && pathname.startsWith(item.href));
             const buttonContent = (
               <>
                 <item.icon />
@@ -91,22 +92,15 @@ function AppSidebar({ user }: { user: User }) {
 
             return (
               <SidebarMenuItem key={item.label}>
-                {item.href && item.href !== '#' ? (
-                  <SidebarMenuButton
-                    asChild
-                    tooltip={{ children: item.label, hidden: open }}
-                    isActive={index === 0}
-                  >
-                    <a href={item.href}>{buttonContent}</a>
-                  </SidebarMenuButton>
-                ) : (
-                  <SidebarMenuButton
-                    tooltip={{ children: item.label, hidden: open }}
-                    isActive={index === 0}
-                  >
+                <SidebarMenuButton
+                  asChild
+                  tooltip={{ children: item.label, hidden: open }}
+                  isActive={isActive}
+                >
+                  <Link href={item.href} className={isActive ? 'bg-muted font-semibold' : ''}>
                     {buttonContent}
-                  </SidebarMenuButton>
-                )}
+                  </Link>
+                </SidebarMenuButton>
               </SidebarMenuItem>
             );
           })}
@@ -150,7 +144,7 @@ function AppHeader({
     )
 }
 
-export function Dashboard() {
+export function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { profile, loading, signOut } = useAuth();
   const router = useRouter();
 
@@ -164,23 +158,22 @@ export function Dashboard() {
     return <div className="flex h-screen items-center justify-center">Cargando...</div>;
   }
 
-  const title = viewTitles[profile.role];
+  const title = viewTitles[profile.role] || 'Dashboard';
 
   return (
     <SidebarProvider defaultOpen>
-      <AppSidebar user={profile} />
-      <SidebarInset>
-        <AppHeader 
-            title={title}
-            signOut={signOut}
-        />
-        <main className="flex-1 overflow-auto p-4 lg:p-6">
-            {profile.role === 'director' && <DirectorView />}
-            {profile.role === 'orientador' && <CounselorView currentUser={profile} />}
-            {profile.role === 'profesor' && <TeacherView />}
-            {profile.role === 'estudiante' && <StudentView />}
-        </main>
-      </SidebarInset>
+        <div className='flex h-screen w-full'>
+            <AppSidebar user={profile} />
+            <SidebarInset className="flex flex-1 flex-col">
+                <AppHeader 
+                    title={title}
+                    signOut={signOut}
+                />
+                <main className="flex-1 overflow-y-auto bg-muted/40 p-4 lg:p-6">
+                    {children}
+                </main>
+            </SidebarInset>
+        </div>
     </SidebarProvider>
   );
 }

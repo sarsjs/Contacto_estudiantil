@@ -1,6 +1,6 @@
 import { collection, getDocs, addDoc, doc, deleteDoc, query, where, updateDoc, writeBatch } from "firebase/firestore";
 import { db } from "./client";
-import type { User, Group, Student, Subject, TimetableEntry, SecurityAlert, Attendance } from "@/lib/types";
+import type { User, Group, Student, Subject, TimetableEntry, SecurityAlert, Attendance, Message } from "@/lib/types";
 
 // Fetch functions
 export const fetchUsers = async (): Promise<User[]> => {
@@ -91,6 +91,11 @@ export const addGroup = async (group: Omit<Group, "id">) => {
   return docRef.id;
 };
 
+export const updateGroup = async (groupId: string, data: Partial<Group>) => {
+  const groupRef = doc(db, "groups", groupId);
+  await updateDoc(groupRef, data);
+};
+
 export const addStudent = async (student: Omit<Student, "id">) => {
     const docRef = await addDoc(collection(db, "students"), student);
     return docRef.id;
@@ -106,6 +111,16 @@ export const updateStudent = async (studentId: string, data: Partial<Student>) =
     await updateDoc(studentRef, data);
 };
 
+export const addSubject = async (subject: Omit<Subject, "id">) => {
+    const docRef = await addDoc(collection(db, "subjects"), subject);
+    return docRef.id;
+};
+
+export const updateSubject = async (subjectId: string, data: Partial<Subject>) => {
+    const subjectRef = doc(db, "subjects", subjectId);
+    await updateDoc(subjectRef, data);
+};
+
 export const setAttendanceBatch = async (records: {studentId: string, date: string, present: boolean}[]) => {
     const batch = writeBatch(db);
     
@@ -119,6 +134,11 @@ export const setAttendanceBatch = async (records: {studentId: string, date: stri
     await batch.commit();
 };
 
+export const addMessage = async (message: Omit<Message, "id">) => {
+    const docRef = await addDoc(collection(db, "messages"), message);
+    return docRef.id;
+};
+
 
 // Delete functions
 export const deleteUser = async (userId: string) => {
@@ -127,4 +147,12 @@ export const deleteUser = async (userId: string) => {
 
 export const deleteGroup = async (groupId: string) => {
   await deleteDoc(doc(db, "groups", groupId));
+};
+
+export const deleteStudent = async (studentId: string) => {
+    await deleteDoc(doc(db, "students", studentId));
+};
+
+export const deleteSubject = async (subjectId: string) => {
+    await deleteDoc(doc(db, "subjects", subjectId));
 };

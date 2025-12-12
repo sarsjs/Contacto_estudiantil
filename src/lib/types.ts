@@ -1,4 +1,5 @@
 export type UserRole = "director" | "orientador" | "profesor" | "estudiante";
+export type RecipientFilter = "all" | "teachers" | "counselors" | "students";
 
 export interface User {
   id: string;
@@ -61,4 +62,11 @@ export interface SecurityAlert {
   type: 'unauthorized_exit' | 'authorized_exit';
   details: string;
   authorizationId?: string;
+}
+
+export interface Message {
+    id: string;
+    content: string;
+    recipientFilter: RecipientFilter;
+    timestamp: string; // ISO 8601 format
 }
