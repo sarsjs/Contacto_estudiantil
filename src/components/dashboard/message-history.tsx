@@ -8,6 +8,16 @@ import { useToast } from '@/hooks/use-toast';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 
+// Helper to safely convert a Firestore Timestamp or other date formats
+const toDate = (timestamp: any): Date => {
+    if (timestamp && typeof timestamp.toDate === 'function') {
+        // Handle Firestore Timestamp object
+        return timestamp.toDate();
+    }
+    // Fallback for strings, numbers, or standard Date objects
+    return new Date(timestamp);
+};
+
 function getRecipientText(recipient: string) {
     switch (recipient) {
         case 'all':
@@ -70,7 +80,7 @@ export function MessageHistory() {
                         {getRecipientText(msg.recipientFilter)}
                     </span>
                     <span className="text-xs text-gray-500 dark:text-gray-400">
-                        {format(new Date(msg.timestamp), "d 'de' MMMM, yyyy 'a las' HH:mm", { locale: es })}
+                        {format(toDate(msg.timestamp), "d 'de' MMMM, yyyy 'a las' HH:mm", { locale: es })}
                     </span>
                 </div>
               </div>
