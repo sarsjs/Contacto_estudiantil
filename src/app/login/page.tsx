@@ -50,7 +50,8 @@ export default function LoginPage() {
   };
 
   const handleForgotPassword = async () => {
-    if (!email) {
+    const emailLower = email.trim().toLowerCase();
+    if (!emailLower) {
       toast({
         title: "Correo requerido",
         description: "Introduce tu correo para enviar el enlace de recuperacion.",
@@ -60,7 +61,7 @@ export default function LoginPage() {
     }
 
     try {
-      await sendPasswordResetEmail(getAuth(), email);
+      await sendPasswordResetEmail(getAuth(), emailLower);
       toast({
         title: "Correo enviado",
         description: "Revisa tu bandeja para restablecer tu contrasena.",
@@ -97,6 +98,16 @@ export default function LoginPage() {
         setProfileMatch(null);
         return null;
       }
+      const allowedRoles = ["orientador", "profesor", "director"];
+      if (!allowedRoles.includes(profile.role)) {
+        toast({
+          title: "Invitacion no valida",
+          description: "Este correo no tiene un rol autorizado para registrarse.",
+          variant: "destructive",
+        });
+        setProfileMatch(null);
+        return null;
+      }
       setProfileMatch(profile);
       setAvatarUrl(profile.avatarUrl || "");
       setCurp(profile.curp || "");
@@ -117,15 +128,6 @@ export default function LoginPage() {
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    const emailLower = email.trim().toLowerCase();
-    if (!emailLower) {
-      toast({
-        title: "Correo requerido",
-        description: "Introduce tu correo institucional.",
-        variant: "destructive",
-      });
-      return;
-    }
     if (!curp || !matricula) {
       toast({
         title: "Datos incompletos",
@@ -134,11 +136,20 @@ export default function LoginPage() {
       });
       return;
     }
-    setLoading(true);
     try {
       const profile = profileMatch ?? (await handleLookupProfile());
       if (!profile) return;
+      const emailLower = email.trim().toLowerCase();
+      if (!emailLower) {
+        toast({
+          title: "Correo requerido",
+          description: "Introduce tu correo institucional.",
+          variant: "destructive",
+        });
+        return;
+      }
 
+      setLoading(true);
       await updateUser(profile.id, {
         curp,
         matricula,

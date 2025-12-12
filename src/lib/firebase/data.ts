@@ -9,13 +9,22 @@ export const fetchUsers = async (): Promise<User[]> => {
 };
 
 export const fetchUserByEmail = async (email: string): Promise<User | null> => {
-    const q = query(collection(db, "users"), where("email", "==", email));
+    const normalized = email.trim().toLowerCase();
+    const q = query(collection(db, "users"), where("email", "==", normalized));
     const querySnapshot = await getDocs(q);
-    if (querySnapshot.empty) {
-        return null;
+    if (!querySnapshot.empty) {
+        const userDoc = querySnapshot.docs[0];
+        return { id: userDoc.id, ...userDoc.data() } as unknown as User;
     }
-    const userDoc = querySnapshot.docs[0];
-    return { id: userDoc.id, ...userDoc.data() } as unknown as User;
+
+    // Fallback case-insensitive search (por si hay correos almacenados en mayúsculas).
+    const allSnapshot = await getDocs(collection(db, "users"));
+    const match = allSnapshot.docs.find((docSnap) => {
+        const docEmail = (docSnap.data() as { email?: string }).email;
+        return docEmail?.toLowerCase() === normalized;
+    });
+    if (!match) return null;
+    return { id: match.id, ...match.data() } as unknown as User;
 };
 
 export const fetchGroups = async (): Promise<Group[]> => {
