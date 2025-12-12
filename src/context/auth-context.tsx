@@ -41,16 +41,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
       if (user) {
         try {
           const userProfile = await fetchUserByEmail(user.email!);
-          if (userProfile) {
-            setProfile(userProfile);
-          } else {
-            setProfile(null);
-            await auth.signOut(); 
-          }
+          setProfile(userProfile || null); // Si no hay perfil, establece null pero NO CIERRES SESIÓN
         } catch (error) {
-          console.error("refresh profile", error);
-          setProfile(null);
-          await auth.signOut();
+          console.error("Error fetching user profile:", error);
+          setProfile(null); // En caso de error, establece el perfil a null pero NO CIERRES SESIÓN
         }
       } else {
         setProfile(null);
