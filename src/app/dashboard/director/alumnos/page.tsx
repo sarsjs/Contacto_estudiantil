@@ -44,7 +44,7 @@ export default function AlumnosPage() {
 
   const [newStudentName, setNewStudentName] = React.useState("");
   const [newStudentEmail, setNewStudentEmail] = React.useState("");
-  const [newStudentGroupId, setNewStudentGroupId] = React.useState<string | undefined>("");
+  const [newStudentGroupId, setNewStudentGroupId] = React.useState<string>("none");
 
   const [searchTerm, setSearchTerm] = React.useState("");
   const [filterGroup, setFilterGroup] = React.useState("all");
@@ -97,17 +97,17 @@ export default function AlumnosPage() {
             email: emailLower, 
             matricula, 
             avatarUrl,
-            groupId: newStudentGroupId === '' ? undefined : newStudentGroupId
+            groupId: newStudentGroupId === 'none' ? undefined : newStudentGroupId
         });
 
         await sendPasswordResetEmail(auth, emailLower);
+        await loadData();
 
         toast({ title: "Alumno Creado", description: `Se ha enviado un correo a ${emailLower} para el acceso.` });
         setAddStudentOpen(false);
         setNewStudentName('');
         setNewStudentEmail('');
-        setNewStudentGroupId('');
-        await loadData();
+        setNewStudentGroupId('none');
     } catch (error) {
       console.error("create student error", error);
       toast({ title: "No se pudo crear", description: "Hubo un error al registrar al alumno.", variant: "destructive" });
@@ -120,10 +120,10 @@ export default function AlumnosPage() {
     if (!editingStudent) return;
     try {
       await updateStudent(editingStudent.id, editingStudent);
+      await loadData();
       toast({ title: "Alumno actualizado", description: `Los datos de ${editingStudent.name} fueron actualizados.` });
       setEditStudentOpen(false);
       setEditingStudent(null);
-      await loadData();
     } catch (error) {
       console.error(error);
       toast({ title: "No se pudo actualizar", description: "Intenta nuevamente.", variant: "destructive" });
@@ -191,7 +191,16 @@ export default function AlumnosPage() {
                             <div className="space-y-4">
                                 <div className="space-y-2"><label className="block text-sm font-medium">Nombre Completo</label><Input value={newStudentName} onChange={(e) => setNewStudentName(e.target.value)} placeholder="Ej. Juan Pérez"/></div>
                                 <div className="space-y-2"><label className="block text-sm font-medium">Correo electrónico</label><Input value={newStudentEmail} onChange={(e) => setNewStudentEmail(e.target.value)} placeholder="ejemplo@correo.com" type="email"/></div>
-                                <div className="space-y-2"><label className="block text-sm font-medium">Asignar Grupo (Opcional)</label><Select value={newStudentGroupId} onValueChange={setNewStudentGroupId}><SelectTrigger><SelectValue placeholder="Seleccionar grupo" /></SelectTrigger><SelectContent><SelectItem value="">Sin grupo</SelectItem>{groupList.map(group => (<SelectItem key={group.id} value={group.id}>{group.name}</SelectItem>))}</SelectContent></Select></div>
+                                <div className="space-y-2">
+                                    <label className="block text-sm font-medium">Asignar Grupo (Opcional)</label>
+                                    <Select value={newStudentGroupId} onValueChange={setNewStudentGroupId}>
+                                        <SelectTrigger><SelectValue placeholder="Seleccionar grupo" /></SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="none">Sin grupo</SelectItem>
+                                            {groupList.map(group => (<SelectItem key={group.id} value={group.id}>{group.name}</SelectItem>))}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
                             </div>
                             <DialogFooter className="mt-4"><Button onClick={handleCreateStudent} disabled={dataLoading}>Crear Alumno</Button></DialogFooter>
                         </DialogContent>
@@ -219,7 +228,19 @@ export default function AlumnosPage() {
                     <div className="space-y-4">
                         <div className="space-y-2"><label className="block text-sm font-medium">Nombre</label><Input value={editingStudent.name} onChange={(e) => setEditingStudent({...editingStudent, name: e.target.value})} placeholder="Nombre completo"/></div>
                         <div className="space-y-2"><label className="block text-sm font-medium">Email</label><Input value={editingStudent.email} onChange={(e) => setEditingStudent({...editingStudent, email: e.target.value})} placeholder="Email" type="email"/></div>
-                        <div className="space-y-2"><label className="block text-sm font-medium">Grupo</label><Select value={editingStudent.groupId || ""} onValueChange={(value) => setEditingStudent({...editingStudent, groupId: value})}><SelectTrigger><SelectValue placeholder="Seleccionar grupo" /></SelectTrigger><SelectContent><SelectItem value="">Sin grupo</SelectItem>{groupList.map(group => (<SelectItem key={group.id} value={group.id}>{group.name}</SelectItem>))}</SelectContent></Select></div>
+                        <div className="space-y-2">
+                            <label className="block text-sm font-medium">Grupo</label>
+                            <Select 
+                                value={editingStudent.groupId || 'none'} 
+                                onValueChange={(value) => setEditingStudent({ ...editingStudent, groupId: value === 'none' ? undefined : value })}                            
+                            >
+                                <SelectTrigger><SelectValue placeholder="Seleccionar grupo" /></SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="none">Sin grupo</SelectItem>
+                                    {groupList.map(group => (<SelectItem key={group.id} value={group.id}>{group.name}</SelectItem>))}
+                                </SelectContent>
+                            </Select>
+                        </div>
                     </div>
                 )}
                 <DialogFooter className="mt-4"><Button onClick={handleUpdateStudent} disabled={dataLoading}>Actualizar Alumno</Button></DialogFooter>
