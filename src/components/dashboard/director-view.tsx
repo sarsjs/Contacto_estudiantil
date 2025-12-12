@@ -41,7 +41,8 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { SecurityAlerts } from "./security-alerts";
 import type { Group, SecurityAlert, User, UserRole, Student } from "@/lib/types";
-import { addUser, fetchUsers, deleteUser, addGroup, fetchGroups, fetchSecurityAlerts, fetchStudents } from "@/lib/firebase/data";
+import { addUser, fetchUsers, deleteUser, addGroup, fetchGroups, fetchSecurityAlerts, fetchStudents, deleteGroup } from "@/lib/firebase/data";
+import { getAuth, createUserWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
 
 export function DirectorView() {
   const [staffList, setStaffList] = React.useState<User[]>([]);
@@ -65,8 +66,45 @@ export function DirectorView() {
   const [newGroupSemester, setNewGroupSemester] = React.useState(1);
 
   const [newCycleName, setNewCycleName] = React.useState("");
+  const [searchTerm, setSearchTerm] = React.useState("");
 
   const counselorsList = staffList.filter((u) => u.role === "orientador");
+  const groupMap = React.useMemo(() => {
+    const map = new Map<string, Group>();
+    groupList.forEach((g) => map.set(g.id, g));
+    return map;
+  }, [groupList]);
+  const searchResults = React.useMemo(() => {
+    const term = searchTerm.trim().toLowerCase();
+    if (!term) return [];
+    const people = [
+      ...staffList.map((u) => ({
+        id: u.id,
+        name: u.name,
+        email: u.email,
+        role: u.role,
+        groupName: "",
+        semester: "",
+      })),
+      ...studentList.map((s) => {
+        const group = s.groupId ? groupMap.get(s.groupId) : undefined;
+        return {
+          id: s.id,
+          name: s.name,
+          email: s.email,
+          role: "estudiante" as const,
+          groupName: group?.name || "Sin grupo",
+          semester: group?.semester ? group.semester.toString() : "N/A",
+        };
+      }),
+    ];
+    return people.filter(
+      (p) =>
+        p.name.toLowerCase().includes(term) ||
+        p.email.toLowerCase().includes(term) ||
+        p.role.toLowerCase().includes(term)
+    );
+  }, [searchTerm, staffList, studentList, groupMap]);
   const { toast } = useToast();
 
   const loadData = React.useCallback(async () => {
@@ -115,19 +153,26 @@ export function DirectorView() {
       return;
     }
 
+    setDataLoading(true);
+
     const avatarSeed = Math.floor(Math.random() * 1000);
     const avatarUrl = `https://picsum.photos/seed/${avatarSeed}/100/100`;
+    const auth = getAuth();
+    const tempPassword = Math.random().toString(36).slice(-8);
+    const emailLower = newStaffEmail.toLowerCase();
 
     try {
+      await createUserWithEmailAndPassword(auth, emailLower, tempPassword);
       await addUser({
         name: newStaffName,
         role: newStaffRole,
-        email: newStaffEmail,
+        email: emailLower,
         avatarUrl,
       });
+      await sendPasswordResetEmail(auth, emailLower);
       toast({
-        title: "Personal añadido",
-        description: `Se agregó a ${newStaffName}.`,
+        title: "Personal anadido",
+        description: `Se creo la cuenta y se envio correo de restablecimiento a ${emailLower}.`,
       });
       setNewStaffName("");
       setNewStaffEmail("");
@@ -138,8 +183,10 @@ export function DirectorView() {
       console.error("create staff error", error);
       toast({
         title: "No se pudo guardar",
-        description: "Hubo un error al registrar al personal.",
+        description: "Hubo un error al registrar o enviar el correo de acceso.",
       });
+    } finally {
+      setDataLoading(false);
     }
   };
 
@@ -153,6 +200,23 @@ export function DirectorView() {
       await loadData();
     } catch (error) {
       console.error("remove staff error", error);
+      toast({
+        title: "No se pudo eliminar",
+        description: "Intenta nuevamente.",
+      });
+    }
+  };
+
+  const handleRemoveGroup = async (groupId: string) => {
+    try {
+      await deleteGroup(groupId);
+      toast({
+        title: "Grupo eliminado",
+        description: "El grupo ya no aparece en el panel.",
+      });
+      await loadData();
+    } catch (error) {
+      console.error("remove group error", error);
       toast({
         title: "No se pudo eliminar",
         description: "Intenta nuevamente.",
@@ -247,6 +311,56 @@ export function DirectorView() {
         <div className="grid grid-cols-1 gap-6">
           <SecurityAlerts alerts={securityAlerts} students={studentList} />
         </div>
+      </section>
+
+      <section className="space-y-4">
+        <Card>
+          <CardHeader>
+            <CardTitle>Buscar personas</CardTitle>
+            <CardDescription>Encuentra maestros, orientadores o alumnos por nombre, correo o rol.</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <Input
+              placeholder="Ej. maria@colegio.com o 'orientador'"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            {searchTerm.trim() ? (
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Nombre</TableHead>
+                    <TableHead>Rol / Tipo</TableHead>
+                    <TableHead>Email</TableHead>
+                    <TableHead>Grupo</TableHead>
+                    <TableHead>Semestre</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {searchResults.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={5} className="text-center text-sm text-muted-foreground">
+                        Sin resultados
+                      </TableCell>
+                    </TableRow>
+                  ) : (
+                    searchResults.map((person) => (
+                      <TableRow key={person.id}>
+                        <TableCell className="font-medium">{person.name}</TableCell>
+                        <TableCell className="capitalize">{person.role}</TableCell>
+                        <TableCell>{person.email}</TableCell>
+                        <TableCell>{person.groupName || "N/A"}</TableCell>
+                        <TableCell>{person.semester || "N/A"}</TableCell>
+                      </TableRow>
+                    ))
+                  )}
+                </TableBody>
+              </Table>
+            ) : (
+              <p className="text-sm text-muted-foreground">Escribe un nombre, correo o rol para buscar.</p>
+            )}
+          </CardContent>
+        </Card>
       </section>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
@@ -492,6 +606,7 @@ export function DirectorView() {
                     <TableHead>Semestre</TableHead>
                     <TableHead>Orientador</TableHead>
                     <TableHead>Ciclo</TableHead>
+                    <TableHead className="text-right">Acciones</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -503,6 +618,50 @@ export function DirectorView() {
                         <TableCell>{group.semester}</TableCell>
                         <TableCell>{counselor?.name || "N/A"}</TableCell>
                         <TableCell>{group.cycleId || "N/A"}</TableCell>
+                        <TableCell className="text-right">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-destructive hover:bg-destructive/20"
+                            onClick={() => handleRemoveGroup(group.id)}
+                            disabled={dataLoading}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                            <span className="sr-only">Eliminar grupo</span>
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Alumnos</CardTitle>
+              <CardDescription>Consulta a qué grupo y semestre pertenece cada alumno.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Nombre</TableHead>
+                    <TableHead>Grupo</TableHead>
+                    <TableHead>Semestre</TableHead>
+                    <TableHead>Email</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {studentList.map((student) => {
+                    const group = student.groupId ? groupMap.get(student.groupId) : undefined;
+                    return (
+                      <TableRow key={student.id}>
+                        <TableCell className="font-medium">{student.name}</TableCell>
+                        <TableCell>{group?.name || "Sin grupo"}</TableCell>
+                        <TableCell>{group?.semester ?? "N/A"}</TableCell>
+                        <TableCell>{student.email}</TableCell>
                       </TableRow>
                     );
                   })}

@@ -6,6 +6,8 @@ export interface User {
   role: UserRole;
   avatarUrl: string;
   email: string;
+  curp?: string;
+  matricula?: string;
 }
 
 export interface Group {
@@ -23,6 +25,8 @@ export interface Student {
   avatarUrl: string;
   groupId: string;
   grades: { subjectId: string; grade: number | null }[];
+  curp?: string;
+  matricula?: string;
 }
 
 export interface Subject {

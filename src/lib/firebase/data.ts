@@ -72,6 +72,11 @@ export const addUser = async (user: Omit<User, "id">) => {
   return docRef.id;
 };
 
+export const updateUser = async (userId: string, data: Partial<User>) => {
+  const userRef = doc(db, "users", userId);
+  await updateDoc(userRef, data);
+};
+
 export const addGroup = async (group: Omit<Group, "id">) => {
   const docRef = await addDoc(collection(db, "groups"), group);
   return docRef.id;
@@ -109,4 +114,8 @@ export const setAttendanceBatch = async (records: {studentId: string, date: stri
 // Delete functions
 export const deleteUser = async (userId: string) => {
   await deleteDoc(doc(db, "users", userId));
+};
+
+export const deleteGroup = async (groupId: string) => {
+  await deleteDoc(doc(db, "groups", groupId));
 };
