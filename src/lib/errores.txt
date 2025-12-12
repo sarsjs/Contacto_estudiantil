@@ -1,0 +1,89 @@
+
+// =================================================================================================
+// |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+// =================================================================================================
+//
+//                                      ANÁLISIS DE ERRORES DE LOG
+//
+// Este archivo contiene una selección de los registros (logs) del despliegue en producción.
+// A continuación, se marcan y explican los errores que causaban el fallo de la aplicación.
+//
+// =================================================================================================
+// |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+// =================================================================================================
+
+
+
+// =================================================================================================
+// |||||||||||||||||||||||||||||||   ERROR #1 (LA CAUSA RAÍZ)   |||||||||||||||||||||||||||||||||||||
+// =================================================================log=================================
+//
+// La aplicación intenta arrancar, pero falla porque no puede encontrar las "claves secretas"
+// de Firebase en el entorno de producción.
+//
+// El mensaje "Could not fetch secret" es la prueba definitiva. Indica que la aplicación
+// no tiene las credenciales para conectarse a Firebase, por lo que no puede inicializar
+// el sistema de autenticación.
+//
+// SEVERITY: WARNING
+//
+{
+    "textPayload": "Could not fetch secret \"projects/1054384089954/secrets/NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID/versions/2\" for environment variable \"NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID\". Instance startup will now abort: Secret Version [projects/1054384089954/secrets/NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID/versions/2.1] not found.",
+    "insertId": "6939131f0008d5f722befa6b",
+    "resource": {
+      "type": "cloud_run_revision",
+      "labels": {
+        "location": "us-east4",
+        "revision_name": "fir08121146-build-2025-12-09-011",
+        "service_name": "fir08121146",
+        "configuration_name": "fir08121146",
+        "project_id": "contacto-estudiantil"
+      }
+    },
+    "timestamp": "2025-12-10T06:28:47.579063Z",
+    "severity": "WARNING",
+    "logName": "projects/contacto-estudiantil/logs/run.googleapis.com%2Fvarlog%2Fsystem",
+    "receiveTimestamp": "2025-12-10T06:28:47.848638Z"
+  },
+
+
+// =================================================================================================
+// |||||||||||||||||||||||||   ERROR #2 (LA CONSECUENCIA DIRECTA)   |||||||||||||||||||||||||||||||||
+// =================================================================================================
+//
+// Como la aplicación no pudo arrancar correctamente (debido al error anterior), no puede
+// responder a las peticiones web.
+//
+// Por eso, cuando el sistema intenta acceder a la aplicación, recibe un "status: 500",
+// que es un error genérico del servidor que significa "Error Interno del Servidor".
+//
+// SEVERITY: ERROR
+//
+  {
+    "insertId": "6939131f0008dae2437b523a",
+    "httpRequest": {
+      "requestMethod": "GET",
+      "requestUrl": "https://t-613552420---fir08121146-7dgvl6pkdq-uk.a.run.app/",
+      "requestSize": "1392",
+      "status": 500,
+      "userAgent": "Google",
+      "remoteIp": "192.178.13.166",
+      "serverIp": "34.143.76.2",
+      "latency": "0s",
+      "protocol": "HTTP/1.1"
+    },
+    "resource": {
+      "type": "cloud_run_revision",
+      "labels": {
+        "configuration_name": "fir08121146",
+        "location": "us-east4",
+        "service_name": "fir08121146",
+        "revision_name": "fir08121146-build-2025-12-09-011",
+        "project_id": "contacto-estudiantil"
+      }
+    },
+    "timestamp": "2025-12-10T06:28:47.483458Z",
+    "severity": "ERROR",
+    "logName": "projects/contacto-estudiantil/logs/run.googleapis.com%2Frequests",
+    "receiveTimestamp": "2025-12-10T06:28:47.586418673Z"
+  }
