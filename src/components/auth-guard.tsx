@@ -1,43 +1,37 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
-import { usePathname, useRouter } from "next/navigation";
-import { useAuth } from "@/context/auth-context";
-
-// Este componente actua como un guardia para toda la aplicacion.
-// Muestra una pantalla de carga mientras se verifica el estado de autenticacion
-// y redirige al usuario segun este autenticado o no.
+import { useEffect } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+import { useAuth } from '@/context/auth-context';
 
 export function AuthGuard({ children }: { children: React.ReactNode }) {
-  const { profile, loading } = useAuth();
+  const { user, loading } = useAuth(); // Usamos 'user' como fuente de la verdad
   const router = useRouter();
   const pathname = usePathname();
 
   useEffect(() => {
-    // Si aun estamos cargando el estado de autenticacion, no hacemos nada.
     if (loading) {
       return;
     }
 
-    const isAuthPage = pathname === "/login";
+    const isAuthPage = pathname === '/login';
 
-    // Si el usuario tiene un perfil, esta autenticado.
-    if (profile) {
-      // Si esta en la pagina de login, lo redirigimos a la pagina principal.
+    // Si el objeto 'user' de Firebase existe, el usuario está autenticado.
+    if (user) {
+      // Si está en la página de login, lo redirigimos a la página principal.
       if (isAuthPage) {
-        router.push("/");
+        router.push('/');
       }
     } else {
-      // Si no tiene perfil, no esta autenticado.
-      // Si no esta en la pagina de login, lo redirigimos alli.
+      // Si no hay 'user', no está autenticado.
+      // Si no está en la página de login, lo redirigimos allí.
       if (!isAuthPage) {
-        router.push("/login");
+        router.push('/login');
       }
     }
-  }, [profile, loading, router, pathname]);
+  }, [user, loading, router, pathname]); // La dependencia ahora es 'user'
 
-  // Mientras se determina el estado de autenticacion, mostramos una pantalla de carga.
-  // Esto es CRUCIAL para prevenir el "parpadeo" de la pagina de login.
+  // Mientras se determina el estado de autenticación, mostramos una pantalla de carga.
   if (loading) {
     return (
       <div className="min-h-screen w-full flex items-center justify-center">
@@ -46,16 +40,14 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
     );
   }
 
-  // Si el usuario no esta autenticado y esta en la pagina de login, mostramos la pagina de login.
-  if (!profile && pathname === "/login") {
+  // La lógica de renderizado también se basa en 'user'.
+  if (!user && pathname === '/login') {
     return <>{children}</>;
   }
 
-  // Si el usuario esta autenticado y no esta en la pagina de login, mostramos la pagina solicitada.
-  if (profile && pathname !== "/login") {
+  if (user && pathname !== '/login') {
     return <>{children}</>;
   }
 
-  // Para todos los demas casos intermedios, no mostramos nada para evitar contenido incorrecto.
   return null;
 }
