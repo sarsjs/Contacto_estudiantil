@@ -28,10 +28,13 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
-import type { User, UserRole } from '@/lib/types';
-import { addUser, fetchUsers, deleteUser, updateUser } from '@/lib/firebase/data';
-import { getAuth, createUserWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
+import type { User } from '@/lib/types';
+import { fetchUsers, deleteUser, updateUser } from '@/lib/firebase/data';
+import { getFunctions, httpsCallable } from 'firebase/functions';
 import { IdCard } from '@/components/dashboard/id-card';
+
+// Definimos el tipo esperado para el rol de usuario
+type UserRole = 'orientador' | 'profesor';
 
 export default function PersonalPage() {
   const [staffList, setStaffList] = React.useState<User[]>([]);
@@ -71,16 +74,17 @@ export default function PersonalPage() {
       return;
     }
     setDataLoading(true);
-    const avatarSeed = Math.floor(Math.random() * 1000);
-    const avatarUrl = `https://picsum.photos/seed/${avatarSeed}/100/100`;
-    const auth = getAuth();
-    const tempPassword = Math.random().toString(36).slice(-8);
-    const emailLower = newStaffEmail.toLowerCase();
     try {
-      await createUserWithEmailAndPassword(auth, emailLower, tempPassword);
-      await addUser({ name: newStaffName, role: newStaffRole, email: emailLower, avatarUrl });
-      await sendPasswordResetEmail(auth, emailLower);
-      toast({ title: "Personal anadido", description: `Se creo la cuenta y se envio correo de restablecimiento a ${emailLower}.` });
+      const functions = getFunctions();
+      const createStaffUser = httpsCallable(functions, 'createStaffUser');
+      
+      await createStaffUser({ 
+        name: newStaffName, 
+        role: newStaffRole, 
+        email: newStaffEmail 
+      });
+
+      toast({ title: "Personal añadido", description: `Se creó la cuenta para ${newStaffName} y se le envió un correo para establecer su contraseña.` });
       setNewStaffName("");
       setNewStaffEmail("");
       setNewStaffRole("orientador");
@@ -88,7 +92,7 @@ export default function PersonalPage() {
       await loadData();
     } catch (error) {
       console.error("create staff error", error);
-      toast({ title: "No se pudo guardar", description: "Hubo un error al registrar o enviar el correo de acceso.", variant: "destructive" });
+      toast({ title: "No se pudo guardar", description: "Hubo un error al registrar. Verifica que el correo no esté en uso.", variant: "destructive" });
     } finally {
       setDataLoading(false);
     }
