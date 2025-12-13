@@ -107,10 +107,17 @@ export function DirectorView() {
 
   const handleDateSelect = (selectedDate: Date | undefined) => {
     setDate(selectedDate);
-    toast({
-        title: "Calendario Interactivo",
-        description: "Funcionalidad para añadir eventos próximamente.",
-    });
+    if (selectedDate) {
+      toast({
+        title: "Fecha seleccionada",
+        description: selectedDate.toLocaleDateString('es-MX', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        }),
+      });
+    }
   };
 
   return (
@@ -187,7 +194,7 @@ export function DirectorView() {
                     <CardTitle>Calendario Escolar</CardTitle>
                     <CardDescription>Gestiona los eventos y fechas importantes.</CardDescription>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="flex justify-center">
                 <Calendar
                     mode="single"
                     selected={date}

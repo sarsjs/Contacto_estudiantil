@@ -148,11 +148,21 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { profile, loading, signOut } = useAuth();
   const router = useRouter();
 
+  const pathname = usePathname();
+
   React.useEffect(() => {
-    if (!loading && !profile) {
+    if (loading) return;
+
+    if (!profile) {
       router.push('/login');
+      return;
     }
-  }, [loading, profile, router]);
+
+    const expectedPath = `/dashboard/${profile.role}`;
+    if (!pathname.startsWith(expectedPath)) {
+      router.push(expectedPath);
+    }
+  }, [loading, profile, router, pathname]);
 
   if (loading || !profile) {
     return <div className="flex h-screen items-center justify-center">Cargando...</div>;
