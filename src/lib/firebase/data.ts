@@ -1,6 +1,7 @@
-import { collection, getDocs, addDoc, doc, deleteDoc, query, where, updateDoc, writeBatch, orderBy, serverTimestamp } from "firebase/firestore";
-import { db } from "./client";
+import { collection, getDocs, addDoc, doc, deleteDoc, query, where, updateDoc, writeBatch, orderBy, serverTimestamp, getDoc } from "firebase/firestore";
+import { db, storage } from "./client";
 import { getFunctions, httpsCallable } from 'firebase/functions';
+import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 import type { User, Group, Subject, TimetableEntry, Attendance, Message, Grade, CalendarEvent } from "@/lib/types";
 
 const fetchData = async <T>(fetchFunction: () => Promise<T[]>, entityName: string): Promise<T[]> => {
@@ -290,6 +291,72 @@ export const fetchStudents = async (): Promise<User[]> => {
 export const fetchStudentsByGroup = async (groupId: string): Promise<User[]> => {
     const allStudents = await fetchStudents();
     return allStudents.filter(student => student.groupId === groupId);
+};
+
+// Función para obtener un usuario por ID
+export const fetchUserById = async (id: string): Promise<User | null> => {
+    try {
+        const userDoc = doc(db, 'users', id);
+        const userSnapshot = await getDoc(userDoc);
+
+        if (userSnapshot.exists()) {
+            return { id: userSnapshot.id, ...userSnapshot.data() } as unknown as User;
+        }
+        return null;
+    } catch (error) {
+        console.error('Error fetching user by id:', error);
+        return null;
+    }
+};
+
+// Funciones para manejar imágenes en Firebase Storage
+export const uploadStudentPhoto = async (userId: string, file: File): Promise<string> => {
+    try {
+        // Subir foto al bucket en la carpeta 'fotos'
+        const photoRef = ref(storage, `fotos/${userId}/${file.name}`);
+        await uploadBytes(photoRef, file);
+        const photoUrl = await getDownloadURL(photoRef);
+
+        // Actualizar el avatarUrl del usuario
+        await updateDoc(doc(db, "users", userId), {
+            avatarUrl: photoUrl
+        });
+
+        return photoUrl;
+    } catch (error) {
+        console.error('Error uploading student photo:', error);
+        throw error;
+    }
+};
+
+export const uploadCredentialImage = async (userId: string, file: File): Promise<string> => {
+    try {
+        // Subir credencial al bucket en la carpeta 'credenciales'
+        const credentialRef = ref(storage, `credenciales/${userId}/${file.name}`);
+        await uploadBytes(credentialRef, file);
+        const credentialUrl = await getDownloadURL(credentialRef);
+        return credentialUrl;
+    } catch (error) {
+        console.error('Error uploading credential image:', error);
+        throw error;
+    }
+};
+
+export const deleteStudentPhoto = async (userId: string, photoUrl: string): Promise<void> => {
+    try {
+        // Extraer el nombre del archivo de la URL para eliminarlo de storage
+        const photoPath = photoUrl.split('/fotos/')[1].split('?')[0]; // Extraer parte del path
+        const photoRef = ref(storage, `fotos/${userId}/${photoPath}`);
+        await deleteObject(photoRef);
+
+        // Remover la referencia de la base de datos
+        await updateDoc(doc(db, "users", userId), {
+            avatarUrl: null
+        });
+    } catch (error) {
+        console.error('Error deleting student photo:', error);
+        throw error;
+    }
 };
 
 // Add/Update functions

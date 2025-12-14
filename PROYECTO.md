@@ -101,3 +101,14 @@ Este registro servirá como historial vivo del progreso; antes de cerrar tu sesi
 - **Implementado:** Funciones auxiliares para obtener destinatarios según roles (profesor-alumnos, orientador-grupos, etc.).
 - **Implementado:** Vista de horarios para profesores mostrando sus clases por día, hora y grupo asignados.
 - **Pendiente:** Implementar Cloud Functions para validaciones de backend y RBAC, integrar notificaciones push con FCM.
+
+14/12/2025 05:30 - Implementación de credenciales digitales con Firebase Storage.
+- **Implementado:** Sistema completo de credenciales digitales similar a credencial física de la escuela.
+- **Implementado:** Integración con Firebase Storage para almacenar fotos en 'fotos/' y credenciales en 'credenciales/'.
+- **Implementado:** Funciones para subir, descargar y eliminar fotos de credenciales con controles de permisos.
+- **Implementado:** Componente de cámara para que alumnos tomen fotos para sus credenciales con la cámara del dispositivo.
+- **Implementado:** Diseño de credencial digital con datos fijos de la escuela y datos variables del alumno (nombre, grado, grupo, foto).
+- **Implementado:** Restricciones de permisos: solo orientadores pueden borrar fotos de credenciales de alumnos.
+- **Implementado:** Integración en panel de alumno con vista previa de credencial y funcionalidad de toma de fotos.
+- **Implementado:** Código de verificación único por usuario para autenticidad de credenciales.
+- **Pendiente:** Implementar generación automática de credenciales en PDF y funcionalidad de verificación por QR.
