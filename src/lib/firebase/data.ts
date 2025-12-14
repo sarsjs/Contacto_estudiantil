@@ -198,34 +198,7 @@ export const fetchStudentCounselor = async (student: User): Promise<User | null>
     }
 };
 
-// Para estudiantes: obtener profesores de su grupo
-export const fetchStudentTeachers = async (student: User): Promise<User[]> => {
-    try {
-        if (!student.groupId) {
-            return [];
-        }
-
-        // Obtener horarios del grupo del estudiante
-        const timetableEntries = await fetchTimetableByGroup(student.groupId);
-        const subjectIds = [...new Set(timetableEntries.map(entry => entry.subjectId))];
-
-        if (subjectIds.length === 0) {
-            return [];
-        }
-
-        // Obtener profesores de esas materias
-        const allUsers = await fetchUsers();
-        return allUsers.filter(user =>
-            user.role === 'profesor' &&
-            subjectIds.includes(user.id) // Este filtro puede necesitar ajuste ya que user.id no es subjectId
-        );
-    } catch (error) {
-        console.error("Error fetching student teachers:", error);
-        return [];
-    }
-};
-
-// Corrección de la función anterior
+// Corrección de la función para obtener profesores de un grupo
 export const fetchStudentTeachersByGroupId = async (groupId: string): Promise<User[]> => {
     try {
         // Obtener horarios del grupo
@@ -256,6 +229,7 @@ export const fetchStudentTeachersByGroupId = async (groupId: string): Promise<Us
     }
 };
 
+// Para estudiantes: obtener profesores de su grupo
 export const fetchStudentTeachers = async (student: User): Promise<User[]> => {
     if (!student.groupId) {
         return [];

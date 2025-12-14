@@ -14,7 +14,6 @@ import type { Student, TimetableEntry, Subject, Grade } from '@/lib/types';
 import { StudentSchedule } from '@/components/dashboard/student-schedule';
 import { StudentGrades } from '@/components/dashboard/student-grades';
 import { MessageHistory } from '@/components/dashboard/message-history';
-import { DigitalIdCard } from '@/components/dashboard/digital-id-card';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Download, Camera } from 'lucide-react';
@@ -131,14 +130,61 @@ export default function AlumnoPage() {
             </div>
           </CardHeader>
           <CardContent className="flex justify-center">
-            <DigitalIdCard
-              user={student}
-              schoolName="Escuela"
-              verificationUrl={`${window.location.origin}/verify`}
-              showCamera={true}
-              onPhotoUpdate={handlePhotoUpdate}
-            />
-          </CardContent>
+          <Card className="w-80 h-52 border-2 border-gray-800 rounded-lg overflow-hidden">
+            <CardContent className="p-0 h-full">
+              <div className="flex h-full bg-white">
+                {/* Lado izquierdo - Foto y datos */}
+                <div className="w-2/5 bg-gray-100 flex flex-col items-center justify-center p-4">
+                  <div className="w-16 h-16 rounded-full bg-gray-300 mb-2 overflow-hidden">
+                    {student.avatarUrl ? (
+                      <img
+                        src={student.avatarUrl}
+                        alt={student.name}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                        <span className="text-xs">{student.name.charAt(0)}</span>
+                      </div>
+                    )}
+                  </div>
+                  <div className="text-center mt-1">
+                    <div className="text-xs font-bold truncate max-w-full">{student.name}</div>
+                    <div className="text-[8px] text-muted-foreground truncate max-w-full">{student.email}</div>
+                  </div>
+                </div>
+
+                {/* Lado derecho - Información y código de verificación */}
+                <div className="w-3/5 flex flex-col p-3">
+                  <div className="flex-1">
+                    <div className="text-xs font-bold uppercase">ESCUELA</div>
+                    <div className="text-[10px] mt-1">Estudiante</div>
+                    {student.matricula && (
+                      <div className="text-[10px] mt-1">Matrícula: {student.matricula}</div>
+                    )}
+                    {student.groupId && (
+                      <div className="text-[10px] mt-1">Grupo: {student.groupId}</div>
+                    )}
+
+                    <div className="text-[8px] mt-2 text-muted-foreground">
+                      Alumno Activo
+                    </div>
+                  </div>
+
+                  {/* Código de verificación */}
+                  <div className="text-center">
+                    <div className="text-[8px] font-mono bg-gray-100 p-1 rounded border">
+                      {student.id.substring(0, 8).toUpperCase()}-E
+                    </div>
+                    <div className="text-[6px] text-center text-muted-foreground mt-1">
+                      Cod: {student.id.substring(0, 8).toUpperCase()}-E
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </CardContent>
         </Card>
       )}
 
