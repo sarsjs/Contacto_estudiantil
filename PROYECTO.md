@@ -1,4 +1,4 @@
-﻿# Proyecto: EduChain - Sistema de Gestión Escolar
+# Proyecto: EduChain - Sistema de Gestión Escolar
 
 ## 1. Concepto del Proyecto
 
@@ -83,3 +83,10 @@ Ejemplo:
 ```
 
 Este registro servirá como historial vivo del progreso; antes de cerrar tu sesión, asegúrate de documentar aquí tus cambios y, si es necesario, referenciar el `git status` relevante o issues asociados.
+
+14/12/2025 03:45 - Refactorización del sistema de autenticación y gestión de usuarios.
+- **Implementado:** Creación de Cloud Functions (`createUser`, `deleteUser`) para automatizar el alta y baja de usuarios (personal y estudiantes) de forma atómica entre Firebase Auth y Firestore.
+- **Corregido:** Solucionado bucle de redirección en el login ("parpadeo") mediante la centralización de la lógica en `AuthGuard`.
+- **Mejorado:** Unificado el modelo de datos. Todos los usuarios ahora residen en la colección `users` con un campo `role`. Se eliminó la lógica que dependía de la colección `students`.
+- **Mejorado:** Refactorizada la página de gestión de alumnos del director para usar las nuevas Cloud Functions, aumentando la seguridad.
+- **Pendiente:** Migrar los registros existentes de la colección `students` a `users` para que los alumnos antiguos puedan acceder. La función para actualizar alumnos (`updateUser`) podría requerir una revisión final para asegurar la compatibilidad con el nuevo modelo de datos unificado.

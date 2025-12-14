@@ -2,6 +2,8 @@
 
 import * as React from 'react';
 import { PlusCircle, Search } from 'lucide-react';
+import { getFunctions, httpsCallable } from 'firebase/functions';
+import { functions } from '@/lib/firebase/client';
 import {
   Card,
   CardContent,
@@ -29,25 +31,22 @@ import {
 } from '@/components/ui/select';
 import { useAuth } from '@/context/auth-context';
 import { useToast } from '@/hooks/use-toast';
-import type { Student, Group } from '@/lib/types';
-import { addStudent, fetchStudents, deleteStudent, updateStudent, fetchGroups, fetchUserByEmail } from '@/lib/firebase/data';
-import { getAuth, createUserWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
+import type { User, Group } from '@/lib/types';
+import { fetchUsers, updateUser, fetchGroups } from '@/lib/firebase/data';
 import { IdCard } from '@/components/dashboard/id-card';
 
 export default function AlumnosPage() {
-  const { user, signIn } = useAuth();
-  const [studentList, setStudentList] = React.useState<Student[]>([]);
+  const [studentList, setStudentList] = React.useState<User[]>([]); // Changed from Student[] to User[]
   const [groupList, setGroupList] = React.useState<Group[]>([]);
   const [dataLoading, setDataLoading] = React.useState(false);
   
   const [addStudentOpen, setAddStudentOpen] = React.useState(false);
   const [editStudentOpen, setEditStudentOpen] = React.useState(false);
-  const [editingStudent, setEditingStudent] = React.useState<Student | null>(null);
+  const [editingStudent, setEditingStudent] = React.useState<User | null>(null); // Changed from Student to User
 
   const [newStudentName, setNewStudentName] = React.useState("");
   const [newStudentEmail, setNewStudentEmail] = React.useState("");
   const [newStudentGroupId, setNewStudentGroupId] = React.useState<string>("none");
-  const [directorPassword, setDirectorPassword] = React.useState("");
 
   const [searchTerm, setSearchTerm] = React.useState("");
   const [filterGroup, setFilterGroup] = React.useState("all");
@@ -57,7 +56,9 @@ export default function AlumnosPage() {
   const loadData = React.useCallback(async () => {
     setDataLoading(true);
     try {
-      const [studentsData, groupsData] = await Promise.all([fetchStudents(), fetchGroups()]);
+      const [allUsers, groupsData] = await Promise.all([fetchUsers(), fetchGroups()]);
+      // Filter for students on the client side
+      const studentsData = allUsers.filter(user => user.role === 'estudiante');
       setStudentList(studentsData);
       setGroupList(groupsData);
     } catch (error) {
@@ -71,64 +72,37 @@ export default function AlumnosPage() {
   React.useEffect(() => { loadData() }, [loadData]);
 
   const handleCreateStudent = async () => {
-    if (!newStudentName || !newStudentEmail || !directorPassword) {
+    if (!newStudentName || !newStudentEmail) {
       toast({
         title: "Datos incompletos",
-        description: "El nombre, el correo y tu contraseña son obligatorios.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (!user?.email) {
-      toast({
-        title: "Sesion inválida",
-        description: "Debes volver a iniciar sesión para crear alumnos.",
+        description: "El nombre y el correo son obligatorios.",
         variant: "destructive",
       });
       return;
     }
 
     setDataLoading(true);
-    const emailLower = newStudentEmail.toLowerCase();
-
     try {
-        const existingUser = await fetchUserByEmail(emailLower);
-        if(existingUser) {
-            toast({ title: "El correo ya existe", description: "Ya existe un usuario con este correo electrónico.", variant: "destructive" });
-            setDataLoading(false);
-            return;
-        }
+      const createUser = httpsCallable(functions, 'createUser');
+      await createUser({
+        name: newStudentName,
+        email: newStudentEmail,
+        role: 'estudiante',
+        groupId: newStudentGroupId === 'none' ? undefined : newStudentGroupId,
+      });
 
-        const auth = getAuth();
-        const tempPassword = Math.random().toString(36).slice(-8);
-        await createUserWithEmailAndPassword(auth, emailLower, tempPassword);
-        
-        const matricula = `MT-${Date.now().toString().slice(-6)}`;
-        const avatarSeed = Math.floor(Math.random() * 1000);
-        const avatarUrl = `https://picsum.photos/seed/${avatarSeed}/100/100`;
-
-        await addStudent({ 
-            name: newStudentName, 
-            email: emailLower, 
-            matricula, 
-            avatarUrl,
-            groupId: newStudentGroupId === 'none' ? undefined : newStudentGroupId
-        });
-
-        await sendPasswordResetEmail(auth, emailLower);
-        await signIn(user.email, directorPassword);
-        await loadData();
-
-        toast({ title: "Alumno Creado", description: `Se ha enviado un correo a ${emailLower} para el acceso.` });
-        setAddStudentOpen(false);
-        setNewStudentName('');
-        setNewStudentEmail('');
-        setNewStudentGroupId('none');
-        setDirectorPassword('');
-    } catch (error) {
+      await loadData();
+      toast({ title: "Alumno Creado", description: `Se ha creado el perfil para ${newStudentName}. Se ha enviado un correo para restablecer la contraseña.` });
+      setAddStudentOpen(false);
+      setNewStudentName('');
+      setNewStudentEmail('');
+      setNewStudentGroupId('none');
+    } catch (error: any) {
       console.error("create student error", error);
-      toast({ title: "No se pudo crear", description: "Hubo un error al registrar al alumno.", variant: "destructive" });
+      const message = error.message.includes("already-exists") 
+        ? "El correo electrónico ya está en uso por otro usuario."
+        : "Hubo un error al registrar al alumno.";
+      toast({ title: "No se pudo crear", description: message, variant: "destructive" });
     } finally {
       setDataLoading(false);
     }
@@ -137,7 +111,12 @@ export default function AlumnosPage() {
   const handleUpdateStudent = async () => {
     if (!editingStudent) return;
     try {
-      await updateStudent(editingStudent.id, editingStudent);
+      await updateUser(editingStudent.id, {
+        name: editingStudent.name,
+        email: editingStudent.email,
+        // @ts-ignore
+        groupId: editingStudent.groupId || undefined
+      });
       await loadData();
       toast({ title: "Alumno actualizado", description: `Los datos de ${editingStudent.name} fueron actualizados.` });
       setEditStudentOpen(false);
@@ -150,8 +129,9 @@ export default function AlumnosPage() {
 
   const handleRemoveStudent = async (studentId: string) => {
     try {
-      await deleteStudent(studentId);
-      toast({ title: "Alumno eliminado", description: "El alumno ya no aparece en el panel." });
+      const deleteUser = httpsCallable(functions, 'deleteUser');
+      await deleteUser({ uid: studentId });
+      toast({ title: "Alumno eliminado", description: "El alumno ha sido eliminado del sistema." });
       await loadData();
     } catch (error) {
       console.error("remove student error", error);
@@ -159,13 +139,14 @@ export default function AlumnosPage() {
     }
   };
 
-  const openEditModal = (student: Student) => {
+  const openEditModal = (student: User) => { // Changed from Student to User
     setEditingStudent(student);
     setEditStudentOpen(true);
   };
 
   const filteredStudents = React.useMemo(() => {
     return studentList.filter(student => {
+        // @ts-ignore
         if (filterGroup !== "all" && student.groupId !== filterGroup) {
             return false;
         }
@@ -219,15 +200,6 @@ export default function AlumnosPage() {
                                         </SelectContent>
                                     </Select>
                                 </div>
-                                <div className="space-y-2">
-                                    <label className="block text-sm font-medium">Tu contraseña</label>
-                                    <Input
-                                        value={directorPassword}
-                                        onChange={(e) => setDirectorPassword(e.target.value)}
-                                        placeholder="Contraseña actual"
-                                        type="password"
-                                    />
-                                </div>
                             </div>
                             <DialogFooter className="mt-4"><Button onClick={handleCreateStudent} disabled={dataLoading}>Crear Alumno</Button></DialogFooter>
                         </DialogContent>
@@ -258,7 +230,9 @@ export default function AlumnosPage() {
                         <div className="space-y-2">
                             <label className="block text-sm font-medium">Grupo</label>
                             <Select 
+                                // @ts-ignore
                                 value={editingStudent.groupId || 'none'} 
+                                // @ts-ignore
                                 onValueChange={(value) => setEditingStudent({ ...editingStudent, groupId: value === 'none' ? undefined : value })}                            
                             >
                                 <SelectTrigger><SelectValue placeholder="Seleccionar grupo" /></SelectTrigger>

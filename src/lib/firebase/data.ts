@@ -1,6 +1,7 @@
 import { collection, getDocs, addDoc, doc, deleteDoc, query, where, updateDoc, writeBatch, orderBy, serverTimestamp } from "firebase/firestore";
 import { db } from "./client";
-import type { User, Group, Student, Subject, TimetableEntry, Attendance, Message, Grade, CalendarEvent } from "@/lib/types";
+import { getFunctions, httpsCallable } from 'firebase/functions';
+import type { User, Group, Subject, TimetableEntry, Attendance, Message, Grade, CalendarEvent } from "@/lib/types";
 
 const fetchData = async <T>(fetchFunction: () => Promise<T[]>, entityName: string): Promise<T[]> => {
   try {
@@ -19,21 +20,19 @@ export const fetchUsers = async (): Promise<User[]> => fetchData(async () => {
 
 export const fetchUserByEmail = async (email: string): Promise<User | null> => {
   try {
-    const normalized = email.trim().toLowerCase();
-    const q = query(collection(db, "users"), where("email", "==", normalized));
+    const normalizedEmail = email.trim().toLowerCase();
+    
+    const q = query(collection(db, "users"), where("email", "==", normalizedEmail));
     const querySnapshot = await getDocs(q);
-    if (!querySnapshot.empty) {
-      const userDoc = querySnapshot.docs[0];
-      return { id: userDoc.id, ...userDoc.data() } as unknown as User;
+    
+    if (querySnapshot.empty) {
+      console.warn(`No user profile found in Firestore for email: ${normalizedEmail}`);
+      return null;
     }
+    
+    const userDoc = querySnapshot.docs[0];
+    return { id: userDoc.id, ...userDoc.data() } as unknown as User;
 
-    const allSnapshot = await getDocs(collection(db, "users"));
-    const match = allSnapshot.docs.find((docSnap) => {
-      const docEmail = (docSnap.data() as { email?: string }).email;
-      return docEmail?.toLowerCase()?.trim?.() === normalized;
-    });
-    if (!match) return null;
-    return { id: match.id, ...match.data() } as unknown as User;
   } catch (error) {
     console.error("Error fetching user by email:", error);
     return null;
@@ -70,30 +69,6 @@ export const fetchSubjectsByTeacher = async (teacherId: string): Promise<Subject
     const querySnapshot = await getDocs(q);
     return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as unknown as Subject));
 }, 'subjects by teacher');
-
-export const fetchStudents = async (): Promise<Student[]> => fetchData(async () => {
-    const querySnapshot = await getDocs(collection(db, "students"));
-    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as unknown as Student));
-}, 'students');
-
-export const fetchStudentsByGroup = async (groupId: string): Promise<Student[]> => fetchData(async () => {
-    const q = query(collection(db, "students"), where("groupId", "==", groupId));
-    const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as unknown as Student));
-}, 'students by group');
-
-export const fetchStudentByEmail = async (email: string): Promise<Student | null> => {
-    try {
-        const q = query(collection(db, "students"), where("email", "==", email));
-        const querySnapshot = await getDocs(q);
-        if (querySnapshot.empty) return null;
-        const studentDoc = querySnapshot.docs[0];
-        return { id: studentDoc.id, ...studentDoc.data() } as unknown as Student;
-    } catch (error) {
-        console.error('Error fetching student by email:', error);
-        return null;
-    }
-};
 
 export const fetchTimetableByGroup = async (groupId: string): Promise<TimetableEntry[]> => fetchData(async () => {
     const q = query(collection(db, "timetables"), where("groupId", "==", groupId));
@@ -146,15 +121,43 @@ export const fetchGradesByStudent = async (studentId: string): Promise<Grade[]> 
     return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as unknown as Grade));
 }, 'grades by student');
 
+// Functions for the unified user model
+export const fetchStudents = async (): Promise<User[]> => {
+    const allUsers = await fetchUsers();
+    return allUsers.filter(user => user.role === 'estudiante');
+};
+
+export const fetchStudentsByGroup = async (groupId: string): Promise<User[]> => {
+    const allStudents = await fetchStudents();
+    return allStudents.filter(student => student.groupId === groupId);
+};
+
 // Add/Update functions
 export const addGroup = async (group: Omit<Group, "id">) => await addDoc(collection(db, "groups"), group);
 export const updateGroup = async (groupId: string, data: Partial<Group>) => await updateDoc(doc(db, "groups", groupId), data);
-export const addStudent = async (student: Omit<Student, "id">) => await addDoc(collection(db, "students"), student);
-export const updateStudent = async (studentId: string, data: Partial<Student>) => await updateDoc(doc(db, "students", studentId), data);
+// Renamed updateStudent to updateUser and targeting 'users' collection
+// Enhanced for unified user model compatibility
+export const updateUser = async (userId: string, data: Partial<User>) => {
+  // Prepare update data, ensuring we don't accidentally change the role field unless explicitly allowed
+  const updateData = { ...data };
+
+  // Remove the id field if present as it should not be updated
+  if (updateData.id) {
+    delete updateData.id;
+  }
+
+  // Ensure role field is not accidentally changed in regular updates
+  if (updateData.role !== undefined) {
+    // In a production environment, role changes should likely be restricted
+    // and performed only through specific administrative functions
+    console.warn(`Updating role for user ${userId}. Ensure this is intentional.`);
+  }
+
+  // Perform the update
+  return await updateDoc(doc(db, "users", userId), updateData);
+};
 export const addSubject = async (subject: Omit<Subject, "id">) => await addDoc(collection(db, "subjects"), subject);
 export const updateSubject = async (subjectId: string, data: Partial<Subject>) => await updateDoc(doc(db, "subjects", subjectId), data);
-export const addUser = async (user: Omit<User, "id">) => await addDoc(collection(db, "users"), user);
-export const updateUser = async (userId: string, data: Partial<User>) => await updateDoc(doc(db, "users", userId), data);
 export const addTimetableEntry = async (entry: Omit<TimetableEntry, "id">) => await addDoc(collection(db, "timetables"), entry);
 export const addMessage = async (message: Omit<Message, "id">) => await addDoc(collection(db, "messages"), { ...message, timestamp: serverTimestamp() });
 export const addEvent = async (event: Omit<CalendarEvent, "id" | "createdAt">) => {
@@ -163,6 +166,20 @@ export const addEvent = async (event: Omit<CalendarEvent, "id" | "createdAt">) =
         createdAt: serverTimestamp(),
     });
     return docRef.id;
+};
+
+// Function to add a student using Cloud Functions for unified user model
+export const addStudent = async (studentData: Omit<User, "id" | "role"> & { groupId?: string }) => {
+    const functions = getFunctions();
+    const createUser = httpsCallable(functions, 'createUser');
+
+    const result = await createUser({
+        ...studentData,
+        role: 'estudiante' as const,
+        groupId: studentData.groupId
+    });
+
+    return result;
 };
 
 export const deleteEvent = async (eventId: string) => {
@@ -192,6 +209,6 @@ export const setGradeBatch = async (records: Omit<Grade, "id" | "createdAt">[]) 
 
 // Delete functions
 export const deleteGroup = async (groupId: string) => await deleteDoc(doc(db, "groups", groupId));
-export const deleteStudent = async (studentId: string) => await deleteDoc(doc(db, "students", studentId));
 export const deleteSubject = async (subjectId: string) => await deleteDoc(doc(db, "subjects", subjectId));
+// This function is for deleting a user doc directly, but the callable cloud function is preferred.
 export const deleteUser = async (userId: string) => await deleteDoc(doc(db, "users", userId));

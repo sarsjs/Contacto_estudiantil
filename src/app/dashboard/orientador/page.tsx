@@ -19,7 +19,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Users } from 'lucide-react';
+import { HelpCircle, Users } from 'lucide-react';
 import { MessagePanel } from '@/components/dashboard/message-panel';
 import { CalendarPanel } from '@/components/dashboard/calendar-panel';
 import { useToast } from '@/hooks/use-toast';
@@ -211,11 +211,22 @@ export default function OrientadorPage() {
 
       <div className="grid gap-6 lg:grid-cols-2">
         <Card>
-          <CardHeader>
-            <CardTitle>Alta masiva de alumnos</CardTitle>
-            <CardDescription>
-              Descarga la plantilla, llénala con los datos básicos y súbela para registrar alumnos rápidamente.
-            </CardDescription>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <div>
+              <CardTitle>Alta masiva de alumnos</CardTitle>
+              <CardDescription>
+                Descarga la plantilla, llénala con los datos básicos y súbela para registrar alumnos rápidamente.
+              </CardDescription>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              className="flex items-center gap-2 h-9"
+              onClick={() => document.getElementById('csv-tutorial-modal')?.classList.remove('hidden')}
+            >
+              <HelpCircle className="h-4 w-4" />
+              Tutorial
+            </Button>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
@@ -286,6 +297,96 @@ export default function OrientadorPage() {
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <MessagePanel />
         <CalendarPanel role="orientador" />
+      </div>
+
+      {/* CSV Tutorial Modal */}
+      <div
+        id="csv-tutorial-modal"
+        className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden"
+      >
+        <div className="bg-white rounded-lg max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+          <div className="p-6">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold">Tutorial: Importación Masiva de Alumnos</h3>
+              <button
+                onClick={() => document.getElementById('csv-tutorial-modal')?.classList.add('hidden')}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <h4 className="font-semibold text-lg mb-2">1. Descargar plantilla</h4>
+                <p className="text-sm text-muted-foreground">
+                  En la sección de importación masiva, haz clic en "Descargar plantilla" para obtener un archivo CSV con el formato correcto.
+                </p>
+              </div>
+
+              <div>
+                <h4 className="font-semibold text-lg mb-2">2. Completar la plantilla</h4>
+                <div className="bg-muted p-4 rounded-md text-sm">
+                  <p className="font-medium mb-2">Formato requerido:</p>
+                  <pre className="whitespace-pre-wrap font-mono text-xs">
+                    {`name,email,groupId
+María López,mlopez@colegio.com,grupo-1-1
+Juan Pérez,jperez@colegio.com,grupo-1-2`}
+                  </pre>
+                </div>
+                <ul className="mt-2 space-y-1 text-sm list-disc list-inside">
+                  <li><strong>name:</strong> Nombre completo del alumno</li>
+                  <li><strong>email:</strong> Correo electrónico único del alumno</li>
+                  <li><strong>groupId:</strong> ID del grupo al que pertenecerá el alumno</li>
+                </ul>
+              </div>
+
+              <div>
+                <h4 className="font-semibold text-lg mb-2">3. Validar datos</h4>
+                <ul className="space-y-1 text-sm list-disc list-inside">
+                  <li>Cada fila representa a un alumno</li>
+                  <li>Asegúrate de que todos los campos sean obligatorios</li>
+                  <li>El correo electrónico debe ser único para cada alumno</li>
+                  <li>Los IDs de grupo deben existir en el sistema</li>
+                  <li>No deben existir filas vacías</li>
+                </ul>
+              </div>
+
+              <div>
+                <h4 className="font-semibold text-lg mb-2">4. Importar archivo</h4>
+                <ul className="space-y-1 text-sm list-disc list-inside">
+                  <li>Haz clic en "Seleccionar archivo CSV"</li>
+                  <li>Elige tu archivo completado</li>
+                  <li>Espera a que se procese la importación</li>
+                  <li>Revisa los resultados: se mostrará el número de alumnos registrados y posibles errores</li>
+                </ul>
+              </div>
+
+              <div>
+                <h4 className="font-semibold text-lg mb-2">Consejos importantes</h4>
+                <ul className="space-y-1 text-sm list-disc list-inside">
+                  <li>Evita caracteres especiales en los nombres</li>
+                  <li>Verifica que los correos electrónicos tengan formato válido</li>
+                  <li>Los alumnos importados recibirán un correo para restablecer su contraseña</li>
+                  <li>Los IDs de grupo deben coincidir con los grupos existentes en el sistema</li>
+                </ul>
+              </div>
+
+              <div className="border-t pt-4">
+                <h4 className="font-semibold text-lg mb-2">Ejemplo completo</h4>
+                <div className="bg-muted p-4 rounded-md text-sm">
+                  <pre className="whitespace-pre-wrap font-mono text-xs">
+                    {`name,email,groupId
+María López,mlopez@colegio.com,grupo-1-1
+Juan Pérez,jperez@colegio.com,grupo-1-1
+Carlos Gómez,cgomez@colegio.com,grupo-1-2
+Ana Torres,atorres@colegio.com,grupo-1-2`}
+                  </pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

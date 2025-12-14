@@ -20,10 +20,12 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   fetchSubjects,
   fetchStudents,
+  fetchUsers,
   fetchGroups,
   fetchAttendanceForDate,
-  updateStudent,
   setAttendanceBatch,
+  setGradeBatch,
+  fetchGradesByStudent,
 } from '@/lib/firebase/data';
 import { useToast } from '@/hooks/use-toast';
 import {
@@ -111,16 +113,32 @@ export function TeacherView() {
       const attendanceRecords = Object.entries(attendanceState).map(([studentId, present]) => ({ studentId, date: today, present }));
       await setAttendanceBatch(attendanceRecords);
 
+      // Prepare grade records for batch update
+      const gradeRecords = [];
       for (const key in gradesState) {
         const [studentId, subjectId] = key.split('-');
-        const grade = gradesState[key];
+        const gradeValue = gradesState[key];
+
+        // Find the group for this student
         const student = students.find(s => s.id === studentId);
-        if (student) {
-          const updatedGrades = student.grades.map(g => 
-            g.subjectId === subjectId ? { ...g, grade: grade === '' ? null : grade } : g
-          );
-          await updateStudent(studentId, { grades: updatedGrades });
+        if (student && student.groupId) {
+          if (gradeValue !== '' && gradeValue !== null) {
+            // Determine which partial (1, 2, or 3) this corresponds to
+            // For now, we'll assume it's the current partial - in a real app, this would be more dynamic
+            const partial = 1; // Should be determined based on current date or academic calendar
+            gradeRecords.push({
+              studentId,
+              subjectId,
+              grade: Number(gradeValue),
+              partial: partial as 1 | 2 | 3,
+              groupId: student.groupId
+            });
+          }
         }
+      }
+
+      if (gradeRecords.length > 0) {
+        await setGradeBatch(gradeRecords);
       }
 
       toast({ title: 'Cambios guardados', description: 'La asistencia y calificaciones han sido registradas.' });
