@@ -68,11 +68,8 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
     }
   }, [pathname, user, profile]);
 
-  if (loading || (user && !profile && pathname !== '/login')) {
-    // Muestra 'Cargando...' si:
-    // 1. La autenticación inicial está en curso.
-    // 2. O si ya hay un usuario de Firebase pero su perfil de la base de datos aún no ha llegado,
-    //    y no estamos en la página de login (para evitar un flash de 'cargando' sobre el formulario).
+  if (loading) {
+    // Muestra 'Cargando...' si la autenticación está en curso
     return (
       <div className="min-h-screen w-full flex items-center justify-center">
         <p>Cargando...</p>
@@ -90,6 +87,40 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
     return <>{children}</>;
   }
 
-  // En cualquier otro caso (como un estado intermedio), no renderiza nada para evitar parpadeos
+  // Si está autenticado pero no tiene perfil (posiblemente error de sincronización)
+  if (user && !profile) {
+    return (
+      <div className="min-h-screen w-full flex items-center justify-center">
+        <p>Cargando perfil...</p>
+      </div>
+    );
+  }
+
+  // Si no está autenticado y no está en login, redirigir a login
+  if (!user && pathname !== '/login') {
+    if (typeof window !== 'undefined') {
+      router.replace('/login');
+    }
+    return (
+      <div className="min-h-screen w-full flex items-center justify-center">
+        <p>Redirigiendo...</p>
+      </div>
+    );
+  }
+
+  // Si está autenticado pero no está en una página de dashboard, redirigir a su dashboard
+  if (user && profile && !pathname.startsWith('/dashboard')) {
+    const destination = roleRoutes[profile.role] ?? '/login';
+    if (typeof window !== 'undefined') {
+      router.replace(destination);
+    }
+    return (
+      <div className="min-h-screen w-full flex items-center justify-center">
+        <p>Redirigiendo...</p>
+      </div>
+    );
+  }
+
+  // En cualquier otro caso, no renderiza nada para evitar parpadeos
   return null;
 }
