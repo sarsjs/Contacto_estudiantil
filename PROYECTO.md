@@ -119,3 +119,9 @@ Este registro servirá como historial vivo del progreso; antes de cerrar tu sesi
 - **Implementado:** Componentes faltantes requeridos para funcionalidad de credenciales digitales.
 - **Implementado:** Solución temporal para visualización de credencial en panel de alumno.
 - **Resuelto:** Errores que impedían la compilación del proyecto.
+
+14/12/2025 05:55 - Corrección de problema de navegación en AuthGuard.
+- **Corregido:** Error que causaba pantalla de carga infinita al visitar la página principal sin autenticación.
+- **Mejorado:** Lógica de redirección para usuarios no autenticados hacia la página de login.
+- **Mejorado:** Manejo de estados de carga y perfil en AuthGuard.
+- **Resuelto:** Ahora los usuarios son redirigidos adecuadamente según su estado de autenticación.
