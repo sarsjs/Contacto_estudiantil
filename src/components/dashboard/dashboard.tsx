@@ -42,20 +42,20 @@ const navItems = {
     { href: '/dashboard/director/estructura', icon: School, label: 'Estructura' },
   ],
   orientador: [
-    { href: '#', icon: Home, label: 'Panel Principal' },
-    { href: '#', icon: ClipboardList, label: 'Estudiantes' },
-    { href: '#', icon: Calendar, label: 'Horarios' },
-    { href: '#', icon: BookCopy, label: 'Materias' },
+    { href: '/dashboard/orientador', icon: Home, label: 'Panel Principal' },
+    { href: '/dashboard/orientador/grupo', icon: ClipboardList, label: 'Grupos' },
+    { href: '/dashboard/orientador/horarios', icon: Calendar, label: 'Horarios' },
+    { href: '/dashboard/orientador/materias', icon: BookCopy, label: 'Materias' },
   ],
   profesor: [
-    { href: '#', icon: LayoutGrid, label: 'Mis Clases' },
-    { href: '#', icon: ClipboardCheck, label: 'Asistencia' },
-    { href: '#', icon: GraduationCap, label: 'Calificaciones' },
+    { href: '/dashboard/profesor', icon: LayoutGrid, label: 'Mis Clases' },
+    { href: '/dashboard/profesor/asistencia', icon: ClipboardCheck, label: 'Asistencia' },
+    { href: '/dashboard/profesor/calificaciones', icon: GraduationCap, label: 'Calificaciones' },
   ],
   estudiante: [
-    { href: '#', icon: LayoutGrid, label: 'Panel Principal' },
-    { href: '#', icon: Calendar, label: 'Mi Horario' },
-    { href: '#', icon: GraduationCap, label: 'Mis Calificaciones' },
+    { href: '/dashboard/alumno', icon: LayoutGrid, label: 'Panel Principal' },
+    { href: '/dashboard/alumno/horario', icon: Calendar, label: 'Mi Horario' },
+    { href: '/dashboard/alumno/calificaciones', icon: GraduationCap, label: 'Mis Calificaciones' },
   ],
 };
 
@@ -151,39 +151,48 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
   React.useEffect(() => {
-    if (loading) return;
-
-    if (!profile) {
-      router.push('/login');
-      return;
-    }
-
+    if (loading || !profile) return;
     const expectedPath = `/dashboard/${profile.role}`;
     if (!pathname.startsWith(expectedPath)) {
       router.push(expectedPath);
     }
   }, [loading, profile, router, pathname]);
 
-  if (loading || !profile) {
+  if (loading) {
     return <div className="flex h-screen items-center justify-center">Cargando...</div>;
+  }
+
+  if (!profile) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-background px-4 text-center">
+        <p className="text-lg font-semibold">Tu perfil no está registrado.</p>
+        <p className="max-w-sm text-sm text-muted-foreground">
+          La cuenta autenticada no tiene un perfil asociado. Contacta al administrador
+          para revisar tu invitación o crear el registro correspondiente.
+        </p>
+        <Button onClick={signOut} variant="outline">
+          Cerrar sesión
+        </Button>
+      </div>
+    );
   }
 
   const title = viewTitles[profile.role] || 'Dashboard';
 
   return (
     <SidebarProvider defaultOpen>
-        <div className='flex h-screen w-full'>
-            <AppSidebar user={profile} />
-            <SidebarInset className="flex flex-1 flex-col">
-                <AppHeader 
-                    title={title}
-                    signOut={signOut}
-                />
-                <main className="flex-1 overflow-y-auto bg-muted/40 p-4 lg:p-6">
-                    {children}
-                </main>
-            </SidebarInset>
-        </div>
+      <div className="flex h-screen w-full">
+        <AppSidebar user={profile} />
+        <SidebarInset className="flex flex-1 flex-col">
+          <AppHeader
+            title={title}
+            signOut={signOut}
+          />
+          <main className="flex-1 overflow-y-auto bg-muted/40 p-4 lg:p-6">
+            {children}
+          </main>
+        </SidebarInset>
+      </div>
     </SidebarProvider>
   );
 }

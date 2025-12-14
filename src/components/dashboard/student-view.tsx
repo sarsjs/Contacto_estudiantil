@@ -18,11 +18,12 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { CheckCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/context/auth-context";
 import { IdCard } from "@/components/dashboard/id-card";
+import { MessagePanel } from "@/components/dashboard/message-panel";
+import { CalendarPanel } from "@/components/dashboard/calendar-panel";
 import {
   fetchStudentByEmail,
   fetchSubjects,
@@ -46,10 +47,6 @@ export function StudentView() {
   const [subjectsMap, setSubjectsMap] = React.useState<Record<string, string>>({});
   const [fetching, setFetching] = React.useState(false);
   const [attendedClasses, setAttendedClasses] = React.useState<Set<string>>(new Set());
-  const [chatMessages, setChatMessages] = React.useState<
-    { sender: "student" | "counselor"; text: string }[]
-  >([]);
-  const [newMessage, setNewMessage] = React.useState("");
 
   React.useEffect(() => {
     const loadSubjects = async () => {
@@ -102,21 +99,6 @@ export function StudentView() {
       description: `Asistencia registrada para ${subjectName}.`,
     });
     setAttendedClasses((prev) => new Set(prev).add(entryId));
-  };
-
-  const handleSendMessage = () => {
-    const trimmed = newMessage.trim();
-    if (!trimmed) return;
-    const updated: { sender: "student" | "counselor"; text: string }[] = [
-      ...chatMessages,
-      { sender: "student", text: trimmed },
-      {
-        sender: "counselor",
-        text: "Gracias por tu mensaje. Tu orientador se pondrá en contacto pronto.",
-      },
-    ];
-    setChatMessages(updated);
-    setNewMessage("");
   };
 
   if (authLoading || fetching) {
@@ -266,42 +248,10 @@ export function StudentView() {
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Contacto con orientador</CardTitle>
-          <CardDescription>Envía un mensaje rápido al equipo de apoyo.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-col gap-4">
-            <div className="h-48 overflow-y-auto border rounded-md p-2 space-y-2">
-              {chatMessages.length === 0 && (
-                <p className="text-sm text-muted-foreground">Aún no hay mensajes.</p>
-              )}
-              {chatMessages.map((msg, idx) => (
-                <div
-                  key={idx}
-                  className={`max-w-[70%] p-2 rounded-lg text-sm ${
-                    msg.sender === "student"
-                      ? "ml-auto bg-primary text-primary-foreground"
-                      : "mr-auto bg-muted"
-                  }`}
-                >
-                  {msg.text}
-                </div>
-              ))}
-            </div>
-            <div className="flex gap-2">
-              <Input
-                value={newMessage}
-                onChange={(event) => setNewMessage(event.target.value)}
-                placeholder="Escribe tu mensaje..."
-                className="flex-1"
-              />
-              <Button onClick={handleSendMessage}>Enviar</Button>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <MessagePanel />
+        <CalendarPanel role="estudiante" />
+      </div>
     </div>
   );
 }

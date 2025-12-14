@@ -27,6 +27,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { useAuth } from '@/context/auth-context';
 import { useToast } from '@/hooks/use-toast';
 import type { Student, Group } from '@/lib/types';
 import { addStudent, fetchStudents, deleteStudent, updateStudent, fetchGroups, fetchUserByEmail } from '@/lib/firebase/data';
@@ -34,6 +35,7 @@ import { getAuth, createUserWithEmailAndPassword, sendPasswordResetEmail } from 
 import { IdCard } from '@/components/dashboard/id-card';
 
 export default function AlumnosPage() {
+  const { user, signIn } = useAuth();
   const [studentList, setStudentList] = React.useState<Student[]>([]);
   const [groupList, setGroupList] = React.useState<Group[]>([]);
   const [dataLoading, setDataLoading] = React.useState(false);
@@ -45,6 +47,7 @@ export default function AlumnosPage() {
   const [newStudentName, setNewStudentName] = React.useState("");
   const [newStudentEmail, setNewStudentEmail] = React.useState("");
   const [newStudentGroupId, setNewStudentGroupId] = React.useState<string>("none");
+  const [directorPassword, setDirectorPassword] = React.useState("");
 
   const [searchTerm, setSearchTerm] = React.useState("");
   const [filterGroup, setFilterGroup] = React.useState("all");
@@ -68,8 +71,21 @@ export default function AlumnosPage() {
   React.useEffect(() => { loadData() }, [loadData]);
 
   const handleCreateStudent = async () => {
-    if (!newStudentName || !newStudentEmail) {
-      toast({ title: "Datos incompletos", description: "El nombre y el correo son obligatorios.", variant: "destructive" });
+    if (!newStudentName || !newStudentEmail || !directorPassword) {
+      toast({
+        title: "Datos incompletos",
+        description: "El nombre, el correo y tu contraseña son obligatorios.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!user?.email) {
+      toast({
+        title: "Sesion inválida",
+        description: "Debes volver a iniciar sesión para crear alumnos.",
+        variant: "destructive",
+      });
       return;
     }
 
@@ -101,6 +117,7 @@ export default function AlumnosPage() {
         });
 
         await sendPasswordResetEmail(auth, emailLower);
+        await signIn(user.email, directorPassword);
         await loadData();
 
         toast({ title: "Alumno Creado", description: `Se ha enviado un correo a ${emailLower} para el acceso.` });
@@ -108,6 +125,7 @@ export default function AlumnosPage() {
         setNewStudentName('');
         setNewStudentEmail('');
         setNewStudentGroupId('none');
+        setDirectorPassword('');
     } catch (error) {
       console.error("create student error", error);
       toast({ title: "No se pudo crear", description: "Hubo un error al registrar al alumno.", variant: "destructive" });
@@ -200,6 +218,15 @@ export default function AlumnosPage() {
                                             {groupList.map(group => (<SelectItem key={group.id} value={group.id}>{group.name}</SelectItem>))}
                                         </SelectContent>
                                     </Select>
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="block text-sm font-medium">Tu contraseña</label>
+                                    <Input
+                                        value={directorPassword}
+                                        onChange={(e) => setDirectorPassword(e.target.value)}
+                                        placeholder="Contraseña actual"
+                                        type="password"
+                                    />
                                 </div>
                             </div>
                             <DialogFooter className="mt-4"><Button onClick={handleCreateStudent} disabled={dataLoading}>Crear Alumno</Button></DialogFooter>

@@ -47,12 +47,21 @@ export interface Attendance {
     groupId: string;
 }
 
-export type RecipientFilter = "all" | "teachers" | "counselors" | "students";
+export type RecipientFilter =
+  | "all"
+  | "teachers"
+  | "counselors"
+  | "students"
+  | "director"
+  | "group"
+  | "student";
 
 export interface Message {
     id: string;
     content: string;
     recipientFilter: RecipientFilter;
+    recipientLabel?: string;
+    recipientId?: string;
     timestamp: FieldValue;
 }
 
@@ -65,4 +74,13 @@ export interface Grade {
     grade: number;
     partial: 1 | 2 | 3; // Periodo de evaluación (1er, 2º, 3er parcial)
     createdAt: FieldValue;
+}
+
+export interface CalendarEvent {
+    id: string;
+    title: string;
+    description: string;
+    date: string; // YYYY-MM-DD
+    createdAt: FieldValue;
+    createdBy?: string;
 }

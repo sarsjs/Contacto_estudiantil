@@ -50,6 +50,8 @@ import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/context/auth-context';
 import { SecurityAlerts } from './security-alerts';
 import { IdCard } from './id-card';
+import { CalendarPanel } from './calendar-panel';
+import { MessagePanel } from './message-panel';
 
 export function CounselorView({ currentUser }: { currentUser: User }) {
   const [students, setStudents] = React.useState<Student[]>([]);
@@ -463,6 +465,10 @@ export function CounselorView({ currentUser }: { currentUser: User }) {
             </Table>
           </CardContent>
         </Card>
+      </div>
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <MessagePanel />
+        <CalendarPanel role="orientador" />
       </div>
     </div>
   );

@@ -5,9 +5,11 @@ import Link from 'next/link';
 import { useAuth } from '@/context/auth-context';
 import { fetchSubjectsByTeacher, fetchUserByEmail } from '@/lib/firebase/data';
 import type { Subject } from '@/lib/types';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from '@/components/ui/button';
-import { BookMarked, ClipboardCheck } from 'lucide-react';
+import { BookMarked } from 'lucide-react';
+import { CalendarPanel } from '@/components/dashboard/calendar-panel';
+import { MessagePanel } from '@/components/dashboard/message-panel';
 
 // Componente para una sola materia
 function SubjectCard({ subject }: { subject: Subject }) {
@@ -98,6 +100,10 @@ export default function ProfesorPage() {
           ))}
         </div>
       )}
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <MessagePanel />
+        <CalendarPanel role="profesor" />
+      </div>
     </div>
   );
 }

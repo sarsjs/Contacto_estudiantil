@@ -2,7 +2,6 @@
 
 import * as React from 'react';
 import { useParams } from 'next/navigation';
-import { useAuth } from '@/context/auth-context';
 import {
   fetchSubjects,
   fetchGroupsBySubject,
@@ -18,7 +17,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 
-function GradeSheet({ students, groupId, subjectId, partial }: { students: Student[], groupId: string, subjectId: string, partial: number }) {
+function GradeSheet({ students, groupId, subjectId, partial }: { students: Student[], groupId: string, subjectId: string, partial: 1 | 2 | 3 }) {
   const [grades, setGrades] = React.useState<Record<string, number | string>>({});
   const [isLoading, setIsLoading] = React.useState(true);
   const [isSaving, setIsSaving] = React.useState(false);
@@ -42,16 +41,16 @@ function GradeSheet({ students, groupId, subjectId, partial }: { students: Stude
 
   const handleSave = async () => {
     setIsSaving(true);
-    const recordsToSave = Object.entries(grades).map(([studentId, grade]) => ({
+    const recordsToSave: Omit<Grade, "id" | "createdAt">[] = Object.entries(grades).map(([studentId, grade]) => ({
       studentId,
       subjectId,
-      groupId, // Assuming groupId is needed in the grade record
-      partial: partial as (1 | 2 | 3),
+      groupId,
+      partial,
       grade: Number(grade),
     }));
 
     try {
-      await setGradeBatch(recordsToSave as any);
+      await setGradeBatch(recordsToSave);
       toast({ title: "Calificaciones Guardadas", description: "El registro se ha guardado correctamente." });
     } catch (error) {
       console.error(error);
@@ -112,7 +111,7 @@ export default function GradingPage() {
   const [subject, setSubject] = React.useState<Subject | null>(null);
   const [groups, setGroups] = React.useState<Group[]>([]);
   const [selectedGroup, setSelectedGroup] = React.useState<string>("");
-  const [selectedPartial, setSelectedPartial] = React.useState<number>(0);
+  const [selectedPartial, setSelectedPartial] = React.useState<1 | 2 | 3 | 0>(0);
   const [students, setStudents] = React.useState<Student[]>([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
@@ -199,7 +198,11 @@ export default function GradingPage() {
         <Card>
           <CardHeader><CardTitle>2. Seleccionar Parcial</CardTitle></CardHeader>
           <CardContent>
-            <Select onValueChange={(val) => setSelectedPartial(Number(val))} value={String(selectedPartial)} disabled={!selectedGroup}>
+            <Select
+              onValueChange={(val) => setSelectedPartial(Number(val) as 1 | 2 | 3)}
+              value={selectedPartial > 0 ? String(selectedPartial) : ''}
+              disabled={!selectedGroup}
+            >
               <SelectTrigger><SelectValue placeholder="Elige un parcial..." /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="1">1er Parcial</SelectItem>

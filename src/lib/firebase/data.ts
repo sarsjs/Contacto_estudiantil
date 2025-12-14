@@ -1,6 +1,6 @@
 import { collection, getDocs, addDoc, doc, deleteDoc, query, where, updateDoc, writeBatch, orderBy, serverTimestamp } from "firebase/firestore";
 import { db } from "./client";
-import type { User, Group, Student, Subject, TimetableEntry, Attendance, Message, Grade } from "@/lib/types";
+import type { User, Group, Student, Subject, TimetableEntry, Attendance, Message, Grade, CalendarEvent } from "@/lib/types";
 
 const fetchData = async <T>(fetchFunction: () => Promise<T[]>, entityName: string): Promise<T[]> => {
   try {
@@ -18,19 +18,26 @@ export const fetchUsers = async (): Promise<User[]> => fetchData(async () => {
 }, 'users');
 
 export const fetchUserByEmail = async (email: string): Promise<User | null> => {
-    try {
-        const normalized = email.trim().toLowerCase();
-        const q = query(collection(db, "users"), where("email", "==", normalized));
-        const querySnapshot = await getDocs(q);
-        if (!querySnapshot.empty) {
-            const userDoc = querySnapshot.docs[0];
-            return { id: userDoc.id, ...userDoc.data() } as unknown as User;
-        }
-        return null;
-    } catch (error) {
-        console.error("Error fetching user by email:", error);
-        return null;
+  try {
+    const normalized = email.trim().toLowerCase();
+    const q = query(collection(db, "users"), where("email", "==", normalized));
+    const querySnapshot = await getDocs(q);
+    if (!querySnapshot.empty) {
+      const userDoc = querySnapshot.docs[0];
+      return { id: userDoc.id, ...userDoc.data() } as unknown as User;
     }
+
+    const allSnapshot = await getDocs(collection(db, "users"));
+    const match = allSnapshot.docs.find((docSnap) => {
+      const docEmail = (docSnap.data() as { email?: string }).email;
+      return docEmail?.toLowerCase()?.trim?.() === normalized;
+    });
+    if (!match) return null;
+    return { id: match.id, ...match.data() } as unknown as User;
+  } catch (error) {
+    console.error("Error fetching user by email:", error);
+    return null;
+  }
 };
 
 export const fetchGroups = async (): Promise<Group[]> => fetchData(async () => {
@@ -105,6 +112,16 @@ export const fetchMessages = async (): Promise<Message[]> => fetchData(async () 
     return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as unknown as Message));
 }, 'messages');
 
+export const fetchEventsByDate = async (date: string): Promise<CalendarEvent[]> => fetchData(async () => {
+    const q = query(
+        collection(db, "events"),
+        where("date", "==", date),
+        orderBy("createdAt", "desc")
+    );
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as unknown as CalendarEvent));
+}, 'events by date');
+
 export const fetchAttendanceForDate = async (date: string): Promise<Attendance[]> => fetchData(async () => {
     const q = query(collection(db, "attendance"), where("date", "==", date));
     const querySnapshot = await getDocs(q);
@@ -140,6 +157,17 @@ export const addUser = async (user: Omit<User, "id">) => await addDoc(collection
 export const updateUser = async (userId: string, data: Partial<User>) => await updateDoc(doc(db, "users", userId), data);
 export const addTimetableEntry = async (entry: Omit<TimetableEntry, "id">) => await addDoc(collection(db, "timetables"), entry);
 export const addMessage = async (message: Omit<Message, "id">) => await addDoc(collection(db, "messages"), { ...message, timestamp: serverTimestamp() });
+export const addEvent = async (event: Omit<CalendarEvent, "id" | "createdAt">) => {
+    const docRef = await addDoc(collection(db, "events"), {
+        ...event,
+        createdAt: serverTimestamp(),
+    });
+    return docRef.id;
+};
+
+export const deleteEvent = async (eventId: string) => {
+    await deleteDoc(doc(db, "events", eventId));
+};
 
 export const setAttendanceBatch = async (records: Omit<Attendance, "id">[]) => {
     const batch = writeBatch(db);

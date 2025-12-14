@@ -9,26 +9,25 @@ export default function Home() {
   const { profile, loading } = useAuth();
 
   useEffect(() => {
-    if (!loading) {
-      if (profile) {
-        // Redirect based on user role
-        switch (profile.role) {
-          case 'director':
-            router.replace('/dashboard/director');
-            break;
-          // TODO: Add redirects for other roles
-          default:
-            // Redirect to a generic dashboard or login if role is unknown
-            router.replace('/login');
-            break;
-        }
-      } else {
-        // If no profile, redirect to login
-        router.replace('/login');
-      }
+    if (loading) {
+      return;
     }
+
+    if (!profile) {
+      router.replace('/login');
+      return;
+    }
+
+    const roleRoutes: Record<string, string> = {
+      director: '/dashboard/director',
+      orientador: '/dashboard/orientador',
+      profesor: '/dashboard/profesor',
+      estudiante: '/dashboard/estudiante',
+    };
+
+    const destination = roleRoutes[profile.role] ?? '/login';
+    router.replace(destination);
   }, [loading, profile, router]);
 
-  // Optional: Show a loading indicator while redirecting
   return <div className="flex h-screen items-center justify-center">Cargando...</div>;
 }

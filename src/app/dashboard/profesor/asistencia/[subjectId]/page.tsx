@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { useAuth } from '@/context/auth-context';
 import {
   fetchSubjects, 
@@ -45,7 +45,7 @@ function AttendanceSheet({ students, groupId, subjectId }: { students: Student[]
 
   const handleSave = async () => {
     setIsSaving(true);
-    const records = Object.entries(attendance).map(([studentId, present]) => ({
+    const records: Omit<Attendance, "id">[] = Object.entries(attendance).map(([studentId, present]) => ({
       studentId,
       present,
       date: today,
@@ -54,7 +54,7 @@ function AttendanceSheet({ students, groupId, subjectId }: { students: Student[]
     }));
 
     try {
-      await setAttendanceBatch(records as any);
+      await setAttendanceBatch(records);
       toast({ title: "Asistencia Guardada", description: "El registro de asistencia se ha guardado correctamente." });
     } catch (error) {
       console.error(error);
@@ -152,7 +152,7 @@ export default function AttendancePage() {
     if (!selectedGroup) {
         setStudents([]);
         return;
-    };
+    }
 
     const loadStudents = async () => {
       try {

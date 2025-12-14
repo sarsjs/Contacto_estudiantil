@@ -1,7 +1,6 @@
 'use client';
 
 import * as React from 'react';
-import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import {
   fetchStudents,
@@ -15,7 +14,6 @@ import { StudentGrades } from '@/components/dashboard/student-grades';
 import { StudentAttendanceHistory } from '@/components/dashboard/student-attendance-history';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 
 export default function StudentDetailPage() {
   const params = useParams();
