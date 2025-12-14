@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "log-progress": "node scripts/log-progress.js",
     "serve": "next start -p 8080",
     "migrate": "dotenv -e .env.local -- npx tsx src/migrate.ts"
   },
@@ -23,6 +24,7 @@
     "@radix-ui/react-tooltip": "^1.2.8",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
     "firebase": "^12.6.0",
     "html-to-image": "^1.11.13",
     "lucide-react": "^0.400.0",
