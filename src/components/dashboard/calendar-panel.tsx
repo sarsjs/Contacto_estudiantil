@@ -146,13 +146,13 @@ export function CalendarPanel({ role, className }: CalendarPanelProps) {
         <CardTitle>Calendario Escolar</CardTitle>
         <CardDescription>Consulta y administra eventos importantes.</CardDescription>
       </CardHeader>
-      <CardContent className="grid gap-6 lg:grid-cols-[minmax(220px,260px)_minmax(0,1fr)] items-start">
-        <div className="flex w-full justify-start">
+      <CardContent className="grid gap-6 lg:grid-cols-[260px_1fr] items-start">
+        <div className="flex flex-col">
           <Calendar
             mode="single"
             selected={selectedDate}
             onSelect={(value) => value && setSelectedDate(value)}
-            className="rounded-md border w-full max-w-[240px]"
+            className="rounded-md border"
           />
         </div>
         <div className="space-y-4">

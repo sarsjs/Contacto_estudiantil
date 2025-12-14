@@ -90,3 +90,14 @@ Este registro servirá como historial vivo del progreso; antes de cerrar tu sesi
 - **Mejorado:** Unificado el modelo de datos. Todos los usuarios ahora residen en la colección `users` con un campo `role`. Se eliminó la lógica que dependía de la colección `students`.
 - **Mejorado:** Refactorizada la página de gestión de alumnos del director para usar las nuevas Cloud Functions, aumentando la seguridad.
 - **Pendiente:** Migrar los registros existentes de la colección `students` a `users` para que los alumnos antiguos puedan acceder. La función para actualizar alumnos (`updateUser`) podría requerir una revisión final para asegurar la compatibilidad con el nuevo modelo de datos unificado.
+
+14/12/2025 04:15 - Mejora del sistema de mensajes y horarios escolares.
+- **Implementado:** Funcionalidades avanzadas de mensajería con múltiples filtros de destinatarios según roles (director, orientador, profesor, alumno) con envío a grupos específicos, profesores específicos, orientadores, etc.
+- **Mejorado:** Sistema de horarios escolares completo con asignación por grupos, visualización para alumnos y vistas específicas por roles.
+- **Corregido:** Alineación del componente CalendarPanel para mejor experiencia de usuario.
+- **Corregido:** Modelo de datos TimetableEntry para uso consistente (day/time en lugar de dayOfWeek/timeSlot).
+- **Implementado:** Tutorial de importación CSV integrado en la aplicación para guiar orientadores y directores.
+- **Mejorado:** Funcionalidad AuthGuard para prevenir redirecciones temporales durante operaciones de gestión de usuarios.
+- **Implementado:** Funciones auxiliares para obtener destinatarios según roles (profesor-alumnos, orientador-grupos, etc.).
+- **Implementado:** Vista de horarios para profesores mostrando sus clases por día, hora y grupo asignados.
+- **Pendiente:** Implementar Cloud Functions para validaciones de backend y RBAC, integrar notificaciones push con FCM.

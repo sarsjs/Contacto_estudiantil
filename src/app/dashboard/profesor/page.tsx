@@ -101,7 +101,20 @@ export default function ProfesorPage() {
         </div>
       )}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <Card>
+          <CardHeader>
+            <CardTitle>Mi Horario de Clases</CardTitle>
+            <CardDescription>Consulta tus clases programadas por día y grupo</CardDescription>
+          </CardHeader>
+          <CardFooter>
+            <Link href="/dashboard/profesor/horario" className="w-full">
+              <Button variant="outline" className="w-full">Ver Horario</Button>
+            </Link>
+          </CardFooter>
+        </Card>
         <MessagePanel />
+      </div>
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <CalendarPanel role="profesor" />
       </div>
     </div>

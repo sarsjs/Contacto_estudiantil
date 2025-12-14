@@ -21,7 +21,7 @@ export function StudentSchedule({ schedule, subjects }: StudentScheduleProps) {
 
   const scheduleMatrix = timeSlots.map(time => {
     return daysOfWeek.map(day => {
-      const entry = schedule.find(s => s.dayOfWeek === day && s.timeSlot === time);
+      const entry = schedule.find(s => s.day === day && s.time === time);
       return entry ? getSubjectName(entry.subjectId) : '--';
     });
   });

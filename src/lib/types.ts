@@ -34,8 +34,8 @@ export interface TimetableEntry {
     id: string;
     groupId: string;
     subjectId: string;
-    dayOfWeek: 'Lunes' | 'Martes' | 'Miércoles' | 'Jueves' | 'Viernes';
-    timeSlot: string; // e.g., "09:00-10:00"
+    day: 'Lunes' | 'Martes' | 'Miércoles' | 'Jueves' | 'Viernes';
+    time: string; // e.g., "09:00 - 10:00"
 }
 
 export interface Attendance {
@@ -48,13 +48,22 @@ export interface Attendance {
 }
 
 export type RecipientFilter =
-  | "all"
-  | "teachers"
-  | "counselors"
-  | "students"
-  | "director"
-  | "group"
-  | "student";
+  | "all"           // Todos los usuarios
+  | "personal"      // Todo el personal (director, orientadores, profesores)
+  | "teachers"      // Solo profesores
+  | "counselors"    // Solo orientadores
+  | "students"      // Todos los estudiantes
+  | "director"      // Solo director
+  | "group"         // Grupo específico
+  | "student"       // Estudiante específico
+  | "myStudents"    // Solo estudiantes de las materias que imparto
+  | "myGroups"      // Solo estudiantes de los grupos de mis materias
+  | "myCounselor"   // Solo mi orientador (para estudiantes)
+  | "myTeacher"     // Solo profesores de mi grupo (para estudiantes)
+  | "specificClass" // Clase específica
+  | "specificTeacher" // Profesor específico
+  | "specificCounselor" // Orientador específico
+  | "specificGroupStudents"; // Solo estudiantes de un grupo específico
 
 export interface Message {
     id: string;
