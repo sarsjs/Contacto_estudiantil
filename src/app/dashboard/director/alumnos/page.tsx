@@ -51,7 +51,7 @@ export default function AlumnosPage() {
   const [filterGroup, setFilterGroup] = React.useState("all");
 
   const { toast } = useToast();
-  const functions = getFunctions();
+  const functions = getFunctions(undefined, 'us-central1');
 
   const loadData = React.useCallback(async () => {
     setDataLoading(true);
@@ -86,7 +86,7 @@ export default function AlumnosPage() {
       const createUser = httpsCallable(functions, 'createUser');
       await createUser({
         name: newStudentName,
-        email: newStudentEmail,
+        email: newStudentEmail.trim().toLowerCase(),
         role: 'estudiante',
         groupId: newStudentGroupId === 'none' ? undefined : newStudentGroupId,
       });

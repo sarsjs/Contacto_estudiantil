@@ -166,3 +166,8 @@ Este registro servirá como historial vivo del progreso; antes de cerrar tu sesi
 - **Implementado:** Inicialización de App Check con reCAPTCHA v3 cuando se define `NEXT_PUBLIC_RECAPTCHA_SITE_KEY`, con token de depuración opcional para pruebas locales.
 - **Mejorado:** Mensajes de error al crear alumnos o personal que indican si la solicitud fue bloqueada por App Check o por falta de sesión/permiso.
 - **Pendiente:** Registrar la app web en App Check y configurar la clave pública en el entorno para validar el alta de usuarios en producción.
+
+19/12/2025 10:30 - Desbloqueo temporal de altas mientras se configura App Check.
+- **Corregido:** Las funciones `createUser` y `deleteUser` se ejecutan en `us-central1` y desactivan la exigencia de App Check para que los directores puedan dar de alta/baja personal y alumnos aunque la web aún no tenga clave reCAPTCHA configurada.
+- **Mejorado:** Las llamadas desde el dashboard usan explícitamente la región correcta y normalizan el correo de alumnos en minúsculas para evitar duplicados.
+- **Pendiente:** Rehabilitar App Check con la clave pública de reCAPTCHA v3 cuando esté disponible y volver a exigirlo en las funciones callable.

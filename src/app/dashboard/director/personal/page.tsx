@@ -68,7 +68,7 @@ export default function PersonalPage() {
   }, [loadData]);
 
 
-  const functions = getFunctions();
+  const functions = getFunctions(undefined, 'us-central1');
 
   const handleCreateStaff = async () => {
     if (!newStaffName || !newStaffRole || !newStaffEmail) {
