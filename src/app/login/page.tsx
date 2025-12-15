@@ -14,13 +14,30 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
+
+const roleRoutes: Record<string, string> = {
+  director: "/dashboard/director",
+  orientador: "/dashboard/orientador",
+  profesor: "/dashboard/profesor",
+  estudiante: "/dashboard/alumno",
+};
 
 export default function LoginPage() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [loading, setLoading] = React.useState(false);
-  const { signIn } = useAuth();
+  const { signIn, profile, user, loading: authLoading } = useAuth();
   const { toast } = useToast();
+  const router = useRouter();
+
+  React.useEffect(() => {
+    if (authLoading) return;
+    if (user && profile) {
+      const destination = roleRoutes[profile.role] ?? "/dashboard";
+      router.replace(destination);
+    }
+  }, [authLoading, profile, router, user]);
 
   const handleSignIn = async (event: React.FormEvent) => {
     event.preventDefault();
