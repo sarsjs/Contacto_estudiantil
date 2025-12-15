@@ -171,3 +171,14 @@ Este registro servirá como historial vivo del progreso; antes de cerrar tu sesi
 - **Corregido:** Las funciones `createUser` y `deleteUser` se ejecutan en `us-central1` y desactivan la exigencia de App Check para que los directores puedan dar de alta/baja personal y alumnos aunque la web aún no tenga clave reCAPTCHA configurada.
 - **Mejorado:** Las llamadas desde el dashboard usan explícitamente la región correcta y normalizan el correo de alumnos en minúsculas para evitar duplicados.
 - **Pendiente:** Rehabilitar App Check con la clave pública de reCAPTCHA v3 cuando esté disponible y volver a exigirlo en las funciones callable.
+
+20/12/2025 09:30 - Configuración de variables para App Check (reCAPTCHA v3).
+- **Añadido:** Archivo `.env.example` con las variables `NEXT_PUBLIC_RECAPTCHA_SITE_KEY` y `NEXT_PUBLIC_APPCHECK_DEBUG_TOKEN` para guiar la configuración local.
+- **Añadido:** Sección en README con pasos para registrar la clave de reCAPTCHA v3 y exportarla en entorno local y App Hosting.
+- **Actualizado:** `apphosting.yaml` ahora expone `NEXT_PUBLIC_RECAPTCHA_SITE_KEY` como variable de entorno para que Next.js inicialice App Check en producción.
+- **Pendiente:** Proveer la Site Key real como secreto en App Hosting y reactivar la exigencia de App Check en las funciones callable tras verificar que el frontend emite tokens válidos.
+
+20/12/2025 18:00 - Site Key de App Check configurada.
+- **Implementado:** Se cargó la Site Key pública `6LdWiCwsAAAAAP0tpLGcgpIl1V_8TlnDQj0xgJ0b` en `.env.example` y en `apphosting.yaml` para que el frontend inicialice App Check sin dependencias externas.
+- **Documentado:** README ahora indica explícitamente la Site Key usada por el proyecto para simplificar la configuración local y en App Hosting.
+- **Pendiente:** Re-activar la exigencia de App Check en las funciones callable (`createUser`/`deleteUser`) y validar altas/bajas con la clave ya configurada.
