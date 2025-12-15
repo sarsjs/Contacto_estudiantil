@@ -72,7 +72,16 @@ export interface Message {
     recipientLabel?: string;
     recipientId?: string;
     timestamp: FieldValue;
+    createdBy?: string;
+    createdByRole?: User['role'];
 }
+
+export type CalendarVisibility =
+  | 'personal'
+  | 'orientadores'
+  | 'maestros'
+  | 'alumnos'
+  | 'todos';
 
 
 // NUEVO TIPO PARA CALIFICACIONES
@@ -92,4 +101,6 @@ export interface CalendarEvent {
     date: string; // YYYY-MM-DD
     createdAt: FieldValue;
     createdBy?: string;
+    createdByRole?: User['role'];
+    visibility?: CalendarVisibility[];
 }
