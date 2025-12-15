@@ -3,7 +3,6 @@
 import * as React from 'react';
 import { PlusCircle, Search } from 'lucide-react';
 import { getFunctions, httpsCallable } from 'firebase/functions';
-import { functions } from '@/lib/firebase/client';
 import {
   Card,
   CardContent,
@@ -52,6 +51,7 @@ export default function AlumnosPage() {
   const [filterGroup, setFilterGroup] = React.useState("all");
 
   const { toast } = useToast();
+  const functions = getFunctions();
 
   const loadData = React.useCallback(async () => {
     setDataLoading(true);

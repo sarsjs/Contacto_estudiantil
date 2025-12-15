@@ -140,3 +140,25 @@ Este registro servirá como historial vivo del progreso; antes de cerrar tu sesi
 - **Implementado:** Creación del componente TimetableManager para gestión de horarios.
 - **Implementado:** Creación de páginas de horarios para director y profesor.
 - **Resuelto:** Ahora todos los roles tienen acceso a la funcionalidad de horarios.
+15/12/2025 09:00 - Verificación de accesos por roles (director, orientador, maestro y alumno).
+- **Hallazgo:** Ninguna de las credenciales proporcionadas permitió salir de /login; tras ingresar usuario y contraseña la vista permanece en la pantalla de inicio de sesión (sin redirección al dashboard).
+- **Implementado:** Se habilitó el entorno local con Playwright + dependencias de Chromium para automatizar las pruebas de login y capturar evidencia.
+- **Pendiente:** Revisar en Firebase Auth/Firestore la validez de las cuentas y la existencia de perfiles vinculados; volver a probar el alta de alumno desde el panel de director cuando el flujo de autenticación funcione.
+16/12/2025 10:30 - Redirección automática después de iniciar sesión.
+- **Implementado:** Se añadió un efecto en la página de login que detecta sesión/perfil cargado y envía al dashboard correspondiente según rol (director, orientador, profesor o alumno), evitando que la vista se quede en /login.
+- **Pendiente:** Validar nuevamente las credenciales compartidas (director, orientador, maestro y alumno) y confirmar que la redirección ocurre tras recuperar los perfiles desde Firestore.
+17/12/2025 12:30 - Ajustes de calendario y comunicados.
+- **Implementado:** Se agregó visibilidad por rol (personal, orientadores, maestros, alumnos o todos) al crear eventos de calendario y se muestra el público objetivo en cada tarjeta.
+- **Corregido:** El listado de eventos del día se muestra debajo del formulario de alta y respeta la visibilidad del creador para que los eventos guardados en Firestore sean visibles según rol.
+- **Corregido:** Se bloqueó el envío de comunicados a roles sin permiso y se registra el autor de cada mensaje para reducir errores de publicación.
+- **Pendiente:** Validar visualmente en producción la nueva distribución del panel y el filtrado de eventos con datos reales.
+17/12/2025 17:30 - Alta y baja de personal/alumnos ligada a Firebase Auth.
+- **Corregido:** La eliminación de personal ahora llama a la Cloud Function `deleteUser` para borrar tanto en Auth como en Firestore, evitando correos duplicados al re-crear maestros u orientadores.
+- **Mejorado:** El alta de personal reusa la función `createUser`, normaliza el correo a minúsculas y muestra un mensaje claro cuando el email ya existe.
+- **Mejorado:** El formulario de alumnos usa la misma instancia de funciones callable para evitar errores de referencia y crear/eliminar cuentas de forma consistente.
+
+18/12/2025 11:00 - Gestor visual de horarios sin empalmes.
+- **Implementado:** Página de horarios para director y orientador con un gestor visual tipo cuadrícula que crea bloques por grupo, día y hora, evitando empalmes por grupo o docente.
+- **Implementado:** Vista de horario para profesores con tabla semanal que muestra día, hora y grupo asignado para cada clase.
+- **Mejorado:** El horario del alumno se alinea por día y hora con formato en español y se reutiliza el mismo grid para todos los roles.
+- **Pendiente:** Validar en producción la carga completa de materias/docentes para asegurar que el detector de empalmes siempre encuentre coincidencias.
