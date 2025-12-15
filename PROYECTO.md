@@ -152,3 +152,7 @@ Este registro servirá como historial vivo del progreso; antes de cerrar tu sesi
 - **Corregido:** El listado de eventos del día se muestra debajo del formulario de alta y respeta la visibilidad del creador para que los eventos guardados en Firestore sean visibles según rol.
 - **Corregido:** Se bloqueó el envío de comunicados a roles sin permiso y se registra el autor de cada mensaje para reducir errores de publicación.
 - **Pendiente:** Validar visualmente en producción la nueva distribución del panel y el filtrado de eventos con datos reales.
+17/12/2025 17:30 - Alta y baja de personal/alumnos ligada a Firebase Auth.
+- **Corregido:** La eliminación de personal ahora llama a la Cloud Function `deleteUser` para borrar tanto en Auth como en Firestore, evitando correos duplicados al re-crear maestros u orientadores.
+- **Mejorado:** El alta de personal reusa la función `createUser`, normaliza el correo a minúsculas y muestra un mensaje claro cuando el email ya existe.
+- **Mejorado:** El formulario de alumnos usa la misma instancia de funciones callable para evitar errores de referencia y crear/eliminar cuentas de forma consistente.
