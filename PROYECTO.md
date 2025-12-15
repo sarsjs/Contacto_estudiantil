@@ -147,3 +147,8 @@ Este registro servirá como historial vivo del progreso; antes de cerrar tu sesi
 16/12/2025 10:30 - Redirección automática después de iniciar sesión.
 - **Implementado:** Se añadió un efecto en la página de login que detecta sesión/perfil cargado y envía al dashboard correspondiente según rol (director, orientador, profesor o alumno), evitando que la vista se quede en /login.
 - **Pendiente:** Validar nuevamente las credenciales compartidas (director, orientador, maestro y alumno) y confirmar que la redirección ocurre tras recuperar los perfiles desde Firestore.
+17/12/2025 12:30 - Ajustes de calendario y comunicados.
+- **Implementado:** Se agregó visibilidad por rol (personal, orientadores, maestros, alumnos o todos) al crear eventos de calendario y se muestra el público objetivo en cada tarjeta.
+- **Corregido:** El listado de eventos del día se muestra debajo del formulario de alta y respeta la visibilidad del creador para que los eventos guardados en Firestore sean visibles según rol.
+- **Corregido:** Se bloqueó el envío de comunicados a roles sin permiso y se registra el autor de cada mensaje para reducir errores de publicación.
+- **Pendiente:** Validar visualmente en producción la nueva distribución del panel y el filtrado de eventos con datos reales.

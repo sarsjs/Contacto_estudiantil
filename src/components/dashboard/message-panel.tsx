@@ -84,6 +84,7 @@ export function MessagePanel() {
     () => ROLE_OPTIONS[roleKey] ?? [{ value: "all", label: "Todos" }],
     [roleKey]
   );
+  const canSendMessages = roleKey === "director" || roleKey === "orientador" || roleKey === "profesor";
 
   React.useEffect(() => {
     if (!recipient && options.length) {
@@ -96,6 +97,15 @@ export function MessagePanel() {
   const canTargetGroups = recipient?.needsTarget === "group";
 
   const handleSend = async () => {
+    if (!canSendMessages) {
+      toast({
+        title: "Sin permisos para enviar",
+        description: "Solo director, orientadores o maestros pueden enviar comunicados.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     const trimmed = message.trim();
     if (!trimmed) {
       toast({ title: "Mensaje vacío", description: "Escribe un mensaje." });
@@ -125,6 +135,8 @@ export function MessagePanel() {
           recipient?.label +
           (targetLabel ? ` · ${targetLabel}` : ""),
         recipientId: targetId || undefined,
+        createdBy: profile.email,
+        createdByRole: profile.role,
       });
 
       setMessage("");
@@ -203,9 +215,14 @@ export function MessagePanel() {
               </Select>
             )}
           </div>
-          <Button className="w-full" onClick={handleSend}>
-            Enviar mensaje
+          <Button className="w-full" onClick={handleSend} disabled={!canSendMessages}>
+            {canSendMessages ? "Enviar mensaje" : "Solo lectura"}
           </Button>
+          {!canSendMessages && (
+            <p className="text-xs text-muted-foreground">
+              Solo director, orientadores y maestros pueden enviar comunicados.
+            </p>
+          )}
         </CardContent>
       </Card>
 
