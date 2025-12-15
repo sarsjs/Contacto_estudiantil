@@ -131,3 +131,12 @@ Este registro servirá como historial vivo del progreso; antes de cerrar tu sesi
 - **Mejorado:** Mensaje descriptivo cuando no se encuentra el perfil del usuario.
 - **Implementado:** Opción para cerrar sesión cuando no se encuentra el perfil registrado.
 - **Resuelto:** Ahora los usuarios reciben feedback claro sobre el estado de su sesión.
+
+14/12/2025 06:15 - Identificación de componentes faltantes en el sistema.
+- **Detectado:** Falta la implementación de la página de horarios para el rol de director (director/horarios/page.tsx).
+- **Detectado:** Falta la implementación de la página de horarios para el rol de profesor (profesor/horario/page.tsx).
+- **Detectado:** Falta el componente TimetableManager en el sistema (solucionado con creación).
+- **Detectado:** Problema con perfil de alumno no encontrado cuando usuario está registrado en Firebase pero no en Firestore.
+- **Implementado:** Creación del componente TimetableManager para gestión de horarios.
+- **Implementado:** Creación de páginas de horarios para director y profesor.
+- **Resuelto:** Ahora todos los roles tienen acceso a la funcionalidad de horarios.
