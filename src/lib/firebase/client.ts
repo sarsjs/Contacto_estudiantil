@@ -63,8 +63,12 @@ const buildMissingConfigProxy = <T extends object>(): T =>
 let appCheck: AppCheck | undefined;
 
 if (typeof window !== "undefined" && firebase_app) {
-  const appCheckSiteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
-  const appCheckEnabled = (process.env.NEXT_PUBLIC_ENABLE_APPCHECK ?? "").toLowerCase() === "true";
+  const appCheckSiteKey = (process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ?? "").trim();
+  const appCheckFlag = (process.env.NEXT_PUBLIC_ENABLE_APPCHECK ?? "").toLowerCase();
+  const appCheckExplicitlyOff = appCheckFlag === "false";
+  const appCheckExplicitlyOn = appCheckFlag === "true";
+  // Si hay Site Key, inicializamos automáticamente salvo que el flag se fuerce a "false".
+  const shouldInitAppCheck = !!appCheckSiteKey && !appCheckExplicitlyOff;
   // Enable the debug token when provided to simplify local testing without CAPTCHA
   const debugToken = process.env.NEXT_PUBLIC_APPCHECK_DEBUG_TOKEN;
   if (debugToken) {
@@ -72,12 +76,15 @@ if (typeof window !== "undefined" && firebase_app) {
     self.FIREBASE_APPCHECK_DEBUG_TOKEN = debugToken === "true" ? true : debugToken;
   }
 
-  if (appCheckEnabled && appCheckSiteKey) {
+  if (shouldInitAppCheck) {
+    if (!appCheckExplicitlyOn && appCheckSiteKey) {
+      console.info("App Check habilitado automáticamente al detectar NEXT_PUBLIC_RECAPTCHA_SITE_KEY.");
+    }
     appCheck = initializeAppCheck(firebase_app, {
       provider: new ReCaptchaV3Provider(appCheckSiteKey),
       isTokenAutoRefreshEnabled: true,
     });
-  } else if (appCheckEnabled && !appCheckSiteKey) {
+  } else if (appCheckExplicitlyOn && !appCheckSiteKey) {
     console.warn(
       "App Check está habilitado pero falta NEXT_PUBLIC_RECAPTCHA_SITE_KEY. Agrega la clave pública para emitir tokens válidos."
     );

@@ -238,3 +238,6 @@ Requisitos:
 27/12/2025 09:00 - Control explícito de App Check por variable de entorno.
 - **Añadido:** Bandera `NEXT_PUBLIC_ENABLE_APPCHECK` para decidir cuándo inicializar App Check; por defecto queda desactivado para evitar advertencias cuando falta la `NEXT_PUBLIC_RECAPTCHA_SITE_KEY`.
 - **Actualizado:** Documentación (`README.md`, `.env.example`, `apphosting.yaml`) para indicar cómo habilitar App Check sólo cuando ya se cuenta con la clave pública de reCAPTCHA.
+27/12/2025 18:00 - Encendido automático de App Check al detectar Site Key.
+- **Corregido:** `src/lib/firebase/client.ts` ahora inicializa App Check en cuanto encuentra `NEXT_PUBLIC_RECAPTCHA_SITE_KEY`, a menos que el flag `NEXT_PUBLIC_ENABLE_APPCHECK` se fuerce a `false`; evita que la protección falle cuando la clave existe pero el flag quedó vacío.
+- **Actualizado:** `.env.example`, `apphosting.yaml` y `README.md` aclaran que el flag es opcional (para apagarlo o forzar el encendido) y que la detección automática usa la Site Key si está configurada.

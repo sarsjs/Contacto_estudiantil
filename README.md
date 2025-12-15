@@ -25,19 +25,21 @@ Estas variables ya no tienen valores predeterminados en el código: si falta alg
 ### App Check (reCAPTCHA v3)
 
 1. Registra la app web en Firebase → App Check y genera una **Site Key** de reCAPTCHA v3.
-2. Exporta la clave en tu entorno (`.env.local` o variables de despliegue):
+2. Exporta la clave en tu entorno (`.env.local` o variables de despliegue); con solo colocar la Site Key App Check se encenderá:
    ```
    NEXT_PUBLIC_RECAPTCHA_SITE_KEY=<tu_site_key>
-   NEXT_PUBLIC_ENABLE_APPCHECK=true
-   # Opcional para pruebas locales (true genera un token de depuración):
+   # Opcional: fuerza el encendido/apagado
+   NEXT_PUBLIC_ENABLE_APPCHECK=true|false
+   # Opcional para pruebas locales (true genera un token de depuración automático):
    NEXT_PUBLIC_APPCHECK_DEBUG_TOKEN=true
    ```
    - No subas la Site Key real al repositorio; defínela como variable de entorno o secreto en tu plataforma de despliegue.
-   - Si dejas `NEXT_PUBLIC_ENABLE_APPCHECK=false`, la app no intentará inicializar App Check (útil para depurar sin la clave).
-3. Para App Hosting, añade el secreto `NEXT_PUBLIC_RECAPTCHA_SITE_KEY` y el flag `NEXT_PUBLIC_ENABLE_APPCHECK=true` en `apphosting.yaml` para que Next.js exponga la clave al frontend.
-4. Reconstruye/despliega; los formularios inicializan App Check solo cuando la clave está presente y el flag está en `true`.
-
-> Nota sobre App Hosting: define los valores reales de Firebase en `apphosting.yaml` (o como secretos referenciados allí). Si quedan vacíos, la app no se inicia y mostrará qué variables faltan, evitando que se use la configuración antigua del repositorio.
+   - Si dejas `NEXT_PUBLIC_ENABLE_APPCHECK` vacío, la app activará App Check automáticamente al detectar la Site Key. Ponlo en
+     `false` solo si necesitas deshabilitarlo de forma explícita.
+3. Para App Hosting, añade el secreto `NEXT_PUBLIC_RECAPTCHA_SITE_KEY`; el flag `NEXT_PUBLIC_ENABLE_APPCHECK` puede quedar vací
+   o o en `true` si deseas forzar el encendido.
+4. Reconstruye/despliega; los formularios inicializan App Check cuando la clave está presente (o el flag fuerza el encendido) y
+   emiten una advertencia clara si no hay clave.
 
 > Nota sobre App Hosting: define los valores reales de Firebase en `apphosting.yaml` (o como secretos referenciados allí). Si quedan vacíos, la app no se inicia y mostrará qué variables faltan, evitando que se use la configuración antigua del repositorio.
 
