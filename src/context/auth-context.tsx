@@ -3,7 +3,7 @@
 import * as React from "react";
 import { createContext, useContext, useEffect, useState, useMemo } from "react";
 import { onAuthStateChanged, User as FirebaseUser } from "firebase/auth";
-import { auth } from "@/lib/firebase/client";
+import { auth, firebaseConfigErrorMessage } from "@/lib/firebase/client";
 import { fetchUserByEmail } from "@/lib/firebase/data";
 import { signInWithEmail } from "@/lib/firebase/auth";
 import type { User } from "@/lib/types";
@@ -35,6 +35,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
   useEffect(() => {
     if (!isClient) return;
 
+    if (firebaseConfigErrorMessage) {
+      console.error(firebaseConfigErrorMessage);
+      setLoading(false);
+      return;
+    }
+
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setLoading(true);
       setUser(user);
@@ -60,9 +66,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
       profile,
       loading,
       signIn: async (email: string, pass:string) => {
+        if (firebaseConfigErrorMessage) {
+          throw new Error(firebaseConfigErrorMessage);
+        }
         await signInWithEmail(email, pass);
       },
       signOut: async () => {
+        if (firebaseConfigErrorMessage) {
+          throw new Error(firebaseConfigErrorMessage);
+        }
         await auth.signOut();
       },
     }),
