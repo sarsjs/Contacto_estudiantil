@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/context/auth-context';
+import { auth } from '@/lib/firebase/client';
 
 const roleRoutes: Record<string, string> = {
   director: '/dashboard/director',
@@ -87,11 +88,25 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
     return <>{children}</>;
   }
 
-  // Si está autenticado pero no tiene perfil (posiblemente error de sincronización)
+  // Si está autenticado pero no tiene perfil (posiblemente error de sincronización o usuario no registrado en Firestore)
   if (user && !profile) {
+    // Mostrar un mensaje de error más descriptivo y permitir cerrar sesión
     return (
       <div className="min-h-screen w-full flex items-center justify-center">
-        <p>Cargando perfil...</p>
+        <div className="text-center">
+          <p className="text-red-500 mb-4">No se encontró tu perfil registrado en el sistema.</p>
+          <button
+            onClick={() => {
+              if (typeof window !== 'undefined') {
+                router.push('/login');
+                auth.signOut(); // Cerrar sesión de Firebase
+              }
+            }}
+            className="text-blue-500 underline"
+          >
+            Cerrar sesión e intentar nuevamente
+          </button>
+        </div>
       </div>
     );
   }
