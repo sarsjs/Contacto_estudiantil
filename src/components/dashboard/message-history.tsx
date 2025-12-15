@@ -36,12 +36,18 @@ function getRecipientText(recipient: string) {
       return 'Solo Orientadores';
     case 'students':
       return 'Solo Alumnos';
+    case 'personal':
+      return 'Todo el personal';
     case 'director':
       return 'Solo Director';
     case 'group':
       return 'Grupo específico';
     case 'student':
       return 'Estudiante específico';
+    case 'specificTeacher':
+      return 'Maestro específico';
+    case 'specificCounselor':
+      return 'Orientador específico';
     default:
       return 'Desconocido';
   }

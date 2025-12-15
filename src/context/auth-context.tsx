@@ -4,7 +4,7 @@ import * as React from "react";
 import { createContext, useContext, useEffect, useState, useMemo } from "react";
 import { onAuthStateChanged, User as FirebaseUser } from "firebase/auth";
 import { auth, firebaseConfigErrorMessage } from "@/lib/firebase/client";
-import { fetchUserByEmail } from "@/lib/firebase/data";
+import { fetchUserByEmail, fetchUserById } from "@/lib/firebase/data";
 import { signInWithEmail } from "@/lib/firebase/auth";
 import type { User } from "@/lib/types";
 
@@ -46,8 +46,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setUser(user);
       if (user) {
         try {
-          const userProfile = await fetchUserByEmail(user.email!);
-          setProfile(userProfile || null); // Si no hay perfil, establece null pero NO CIERRES SESIÓN
+          const profileByEmail = user.email ? await fetchUserByEmail(user.email) : null;
+          const profileById = !profileByEmail ? await fetchUserById(user.uid) : null;
+
+          setProfile(profileByEmail || profileById || null); // Si no hay perfil, establece null pero NO CIERRES SESIÓN
         } catch (error) {
           console.error("Error fetching user profile:", error);
           setProfile(null); // En caso de error, establece el perfil a null pero NO CIERRES SESIÓN
