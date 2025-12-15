@@ -39,6 +39,8 @@ Estas variables ya no tienen valores predeterminados en el código: si falta alg
 
 > Nota sobre App Hosting: define los valores reales de Firebase en `apphosting.yaml` (o como secretos referenciados allí). Si quedan vacíos, la app no se inicia y mostrará qué variables faltan, evitando que se use la configuración antigua del repositorio.
 
+> Nota sobre App Hosting: define los valores reales de Firebase en `apphosting.yaml` (o como secretos referenciados allí). Si quedan vacíos, la app no se inicia y mostrará qué variables faltan, evitando que se use la configuración antigua del repositorio.
+
 ## Registro de avances
 
 Cada vez que trabajes en EduChain después de la fecha de referencia (14/12/2025 01:17), agrega un resumen corto al final de `PROYECTO.md` siguiendo el formato:
