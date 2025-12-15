@@ -9,7 +9,7 @@ service cloud.firestore {
         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'director' ||
         (
           get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'orientador' &&
-          resource.data.role == 'alumno'
+          resource.data.role == 'estudiante'
         )
       );
 
@@ -20,8 +20,8 @@ service cloud.firestore {
           (
             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'orientador' &&
             (
-              (request.resource != null && request.resource.data.role == 'alumno') ||
-              (request.resource == null && resource != null && resource.data.role == 'alumno')
+              (request.resource != null && request.resource.data.role == 'estudiante') ||
+              (request.resource == null && resource != null && resource.data.role == 'estudiante')
             )
           )
         );

@@ -197,3 +197,8 @@ Este registro servirá como historial vivo del progreso; antes de cerrar tu sesi
 - **Implementado:** Los orientadores pueden crear, editar y eliminar perfiles con rol `alumno` en la colección `users` sin acceder al resto de roles.
 - **Corregido:** Los orientadores también pueden leer perfiles de alumnos para gestionarlos desde el panel sin necesitar permisos de director.
 - **Pendiente:** Mantener el refuerzo de validaciones vía Cloud Functions para evitar elevaciones de privilegios desde la consola.
+
+24/12/2025 11:30 - Función callable `createUser` (antes `createStaffUser`).
+- **Documentado:** La Cloud Function expuesta en Firebase Console como `createStaffUser` corresponde al endpoint callable que usan los directores para dar de alta personal o alumnos. Ver `functions/index.ts` (`createUser`) para el código fuente y permisos.
+- **Contexto:** El trigger es HTTPS callable (no cron ni pub/sub); verifica que quien la invoca sea un director y luego crea la cuenta en Auth y el documento en Firestore con un avatar temporal.
+- **Nota:** Si se despliega con un nombre nuevo (`createUser`), la consola mostrará el identificador actualizado; en despliegues anteriores se mantiene el alias `createStaffUser` pero la lógica es la misma.
