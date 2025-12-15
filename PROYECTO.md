@@ -182,3 +182,59 @@ Este registro servirá como historial vivo del progreso; antes de cerrar tu sesi
 - **Corregido:** Se eliminó la Site Key pública del repositorio y se dejó como variable de entorno/secret en `apphosting.yaml` para evitar exponerla en GitHub.
 - **Documentado:** README y `.env.example` instruyen a usar la propia clave generada en Firebase en lugar de una valor hardcodeado.
 - **Pendiente:** Cargar la Site Key como secreto gestionado en App Hosting y reactivar la exigencia de App Check en las funciones callable tras validar que el frontend emite tokens válidos.
+
+21/12/2025 09:00 - Evitar fallos por secretos ausentes en App Hosting.
+- **Corregido:** `apphosting.yaml` deja de mapear las claves públicas de Firebase como secretos para impedir que el despliegue falle cuando no existen versiones configuradas en el proyecto.
+- **Corregido:** `firebase.json` ya no declara secretos disponibles para frameworks, evitando que Cloud Run intente recuperar versiones inexistentes.
+- **Documentado:** README aclara que las claves públicas vienen embebidas y cómo volver a mapear `NEXT_PUBLIC_RECAPTCHA_SITE_KEY` si se desea gestionarla como secreto.
+
+22/12/2025 12:00 - Configuración explícita de llaves públicas de Firebase.
+- **Corregido:** `src/lib/firebase/client.ts` ahora lee las llaves públicas desde variables de entorno para poder rotar la API key y dominios autorizados sin cambios de código.
+- **Corregido:** `apphosting.yaml` expone todas las variables de Firebase y App Check para cargarlas en App Hosting y evitar errores de "API key not valid" en el login.
+- **Documentado:** `.env.example` y `README.md` listan las variables necesarias para autenticación y App Check.
+
+23/12/2025 09:15 - Permisos diferenciados para orientadores sobre alumnos.
+- **Implementado:** Los orientadores pueden crear, editar y eliminar perfiles con rol `alumno` en la colección `users` sin acceder al resto de roles.
+- **Corregido:** Los orientadores también pueden leer perfiles de alumnos para gestionarlos desde el panel sin necesitar permisos de director.
+- **Pendiente:** Mantener el refuerzo de validaciones vía Cloud Functions para evitar elevaciones de privilegios desde la consola.
+
+24/12/2025 12:00 - Limpieza de compilaciones viejas en Cloud Build.
+- **Añadido:** Script `scripts/clean_cloud_builds.sh` para borrar en lote compilaciones antiguas y conservar sólo las más recientes.
+- **Instrucción:** Ejecutar con `KEEP_BUILDS=2` (por defecto) para dejar únicamente las dos últimas compilaciones del historial.
+- **Requisito:** Tener `gcloud` instalado y autenticado con permisos de administrador de Cloud Build.
+
+## Mantenimiento de compilaciones de Cloud Build
+
+Cuando el historial de compilaciones crece en la consola y quieres quedarte sólo con las más recientes, usa el script `scripts/clean_cloud_builds.sh`:
+
+```bash
+# Mantiene sólo las 2 compilaciones más recientes en us-east4 para el proyecto por defecto
+./scripts/clean_cloud_builds.sh
+
+# Personaliza el proyecto, región o cuántas quieres conservar
+PROJECT_ID=contacto-estudiantil \
+CLOUD_BUILD_REGION=us-east4 \
+KEEP_BUILDS=2 \
+./scripts/clean_cloud_builds.sh
+```
+
+Requisitos:
+
+- Tener el SDK de gcloud instalado y autenticado con permisos de administrador de Cloud Build.
+- Ejecutar en la terminal: el script listará las compilaciones más recientes y eliminará el resto en lote.
+
+24/12/2025 11:30 - Función callable `createUser` (antes `createStaffUser`).
+- **Documentado:** La Cloud Function expuesta en Firebase Console como `createStaffUser` corresponde al endpoint callable que usan los directores para dar de alta personal o alumnos. Ver `functions/index.ts` (`createUser`) para el código fuente y permisos.
+- **Contexto:** El trigger es HTTPS callable (no cron ni pub/sub); verifica que quien la invoca sea un director y luego crea la cuenta en Auth y el documento en Firestore con un avatar temporal.
+- **Nota:** Si se despliega con un nombre nuevo (`createUser`), la consola mostrará el identificador actualizado; en despliegues anteriores se mantiene el alias `createStaffUser` pero la lógica es la misma.
+
+25/12/2025 10:00 - Bloqueo de configuraciones obsoletas de Firebase.
+- **Corregido:** `src/lib/firebase/client.ts` elimina las llaves públicas embebidas y falla de forma explícita cuando faltan variables, evitando que el frontend apunte por error al proyecto equivocado y rechace credenciales válidas.
+- **Documentado:** README aclara que todas las llaves deben declararse en `.env.local` o en `apphosting.yaml`; si quedan vacías, la app indicará cuáles faltan en lugar de permitir un login contra el proyecto incorrecto.
+26/12/2025 14:00 - Restaurar configuración pública por defecto.
+- **Corregido:** `src/lib/firebase/client.ts` vuelve a incluir las llaves públicas del proyecto `contacto-estudiantil` como respaldo, evitando el bloqueo de inicio de sesión por variables vacías en App Hosting.
+- **Configurado:** `apphosting.yaml` y `.env.example` ya traen los valores completos para que el build use la configuración correcta sin intervención manual; se pueden sobreescribir cuando se requiera apuntar a otro proyecto.
+
+27/12/2025 09:00 - Control explícito de App Check por variable de entorno.
+- **Añadido:** Bandera `NEXT_PUBLIC_ENABLE_APPCHECK` para decidir cuándo inicializar App Check; por defecto queda desactivado para evitar advertencias cuando falta la `NEXT_PUBLIC_RECAPTCHA_SITE_KEY`.
+- **Actualizado:** Documentación (`README.md`, `.env.example`, `apphosting.yaml`) para indicar cómo habilitar App Check sólo cuando ya se cuenta con la clave pública de reCAPTCHA.
