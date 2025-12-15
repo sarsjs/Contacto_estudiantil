@@ -231,3 +231,6 @@ Requisitos:
 25/12/2025 10:00 - Bloqueo de configuraciones obsoletas de Firebase.
 - **Corregido:** `src/lib/firebase/client.ts` elimina las llaves públicas embebidas y falla de forma explícita cuando faltan variables, evitando que el frontend apunte por error al proyecto equivocado y rechace credenciales válidas.
 - **Documentado:** README aclara que todas las llaves deben declararse en `.env.local` o en `apphosting.yaml`; si quedan vacías, la app indicará cuáles faltan en lugar de permitir un login contra el proyecto incorrecto.
+26/12/2025 14:00 - Restaurar configuración pública por defecto.
+- **Corregido:** `src/lib/firebase/client.ts` vuelve a incluir las llaves públicas del proyecto `contacto-estudiantil` como respaldo, evitando el bloqueo de inicio de sesión por variables vacías en App Hosting.
+- **Configurado:** `apphosting.yaml` y `.env.example` ya traen los valores completos para que el build use la configuración correcta sin intervención manual; se pueden sobreescribir cuando se requiera apuntar a otro proyecto.

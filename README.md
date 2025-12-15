@@ -6,7 +6,9 @@ This is the EduChain Next.js dashboard project.
 
 The dashboard relies on Firebase for its backend services, including Authentication and Firestore Database. The necessary configuration is located in `src/lib/firebase/` and environment variables should be set up in `.env.local`.
 
-Variables públicas requeridas (usa los valores reales de tu proyecto en Firebase → Configuración del proyecto → tus apps web):
+Variables públicas requeridas (usa los valores reales de tu proyecto en Firebase → Configuración del proyecto → tus apps web).
+El repositorio incluye, como respaldo, las llaves públicas del proyecto `contacto-estudiantil` para que el login funcione aun si
+olvidas definir variables en App Hosting o en `.env.local`; puedes sobreescribirlas con tu propio proyecto cuando sea necesario:
 
 ```
 NEXT_PUBLIC_FIREBASE_API_KEY=
