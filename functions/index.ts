@@ -18,7 +18,6 @@ interface CreateUserData {
 export const createUser = functions
   .region('us-central1')
   .https.onCall({ enforceAppCheck: false }, async (data: CreateUserData, context) => {
-  // 1. Verificación de permisos (solo un director puede crear usuarios)
   if (!context.auth) {
     throw new functions.https.HttpsError(
       "unauthenticated",
@@ -27,10 +26,17 @@ export const createUser = functions
   }
 
   const callerDoc = await db.collection("users").doc(context.auth.uid).get();
-  if (callerDoc.data()?.role !== 'director') {
+  const callerRole = callerDoc.data()?.role;
+
+  // Permisos:
+  // - Director: puede crear cualquier rol.
+  // - Orientador: solo puede crear estudiantes.
+  if (
+    callerRole !== 'director' && !(callerRole === 'orientador' && data.role === 'estudiante')
+  ) {
     throw new functions.https.HttpsError(
       "permission-denied",
-      "Solo un director puede crear nuevos usuarios."
+      "Solo un director o un orientador (para alumnos) puede crear usuarios."
     );
   }
 
@@ -102,7 +108,6 @@ interface DeleteUserData {
 export const deleteUser = functions
   .region('us-central1')
   .https.onCall({ enforceAppCheck: false }, async (data: DeleteUserData, context) => {
-  // 1. Verificación de permisos (solo un director puede eliminar usuarios)
   if (!context.auth) {
     throw new functions.https.HttpsError(
       "unauthenticated",
@@ -111,12 +116,7 @@ export const deleteUser = functions
   }
 
   const callerDoc = await db.collection("users").doc(context.auth.uid).get();
-  if (callerDoc.data()?.role !== 'director') {
-    throw new functions.https.HttpsError(
-      "permission-denied",
-      "Solo un director puede eliminar usuarios."
-    );
-  }
+  const callerRole = callerDoc.data()?.role;
 
   const { uid } = data;
 
@@ -124,6 +124,21 @@ export const deleteUser = functions
     throw new functions.https.HttpsError(
       "invalid-argument",
       "Un director no se puede eliminar a sí mismo."
+    );
+  }
+
+  const targetDoc = await db.collection("users").doc(uid).get();
+  const targetRole = targetDoc.data()?.role;
+
+  // Permisos:
+  // - Director: puede eliminar cualquier usuario (menos a sí mismo).
+  // - Orientador: solo puede eliminar estudiantes.
+  if (
+    callerRole !== 'director' && !(callerRole === 'orientador' && targetRole === 'estudiante')
+  ) {
+    throw new functions.https.HttpsError(
+      "permission-denied",
+      "Solo un director o un orientador (para alumnos) puede eliminar usuarios."
     );
   }
 

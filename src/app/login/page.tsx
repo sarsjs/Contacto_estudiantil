@@ -3,6 +3,7 @@
 import * as React from "react";
 import { getAuth, sendPasswordResetEmail } from "firebase/auth";
 import { useAuth } from "@/context/auth-context";
+import { firebaseConfigErrorMessage } from "@/lib/firebase/client";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -44,13 +45,50 @@ export default function LoginPage() {
     setLoading(true);
     const normalizedEmail = email.trim().toLowerCase();
     try {
+      if (firebaseConfigErrorMessage) {
+        throw new Error(firebaseConfigErrorMessage);
+      }
+
       await signIn(normalizedEmail, password);
       toast({ title: "Inicio de sesión", description: "Bienvenido de nuevo." });
     } catch (error) {
       console.error("Login error", error);
+
+      // Mostrar mensajes claros según el tipo de error
+      let title = "Error al iniciar sesión";
+      let description = "Intenta nuevamente.";
+
+      if (firebaseConfigErrorMessage) {
+        description = firebaseConfigErrorMessage;
+      } else if (typeof error === "object" && error && "code" in error) {
+        const code = String((error as { code?: unknown }).code);
+
+        switch (code) {
+          case "auth/invalid-api-key":
+          case "auth/configuration-not-found":
+            description =
+              "La configuración de Firebase es inválida o falta. Revisa las llaves públicas en las variables de entorno.";
+            break;
+          case "auth/invalid-email":
+            description = "El correo no es válido.";
+            break;
+          case "auth/user-disabled":
+            description = "La cuenta está deshabilitada.";
+            break;
+          case "auth/user-not-found":
+          case "auth/wrong-password":
+            title = "Credenciales incorrectas";
+            description = "Verifica tu correo y contraseña.";
+            break;
+          default:
+            description = "Ocurrió un problema al validar tus credenciales.";
+            break;
+        }
+      }
+
       toast({
-        title: "Credenciales incorrectas",
-        description: "Verifica tu correo y contraseña.",
+        title,
+        description,
         variant: "destructive",
       });
     } finally {
@@ -69,6 +107,10 @@ export default function LoginPage() {
       return;
     }
     try {
+      if (firebaseConfigErrorMessage) {
+        throw new Error(firebaseConfigErrorMessage);
+      }
+
       await sendPasswordResetEmail(getAuth(), normalizedEmail);
       toast({
         title: "Correo enviado",
@@ -78,7 +120,9 @@ export default function LoginPage() {
       console.error("Forgot password error", error);
       toast({
         title: "Error",
-        description: "No se pudo enviar el correo.",
+        description:
+          firebaseConfigErrorMessage ??
+          "No se pudo enviar el correo. Verifica la configuración de Firebase o inténtalo más tarde.",
         variant: "destructive",
       });
     }

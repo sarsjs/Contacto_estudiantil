@@ -8,6 +8,7 @@ import type { Group, User, Student } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
 import { CalendarPanel } from './calendar-panel';
 import { MessagePanel } from './message-panel';
+import { MessageHistory } from './message-history';
 
 export function DirectorView() {
   const [staffList, setStaffList] = React.useState<User[]>([]);
@@ -91,9 +92,12 @@ export function DirectorView() {
           description="Activos y próximos"
         />
       </div>
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <MessagePanel />
-        <CalendarPanel role="director" />
+      <div className="space-y-6">
+        <div className="grid gap-6 lg:grid-cols-2">
+          <MessagePanel showHistory={false} />
+          <MessageHistory />
+        </div>
+        <CalendarPanel role="director" className="w-full" />
       </div>
     </div>
   );

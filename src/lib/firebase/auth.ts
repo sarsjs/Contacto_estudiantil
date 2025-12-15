@@ -1,4 +1,4 @@
-import { auth } from './client';
+import { auth, firebaseConfigErrorMessage } from './client';
 import {
   signInWithEmailAndPassword,
   signOut,
@@ -6,6 +6,10 @@ import {
 } from 'firebase/auth';
 
 export async function signInWithEmail(email: string, password: string) {
+  if (firebaseConfigErrorMessage) {
+    throw new Error(firebaseConfigErrorMessage);
+  }
+
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     return userCredential;
@@ -16,10 +20,18 @@ export async function signInWithEmail(email: string, password: string) {
 }
 
 export async function signOutUser() {
+  if (firebaseConfigErrorMessage) {
+    throw new Error(firebaseConfigErrorMessage);
+  }
+
   return await signOut(auth);
 }
 
 export function fetchCurrentSession() {
+  if (firebaseConfigErrorMessage) {
+    return Promise.reject(new Error(firebaseConfigErrorMessage));
+  }
+
   return new Promise((resolve, reject) => {
     const unsubscribe = onAuthStateChanged(
       auth,

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/context/auth-context';
-import { auth } from '@/lib/firebase/client';
+import { auth, firebaseConfigErrorMessage } from '@/lib/firebase/client';
 
 const roleRoutes: Record<string, string> = {
   director: '/dashboard/director',
@@ -99,7 +99,9 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
             onClick={() => {
               if (typeof window !== 'undefined') {
                 router.push('/login');
-                auth.signOut(); // Cerrar sesión de Firebase
+                if (!firebaseConfigErrorMessage) {
+                  auth.signOut(); // Cerrar sesión de Firebase
+                }
               }
             }}
             className="text-blue-500 underline"
