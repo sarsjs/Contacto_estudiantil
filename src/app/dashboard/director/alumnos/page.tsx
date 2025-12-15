@@ -99,10 +99,18 @@ export default function AlumnosPage() {
       setNewStudentGroupId('none');
     } catch (error: any) {
       console.error("create student error", error);
-      const message = error.message.includes("already-exists") 
-        ? "El correo electrónico ya está en uso por otro usuario."
-        : "Hubo un error al registrar al alumno.";
-      toast({ title: "No se pudo crear", description: message, variant: "destructive" });
+      const code = error?.code || "";
+      let description = "Hubo un error al registrar al alumno.";
+
+      if (error?.message?.includes("already-exists") || code.includes("already-exists")) {
+        description = "El correo electrónico ya está en uso por otro usuario.";
+      } else if (code.includes("unauthenticated") || code.includes("permission-denied")) {
+        description = "Solo un director autenticado puede crear alumnos. Inicia sesión nuevamente e inténtalo otra vez.";
+      } else if (code.includes("failed-precondition") || code.includes("app-check")) {
+        description = "La solicitud fue bloqueada por App Check. Registra la app web en App Check o añade NEXT_PUBLIC_RECAPTCHA_SITE_KEY para emitir tokens válidos.";
+      }
+
+      toast({ title: "No se pudo crear", description, variant: "destructive" });
     } finally {
       setDataLoading(false);
     }

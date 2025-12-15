@@ -93,10 +93,18 @@ export default function PersonalPage() {
       await loadData();
     } catch (error: any) {
       console.error("create staff error", error);
-      const alreadyExists = error?.message?.includes('already-exists') || error?.code === 'already-exists' || error?.code === 'functions/already-exists';
-      const description = alreadyExists
+      const code = error?.code || "";
+      const alreadyExists = error?.message?.includes('already-exists') || code.includes('already-exists');
+      let description = alreadyExists
         ? 'El correo electrónico ya está en uso por otra cuenta. Elimina por completo el usuario anterior antes de re-registrarlo.'
         : 'Hubo un error al registrar. Verifica que el correo no esté en uso.';
+
+      if (!alreadyExists && (code.includes('unauthenticated') || code.includes('permission-denied'))) {
+        description = 'Solo un director autenticado puede crear personal. Revisa tu sesión e inténtalo otra vez.';
+      } else if (!alreadyExists && (code.includes('failed-precondition') || code.includes('app-check'))) {
+        description = 'La petición fue bloqueada por App Check. Registra la app web en App Check o configura NEXT_PUBLIC_RECAPTCHA_SITE_KEY para emitir tokens válidos.';
+      }
+
       toast({ title: "No se pudo guardar", description, variant: "destructive" });
     } finally {
       setDataLoading(false);

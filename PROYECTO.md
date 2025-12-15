@@ -162,3 +162,7 @@ Este registro servirá como historial vivo del progreso; antes de cerrar tu sesi
 - **Implementado:** Vista de horario para profesores con tabla semanal que muestra día, hora y grupo asignado para cada clase.
 - **Mejorado:** El horario del alumno se alinea por día y hora con formato en español y se reutiliza el mismo grid para todos los roles.
 - **Pendiente:** Validar en producción la carga completa de materias/docentes para asegurar que el detector de empalmes siempre encuentre coincidencias.
+18/12/2025 15:00 - Integración opcional de App Check y mensajes de error guiados.
+- **Implementado:** Inicialización de App Check con reCAPTCHA v3 cuando se define `NEXT_PUBLIC_RECAPTCHA_SITE_KEY`, con token de depuración opcional para pruebas locales.
+- **Mejorado:** Mensajes de error al crear alumnos o personal que indican si la solicitud fue bloqueada por App Check o por falta de sesión/permiso.
+- **Pendiente:** Registrar la app web en App Check y configurar la clave pública en el entorno para validar el alta de usuarios en producción.
