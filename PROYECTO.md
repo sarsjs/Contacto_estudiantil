@@ -156,3 +156,9 @@ Este registro servirá como historial vivo del progreso; antes de cerrar tu sesi
 - **Corregido:** La eliminación de personal ahora llama a la Cloud Function `deleteUser` para borrar tanto en Auth como en Firestore, evitando correos duplicados al re-crear maestros u orientadores.
 - **Mejorado:** El alta de personal reusa la función `createUser`, normaliza el correo a minúsculas y muestra un mensaje claro cuando el email ya existe.
 - **Mejorado:** El formulario de alumnos usa la misma instancia de funciones callable para evitar errores de referencia y crear/eliminar cuentas de forma consistente.
+
+18/12/2025 11:00 - Gestor visual de horarios sin empalmes.
+- **Implementado:** Página de horarios para director y orientador con un gestor visual tipo cuadrícula que crea bloques por grupo, día y hora, evitando empalmes por grupo o docente.
+- **Implementado:** Vista de horario para profesores con tabla semanal que muestra día, hora y grupo asignado para cada clase.
+- **Mejorado:** El horario del alumno se alinea por día y hora con formato en español y se reutiliza el mismo grid para todos los roles.
+- **Pendiente:** Validar en producción la carga completa de materias/docentes para asegurar que el detector de empalmes siempre encuentre coincidencias.
