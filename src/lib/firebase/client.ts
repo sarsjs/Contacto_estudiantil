@@ -4,15 +4,36 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
-const firebaseConfig = {
-      apiKey: "AIzaSyCWiMV9980JadNny5X9EJcQAo9rClM9uck",
-      authDomain: "contacto-estudiantil.firebaseapp.com",
-      projectId: "contacto-estudiantil",
-      storageBucket: "contacto-estudiantil.appspot.com",
-      messagingSenderId: "1054384089954",
-      appId: "1:1054384089954:web:8898446e0c65214b039a3b",
-      measurementId: "G-109KM3955D"
-    };
+function getFirebaseConfig() {
+  const config = {
+    apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+    authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+    storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+    measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
+  } as const;
+
+  const missingKeys = Object.entries(config)
+    .filter(([key, value]) =>
+      ["apiKey", "authDomain", "projectId", "storageBucket", "messagingSenderId", "appId"].includes(key)
+        ? !value
+        : false
+    )
+    .map(([key]) => key);
+
+  if (missingKeys.length > 0) {
+    const missingList = missingKeys.join(", ");
+    throw new Error(
+      `Faltan variables de entorno de Firebase: ${missingList}. Cárgalas en .env.local o en App Hosting para evitar conectarte a un proyecto incorrecto.`
+    );
+  }
+
+  return config;
+}
+
+const firebaseConfig = getFirebaseConfig();
 
 // Initialize Firebase
 const firebase_app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
