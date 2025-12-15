@@ -6,6 +6,20 @@ This is the EduChain Next.js dashboard project.
 
 The dashboard relies on Firebase for its backend services, including Authentication and Firestore Database. The necessary configuration is located in `src/lib/firebase/` and environment variables should be set up in `.env.local`.
 
+Variables públicas requeridas (usa los valores reales de tu proyecto en Firebase → Configuración del proyecto → tus apps web):
+
+```
+NEXT_PUBLIC_FIREBASE_API_KEY=
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
+NEXT_PUBLIC_FIREBASE_APP_ID=
+NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=
+```
+
+En App Hosting declara estas variables (o sus secretos correspondientes) en `apphosting.yaml` para evitar el error **API key not valid** al autenticar. En local, colócalas en `.env.local` junto con la configuración de App Check.
+
 ### App Check (reCAPTCHA v3)
 
 1. Registra la app web en Firebase → App Check y genera una **Site Key** de reCAPTCHA v3.

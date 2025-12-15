@@ -187,3 +187,8 @@ Este registro servirá como historial vivo del progreso; antes de cerrar tu sesi
 - **Corregido:** `apphosting.yaml` deja de mapear las claves públicas de Firebase como secretos para impedir que el despliegue falle cuando no existen versiones configuradas en el proyecto.
 - **Corregido:** `firebase.json` ya no declara secretos disponibles para frameworks, evitando que Cloud Run intente recuperar versiones inexistentes.
 - **Documentado:** README aclara que las claves públicas vienen embebidas y cómo volver a mapear `NEXT_PUBLIC_RECAPTCHA_SITE_KEY` si se desea gestionarla como secreto.
+
+22/12/2025 12:00 - Configuración explícita de llaves públicas de Firebase.
+- **Corregido:** `src/lib/firebase/client.ts` ahora lee las llaves públicas desde variables de entorno para poder rotar la API key y dominios autorizados sin cambios de código.
+- **Corregido:** `apphosting.yaml` expone todas las variables de Firebase y App Check para cargarlas en App Hosting y evitar errores de "API key not valid" en el login.
+- **Documentado:** `.env.example` y `README.md` listan las variables necesarias para autenticación y App Check.
