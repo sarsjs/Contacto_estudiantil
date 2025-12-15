@@ -140,3 +140,10 @@ Este registro servirá como historial vivo del progreso; antes de cerrar tu sesi
 - **Implementado:** Creación del componente TimetableManager para gestión de horarios.
 - **Implementado:** Creación de páginas de horarios para director y profesor.
 - **Resuelto:** Ahora todos los roles tienen acceso a la funcionalidad de horarios.
+15/12/2025 09:00 - Verificación de accesos por roles (director, orientador, maestro y alumno).
+- **Hallazgo:** Ninguna de las credenciales proporcionadas permitió salir de /login; tras ingresar usuario y contraseña la vista permanece en la pantalla de inicio de sesión (sin redirección al dashboard).
+- **Implementado:** Se habilitó el entorno local con Playwright + dependencias de Chromium para automatizar las pruebas de login y capturar evidencia.
+- **Pendiente:** Revisar en Firebase Auth/Firestore la validez de las cuentas y la existencia de perfiles vinculados; volver a probar el alta de alumno desde el panel de director cuando el flujo de autenticación funcione.
+16/12/2025 10:30 - Redirección automática después de iniciar sesión.
+- **Implementado:** Se añadió un efecto en la página de login que detecta sesión/perfil cargado y envía al dashboard correspondiente según rol (director, orientador, profesor o alumno), evitando que la vista se quede en /login.
+- **Pendiente:** Validar nuevamente las credenciales compartidas (director, orientador, maestro y alumno) y confirmar que la redirección ocurre tras recuperar los perfiles desde Firestore.
