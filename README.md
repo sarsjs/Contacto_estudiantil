@@ -18,7 +18,7 @@ NEXT_PUBLIC_FIREBASE_APP_ID=
 NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=
 ```
 
-En App Hosting declara estas variables (o sus secretos correspondientes) en `apphosting.yaml` para evitar el error **API key not valid** al autenticar. En local, colócalas en `.env.local` junto con la configuración de App Check.
+Estas variables ya no tienen valores predeterminados en el código: si falta alguna, la inicialización de Firebase falla con un error explícito para evitar conectarse a un proyecto incorrecto y recibir mensajes de **Credenciales incorrectas**. En local colócalas en `.env.local` y en App Hosting decláralas (o sus secretos correspondientes) en `apphosting.yaml`.
 
 ### App Check (reCAPTCHA v3)
 
@@ -33,7 +33,7 @@ En App Hosting declara estas variables (o sus secretos correspondientes) en `app
 3. Para App Hosting, añade el secreto `NEXT_PUBLIC_RECAPTCHA_SITE_KEY` y referencia en `apphosting.yaml` para que Next.js exponga la clave al frontend.
 4. Reconstruye/despliega; los formularios ya inicializan App Check automáticamente cuando la clave está presente.
 
-> Nota sobre App Hosting: las claves de Firebase (apiKey, authDomain, etc.) son públicas y ya están embebidas en el cliente. Para evitar fallos de arranque cuando no existen versiones de secretos en el proyecto, `apphosting.yaml` ya no mapea esas claves como secretos. Solo define `NEXT_PUBLIC_RECAPTCHA_SITE_KEY` como variable opcional (vacía por defecto); si quieres gestionarla vía secretos, vuelve a mapearla en ese archivo y crea el secreto correspondiente en Firebase.
+> Nota sobre App Hosting: define los valores reales de Firebase en `apphosting.yaml` (o como secretos referenciados allí). Si quedan vacíos, la app no se inicia y mostrará qué variables faltan, evitando que se use la configuración antigua del repositorio.
 
 ## Registro de avances
 

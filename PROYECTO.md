@@ -202,3 +202,7 @@ Este registro servirá como historial vivo del progreso; antes de cerrar tu sesi
 - **Documentado:** La Cloud Function expuesta en Firebase Console como `createStaffUser` corresponde al endpoint callable que usan los directores para dar de alta personal o alumnos. Ver `functions/index.ts` (`createUser`) para el código fuente y permisos.
 - **Contexto:** El trigger es HTTPS callable (no cron ni pub/sub); verifica que quien la invoca sea un director y luego crea la cuenta en Auth y el documento en Firestore con un avatar temporal.
 - **Nota:** Si se despliega con un nombre nuevo (`createUser`), la consola mostrará el identificador actualizado; en despliegues anteriores se mantiene el alias `createStaffUser` pero la lógica es la misma.
+
+25/12/2025 10:00 - Bloqueo de configuraciones obsoletas de Firebase.
+- **Corregido:** `src/lib/firebase/client.ts` elimina las llaves públicas embebidas y falla de forma explícita cuando faltan variables, evitando que el frontend apunte por error al proyecto equivocado y rechace credenciales válidas.
+- **Documentado:** README aclara que todas las llaves deben declararse en `.env.local` o en `apphosting.yaml`; si quedan vacías, la app indicará cuáles faltan en lugar de permitir un login contra el proyecto incorrecto.
