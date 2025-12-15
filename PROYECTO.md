@@ -192,3 +192,8 @@ Este registro servirá como historial vivo del progreso; antes de cerrar tu sesi
 - **Corregido:** `src/lib/firebase/client.ts` ahora lee las llaves públicas desde variables de entorno para poder rotar la API key y dominios autorizados sin cambios de código.
 - **Corregido:** `apphosting.yaml` expone todas las variables de Firebase y App Check para cargarlas en App Hosting y evitar errores de "API key not valid" en el login.
 - **Documentado:** `.env.example` y `README.md` listan las variables necesarias para autenticación y App Check.
+
+23/12/2025 09:15 - Permisos diferenciados para orientadores sobre alumnos.
+- **Implementado:** Los orientadores pueden crear, editar y eliminar perfiles con rol `alumno` en la colección `users` sin acceder al resto de roles.
+- **Corregido:** Los orientadores también pueden leer perfiles de alumnos para gestionarlos desde el panel sin necesitar permisos de director.
+- **Pendiente:** Mantener el refuerzo de validaciones vía Cloud Functions para evitar elevaciones de privilegios desde la consola.
