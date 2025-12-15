@@ -125,3 +125,9 @@ Este registro servirá como historial vivo del progreso; antes de cerrar tu sesi
 - **Mejorado:** Lógica de redirección para usuarios no autenticados hacia la página de login.
 - **Mejorado:** Manejo de estados de carga y perfil en AuthGuard.
 - **Resuelto:** Ahora los usuarios son redirigidos adecuadamente según su estado de autenticación.
+
+14/12/2025 06:00 - Mejora de manejo de usuarios sin perfil en AuthGuard.
+- **Corregido:** Error que causaba pantalla de "Cargando perfil..." para usuarios autenticados sin perfil en Firestore.
+- **Mejorado:** Mensaje descriptivo cuando no se encuentra el perfil del usuario.
+- **Implementado:** Opción para cerrar sesión cuando no se encuentra el perfil registrado.
+- **Resuelto:** Ahora los usuarios reciben feedback claro sobre el estado de su sesión.
