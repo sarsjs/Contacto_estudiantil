@@ -19,6 +19,8 @@ The dashboard relies on Firebase for its backend services, including Authenticat
 3. Para App Hosting, añade el secreto `NEXT_PUBLIC_RECAPTCHA_SITE_KEY` y referencia en `apphosting.yaml` para que Next.js exponga la clave al frontend.
 4. Reconstruye/despliega; los formularios ya inicializan App Check automáticamente cuando la clave está presente.
 
+> Nota sobre App Hosting: las claves de Firebase (apiKey, authDomain, etc.) son públicas y ya están embebidas en el cliente. Para evitar fallos de arranque cuando no existen versiones de secretos en el proyecto, `apphosting.yaml` ya no mapea esas claves como secretos. Solo define `NEXT_PUBLIC_RECAPTCHA_SITE_KEY` como variable opcional (vacía por defecto); si quieres gestionarla vía secretos, vuelve a mapearla en ese archivo y crea el secreto correspondiente en Firebase.
+
 ## Registro de avances
 
 Cada vez que trabajes en EduChain después de la fecha de referencia (14/12/2025 01:17), agrega un resumen corto al final de `PROYECTO.md` siguiendo el formato:
