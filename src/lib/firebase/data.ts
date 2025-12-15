@@ -91,11 +91,12 @@ export const fetchMessages = async (): Promise<Message[]> => fetchData(async () 
 export const fetchEventsByDate = async (date: string): Promise<CalendarEvent[]> => fetchData(async () => {
     const q = query(
         collection(db, "events"),
-        where("date", "==", date),
         orderBy("createdAt", "desc")
     );
     const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as unknown as CalendarEvent));
+    return querySnapshot.docs
+        .map(doc => ({ id: doc.id, ...doc.data() } as unknown as CalendarEvent))
+        .filter(event => event.date === date);
 }, 'events by date');
 
 export const fetchAttendanceForDate = async (date: string): Promise<Attendance[]> => fetchData(async () => {
@@ -361,7 +362,7 @@ export const addSubject = async (subject: Omit<Subject, "id">) => await addDoc(c
 export const updateSubject = async (subjectId: string, data: Partial<Subject>) => await updateDoc(doc(db, "subjects", subjectId), data);
 export const addTimetableEntry = async (entry: Omit<TimetableEntry, "id">) => await addDoc(collection(db, "timetables"), entry);
 // Función para enviar mensajes a múltiples destinatarios según filtros
-export const addMessage = async (message: Omit<Message, "id">) => {
+export const addMessage = async (message: Omit<Message, "id" | "timestamp">) => {
   // Para mantener compatibilidad con la estructura actual, primero guardamos el mensaje general
   const docRef = await addDoc(collection(db, "messages"), {
     ...message,
@@ -375,6 +376,7 @@ export const addMessage = async (message: Omit<Message, "id">) => {
 export const addEvent = async (event: Omit<CalendarEvent, "id" | "createdAt">) => {
     const docRef = await addDoc(collection(db, "events"), {
         ...event,
+        visibility: event.visibility && event.visibility.length > 0 ? event.visibility : ['personal'],
         createdAt: serverTimestamp(),
     });
     return docRef.id;
