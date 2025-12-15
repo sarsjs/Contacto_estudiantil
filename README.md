@@ -6,18 +6,42 @@ This is the EduChain Next.js dashboard project.
 
 The dashboard relies on Firebase for its backend services, including Authentication and Firestore Database. The necessary configuration is located in `src/lib/firebase/` and environment variables should be set up in `.env.local`.
 
+Variables públicas requeridas (usa los valores reales de tu proyecto en Firebase → Configuración del proyecto → tus apps web).
+El repositorio incluye, como respaldo, las llaves públicas del proyecto `contacto-estudiantil` para que el login funcione aun si
+olvidas definir variables en App Hosting o en `.env.local`; puedes sobreescribirlas con tu propio proyecto cuando sea necesario:
+
+```
+NEXT_PUBLIC_FIREBASE_API_KEY=
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
+NEXT_PUBLIC_FIREBASE_APP_ID=
+NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=
+```
+
+Estas variables ya no tienen valores predeterminados en el código: si falta alguna, la inicialización de Firebase falla con un error explícito para evitar conectarse a un proyecto incorrecto y recibir mensajes de **Credenciales incorrectas**. En local colócalas en `.env.local` y en App Hosting decláralas (o sus secretos correspondientes) en `apphosting.yaml`.
+
 ### App Check (reCAPTCHA v3)
 
 1. Registra la app web en Firebase → App Check y genera una **Site Key** de reCAPTCHA v3.
-2. Exporta la clave en tu entorno (`.env.local` o variables de despliegue):
+2. Exporta la clave en tu entorno (`.env.local` o variables de despliegue); con solo colocar la Site Key App Check se encenderá:
    ```
    NEXT_PUBLIC_RECAPTCHA_SITE_KEY=<tu_site_key>
-   # Opcional para pruebas locales (true genera un token de depuración):
+   # Opcional: fuerza el encendido/apagado
+   NEXT_PUBLIC_ENABLE_APPCHECK=true|false
+   # Opcional para pruebas locales (true genera un token de depuración automático):
    NEXT_PUBLIC_APPCHECK_DEBUG_TOKEN=true
    ```
    - No subas la Site Key real al repositorio; defínela como variable de entorno o secreto en tu plataforma de despliegue.
-3. Para App Hosting, añade el secreto `NEXT_PUBLIC_RECAPTCHA_SITE_KEY` y referencia en `apphosting.yaml` para que Next.js exponga la clave al frontend.
-4. Reconstruye/despliega; los formularios ya inicializan App Check automáticamente cuando la clave está presente.
+   - Si dejas `NEXT_PUBLIC_ENABLE_APPCHECK` vacío, la app activará App Check automáticamente al detectar la Site Key. Ponlo en
+     `false` solo si necesitas deshabilitarlo de forma explícita.
+3. Para App Hosting, añade el secreto `NEXT_PUBLIC_RECAPTCHA_SITE_KEY`; el flag `NEXT_PUBLIC_ENABLE_APPCHECK` puede quedar vací
+   o o en `true` si deseas forzar el encendido.
+4. Reconstruye/despliega; los formularios inicializan App Check cuando la clave está presente (o el flag fuerza el encendido) y
+   emiten una advertencia clara si no hay clave.
+
+> Nota sobre App Hosting: define los valores reales de Firebase en `apphosting.yaml` (o como secretos referenciados allí). Si quedan vacíos, la app no se inicia y mostrará qué variables faltan, evitando que se use la configuración antigua del repositorio.
 
 ## Registro de avances
 

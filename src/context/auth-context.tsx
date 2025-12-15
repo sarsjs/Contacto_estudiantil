@@ -3,8 +3,8 @@
 import * as React from "react";
 import { createContext, useContext, useEffect, useState, useMemo } from "react";
 import { onAuthStateChanged, User as FirebaseUser } from "firebase/auth";
-import { auth } from "@/lib/firebase/client";
-import { fetchUserByEmail } from "@/lib/firebase/data";
+import { auth, firebaseConfigErrorMessage } from "@/lib/firebase/client";
+import { fetchUserByEmail, fetchUserById } from "@/lib/firebase/data";
 import { signInWithEmail } from "@/lib/firebase/auth";
 import type { User } from "@/lib/types";
 
@@ -35,13 +35,21 @@ export function AuthProvider({ children }: AuthProviderProps) {
   useEffect(() => {
     if (!isClient) return;
 
+    if (firebaseConfigErrorMessage) {
+      console.error(firebaseConfigErrorMessage);
+      setLoading(false);
+      return;
+    }
+
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setLoading(true);
       setUser(user);
       if (user) {
         try {
-          const userProfile = await fetchUserByEmail(user.email!);
-          setProfile(userProfile || null); // Si no hay perfil, establece null pero NO CIERRES SESIÓN
+          const profileByEmail = user.email ? await fetchUserByEmail(user.email) : null;
+          const profileById = !profileByEmail ? await fetchUserById(user.uid) : null;
+
+          setProfile(profileByEmail || profileById || null); // Si no hay perfil, establece null pero NO CIERRES SESIÓN
         } catch (error) {
           console.error("Error fetching user profile:", error);
           setProfile(null); // En caso de error, establece el perfil a null pero NO CIERRES SESIÓN
@@ -60,9 +68,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
       profile,
       loading,
       signIn: async (email: string, pass:string) => {
+        if (firebaseConfigErrorMessage) {
+          throw new Error(firebaseConfigErrorMessage);
+        }
         await signInWithEmail(email, pass);
       },
       signOut: async () => {
+        if (firebaseConfigErrorMessage) {
+          throw new Error(firebaseConfigErrorMessage);
+        }
         await auth.signOut();
       },
     }),

@@ -5,6 +5,8 @@ export interface User {
     name: string;
     email: string;
     role: 'director' | 'orientador' | 'profesor' | 'estudiante';
+    groupId?: string;
+    groups?: string[];
 }
 
 export interface Group {
