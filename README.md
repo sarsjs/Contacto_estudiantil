@@ -6,6 +6,19 @@ This is the EduChain Next.js dashboard project.
 
 The dashboard relies on Firebase for its backend services, including Authentication and Firestore Database. The necessary configuration is located in `src/lib/firebase/` and environment variables should be set up in `.env.local`.
 
+### App Check (reCAPTCHA v3)
+
+1. Registra la app web en Firebase → App Check y genera una **Site Key** de reCAPTCHA v3.
+2. Exporta la clave en tu entorno (`.env.local` o variables de despliegue):
+   - Para este proyecto, la Site Key pública es `6LdWiCwsAAAAAP0tpLGcgpIl1V_8TlnDQj0xgJ0b`.
+   ```
+   NEXT_PUBLIC_RECAPTCHA_SITE_KEY=<tu_site_key>
+   # Opcional para pruebas locales (true genera un token de depuración):
+   NEXT_PUBLIC_APPCHECK_DEBUG_TOKEN=true
+   ```
+3. Para App Hosting, añade el secreto `NEXT_PUBLIC_RECAPTCHA_SITE_KEY` y referencia en `apphosting.yaml` para que Next.js exponga la clave al frontend.
+4. Reconstruye/despliega; los formularios ya inicializan App Check automáticamente cuando la clave está presente.
+
 ## Registro de avances
 
 Cada vez que trabajes en EduChain después de la fecha de referencia (14/12/2025 01:17), agrega un resumen corto al final de `PROYECTO.md` siguiendo el formato:

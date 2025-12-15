@@ -15,7 +15,9 @@ interface CreateUserData {
 }
 
 // Renombramos la función a 'createUser' para que sea más genérica
-export const createUser = functions.https.onCall(async (data: CreateUserData, context) => {
+export const createUser = functions
+  .region('us-central1')
+  .https.onCall({ enforceAppCheck: false }, async (data: CreateUserData, context) => {
   // 1. Verificación de permisos (solo un director puede crear usuarios)
   if (!context.auth) {
     throw new functions.https.HttpsError(
@@ -91,13 +93,15 @@ export const createUser = functions.https.onCall(async (data: CreateUserData, co
       error
     );
   }
-});
+  });
 
 interface DeleteUserData {
   uid: string;
 }
 
-export const deleteUser = functions.https.onCall(async (data: DeleteUserData, context) => {
+export const deleteUser = functions
+  .region('us-central1')
+  .https.onCall({ enforceAppCheck: false }, async (data: DeleteUserData, context) => {
   // 1. Verificación de permisos (solo un director puede eliminar usuarios)
   if (!context.auth) {
     throw new functions.https.HttpsError(
@@ -152,4 +156,4 @@ export const deleteUser = functions.https.onCall(async (data: DeleteUserData, co
       error
     );
   }
-});
+  });

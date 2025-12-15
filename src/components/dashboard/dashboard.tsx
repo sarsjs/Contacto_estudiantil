@@ -40,6 +40,7 @@ const navItems = {
     { href: '/dashboard/director/personal', icon: Users, label: 'Personal' },
     { href: '/dashboard/director/alumnos', icon: GraduationCap, label: 'Alumnos' },
     { href: '/dashboard/director/estructura', icon: School, label: 'Estructura' },
+    { href: '/dashboard/director/horarios', icon: Calendar, label: 'Horarios' },
   ],
   orientador: [
     { href: '/dashboard/orientador', icon: Home, label: 'Panel Principal' },
@@ -51,6 +52,7 @@ const navItems = {
     { href: '/dashboard/profesor', icon: LayoutGrid, label: 'Mis Clases' },
     { href: '/dashboard/profesor/asistencia', icon: ClipboardCheck, label: 'Asistencia' },
     { href: '/dashboard/profesor/calificaciones', icon: GraduationCap, label: 'Calificaciones' },
+    { href: '/dashboard/profesor/horario', icon: Calendar, label: 'Mi Horario' },
   ],
   estudiante: [
     { href: '/dashboard/alumno', icon: LayoutGrid, label: 'Panel Principal' },

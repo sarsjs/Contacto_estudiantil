@@ -29,7 +29,7 @@ import {
 } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import type { User } from '@/lib/types';
-import { fetchUsers, deleteUser, updateUser } from '@/lib/firebase/data';
+import { fetchUsers, updateUser } from '@/lib/firebase/data';
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import { IdCard } from '@/components/dashboard/id-card';
 
@@ -68,6 +68,8 @@ export default function PersonalPage() {
   }, [loadData]);
 
 
+  const functions = getFunctions(undefined, 'us-central1');
+
   const handleCreateStaff = async () => {
     if (!newStaffName || !newStaffRole || !newStaffEmail) {
       toast({ title: "Datos incompletos", description: "Por favor completa todos los campos.", variant: "destructive" });
@@ -75,13 +77,12 @@ export default function PersonalPage() {
     }
     setDataLoading(true);
     try {
-      const functions = getFunctions();
-      const createStaffUser = httpsCallable(functions, 'createStaffUser');
-      
-      await createStaffUser({ 
-        name: newStaffName, 
-        role: newStaffRole, 
-        email: newStaffEmail 
+      const createUser = httpsCallable(functions, 'createUser');
+
+      await createUser({
+        name: newStaffName,
+        role: newStaffRole,
+        email: newStaffEmail.trim().toLowerCase(),
       });
 
       toast({ title: "Personal añadido", description: `Se creó la cuenta para ${newStaffName} y se le envió un correo para establecer su contraseña.` });
@@ -90,9 +91,21 @@ export default function PersonalPage() {
       setNewStaffRole("orientador");
       setAddStaffOpen(false);
       await loadData();
-    } catch (error) {
+    } catch (error: any) {
       console.error("create staff error", error);
-      toast({ title: "No se pudo guardar", description: "Hubo un error al registrar. Verifica que el correo no esté en uso.", variant: "destructive" });
+      const code = error?.code || "";
+      const alreadyExists = error?.message?.includes('already-exists') || code.includes('already-exists');
+      let description = alreadyExists
+        ? 'El correo electrónico ya está en uso por otra cuenta. Elimina por completo el usuario anterior antes de re-registrarlo.'
+        : 'Hubo un error al registrar. Verifica que el correo no esté en uso.';
+
+      if (!alreadyExists && (code.includes('unauthenticated') || code.includes('permission-denied'))) {
+        description = 'Solo un director autenticado puede crear personal. Revisa tu sesión e inténtalo otra vez.';
+      } else if (!alreadyExists && (code.includes('failed-precondition') || code.includes('app-check'))) {
+        description = 'La petición fue bloqueada por App Check. Registra la app web en App Check o configura NEXT_PUBLIC_RECAPTCHA_SITE_KEY para emitir tokens válidos.';
+      }
+
+      toast({ title: "No se pudo guardar", description, variant: "destructive" });
     } finally {
       setDataLoading(false);
     }
@@ -114,8 +127,9 @@ export default function PersonalPage() {
 
   const handleRemoveStaff = async (staffId: string) => {
     try {
-      await deleteUser(staffId);
-      toast({ title: "Personal eliminado", description: "El staff ya no aparece en el panel." });
+      const deleteUserFn = httpsCallable(functions, 'deleteUser');
+      await deleteUserFn({ uid: staffId });
+      toast({ title: "Personal eliminado", description: "La cuenta se eliminó de Firebase Auth y Firestore." });
       await loadData();
     } catch (error) {
       console.error("remove staff error", error);
