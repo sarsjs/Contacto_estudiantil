@@ -178,7 +178,7 @@ Este registro servirá como historial vivo del progreso; antes de cerrar tu sesi
 - **Actualizado:** `apphosting.yaml` ahora expone `NEXT_PUBLIC_RECAPTCHA_SITE_KEY` como variable de entorno para que Next.js inicialice App Check en producción.
 - **Pendiente:** Proveer la Site Key real como secreto en App Hosting y reactivar la exigencia de App Check en las funciones callable tras verificar que el frontend emite tokens válidos.
 
-20/12/2025 18:00 - Site Key de App Check configurada.
-- **Implementado:** Se cargó la Site Key pública `6LdWiCwsAAAAAP0tpLGcgpIl1V_8TlnDQj0xgJ0b` en `.env.example` y en `apphosting.yaml` para que el frontend inicialice App Check sin dependencias externas.
-- **Documentado:** README ahora indica explícitamente la Site Key usada por el proyecto para simplificar la configuración local y en App Hosting.
-- **Pendiente:** Re-activar la exigencia de App Check en las funciones callable (`createUser`/`deleteUser`) y validar altas/bajas con la clave ya configurada.
+20/12/2025 18:00 - Site Key de App Check: retirada del repositorio público.
+- **Corregido:** Se eliminó la Site Key pública del repositorio y se dejó como variable de entorno/secret en `apphosting.yaml` para evitar exponerla en GitHub.
+- **Documentado:** README y `.env.example` instruyen a usar la propia clave generada en Firebase en lugar de una valor hardcodeado.
+- **Pendiente:** Cargar la Site Key como secreto gestionado en App Hosting y reactivar la exigencia de App Check en las funciones callable tras validar que el frontend emite tokens válidos.

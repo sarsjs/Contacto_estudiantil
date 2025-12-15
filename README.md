@@ -10,12 +10,12 @@ The dashboard relies on Firebase for its backend services, including Authenticat
 
 1. Registra la app web en Firebase → App Check y genera una **Site Key** de reCAPTCHA v3.
 2. Exporta la clave en tu entorno (`.env.local` o variables de despliegue):
-   - Para este proyecto, la Site Key pública es `6LdWiCwsAAAAAP0tpLGcgpIl1V_8TlnDQj0xgJ0b`.
    ```
    NEXT_PUBLIC_RECAPTCHA_SITE_KEY=<tu_site_key>
    # Opcional para pruebas locales (true genera un token de depuración):
    NEXT_PUBLIC_APPCHECK_DEBUG_TOKEN=true
    ```
+   - No subas la Site Key real al repositorio; defínela como variable de entorno o secreto en tu plataforma de despliegue.
 3. Para App Hosting, añade el secreto `NEXT_PUBLIC_RECAPTCHA_SITE_KEY` y referencia en `apphosting.yaml` para que Next.js exponga la clave al frontend.
 4. Reconstruye/despliega; los formularios ya inicializan App Check automáticamente cuando la clave está presente.
 
