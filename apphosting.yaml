@@ -1,10 +1,11 @@
-
-env:
-  # Las claves de Firebase son públicas y ya están embebidas en el código del cliente,
-  # por lo que App Hosting no necesita buscarlas como secretos. Esto evita errores de
-  # arranque cuando no hay versiones de secretos disponibles en el proyecto.
-  #
-  # Si en el futuro se prefiere administrar estas claves vía secretos, se pueden volver
-  # a mapear aquí, pero mientras tanto la app usará los valores públicos en el código.
-  - variable: NEXT_PUBLIC_RECAPTCHA_SITE_KEY
-    value: ""
+runConfig:
+  runtime: nodejs20
+  env:
+    # Las claves de Firebase son públicas y ya están embebidas en el código del cliente,
+    # por lo que App Hosting no necesita buscarlas como secretos. Esto evita errores de
+    # arranque cuando no hay versiones de secretos disponibles en el proyecto.
+    #
+    # Si en el futuro se prefiere administrar estas claves vía secretos, se pueden volver
+    # a mapear aquí, pero mientras tanto la app usará los valores públicos en el código.
+    - variable: NEXT_PUBLIC_RECAPTCHA_SITE_KEY
+      value: ""
