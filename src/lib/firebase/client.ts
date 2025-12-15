@@ -5,14 +5,26 @@ import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-      apiKey: "AIzaSyCWiMV9980JadNny5X9EJcQAo9rClM9uck",
-      authDomain: "contacto-estudiantil.firebaseapp.com",
-      projectId: "contacto-estudiantil",
-      storageBucket: "contacto-estudiantil.appspot.com",
-      messagingSenderId: "1054384089954",
-      appId: "1:1054384089954:web:8898446e0c65214b039a3b",
-      measurementId: "G-109KM3955D"
-    };
+  apiKey:
+    process.env.NEXT_PUBLIC_FIREBASE_API_KEY ??
+    "AIzaSyCWiMV9980JadNny5X9EJcQAo9rClM9uck",
+  authDomain:
+    process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN ??
+    "contacto-estudiantil.firebaseapp.com",
+  projectId:
+    process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID ?? "contacto-estudiantil",
+  storageBucket:
+    process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET ??
+    "contacto-estudiantil.appspot.com",
+  messagingSenderId:
+    process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID ??
+    "1054384089954",
+  appId:
+    process.env.NEXT_PUBLIC_FIREBASE_APP_ID ??
+    "1:1054384089954:web:8898446e0c65214b039a3b",
+  measurementId:
+    process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID ?? "G-109KM3955D",
+};
 
 // Initialize Firebase
 const firebase_app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
