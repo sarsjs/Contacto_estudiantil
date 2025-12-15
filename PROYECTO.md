@@ -198,6 +198,31 @@ Este registro servirá como historial vivo del progreso; antes de cerrar tu sesi
 - **Corregido:** Los orientadores también pueden leer perfiles de alumnos para gestionarlos desde el panel sin necesitar permisos de director.
 - **Pendiente:** Mantener el refuerzo de validaciones vía Cloud Functions para evitar elevaciones de privilegios desde la consola.
 
+24/12/2025 12:00 - Limpieza de compilaciones viejas en Cloud Build.
+- **Añadido:** Script `scripts/clean_cloud_builds.sh` para borrar en lote compilaciones antiguas y conservar sólo las más recientes.
+- **Instrucción:** Ejecutar con `KEEP_BUILDS=2` (por defecto) para dejar únicamente las dos últimas compilaciones del historial.
+- **Requisito:** Tener `gcloud` instalado y autenticado con permisos de administrador de Cloud Build.
+
+## Mantenimiento de compilaciones de Cloud Build
+
+Cuando el historial de compilaciones crece en la consola y quieres quedarte sólo con las más recientes, usa el script `scripts/clean_cloud_builds.sh`:
+
+```bash
+# Mantiene sólo las 2 compilaciones más recientes en us-east4 para el proyecto por defecto
+./scripts/clean_cloud_builds.sh
+
+# Personaliza el proyecto, región o cuántas quieres conservar
+PROJECT_ID=contacto-estudiantil \
+CLOUD_BUILD_REGION=us-east4 \
+KEEP_BUILDS=2 \
+./scripts/clean_cloud_builds.sh
+```
+
+Requisitos:
+
+- Tener el SDK de gcloud instalado y autenticado con permisos de administrador de Cloud Build.
+- Ejecutar en la terminal: el script listará las compilaciones más recientes y eliminará el resto en lote.
+
 24/12/2025 11:30 - Función callable `createUser` (antes `createStaffUser`).
 - **Documentado:** La Cloud Function expuesta en Firebase Console como `createStaffUser` corresponde al endpoint callable que usan los directores para dar de alta personal o alumnos. Ver `functions/index.ts` (`createUser`) para el código fuente y permisos.
 - **Contexto:** El trigger es HTTPS callable (no cron ni pub/sub); verifica que quien la invoca sea un director y luego crea la cuenta en Auth y el documento en Firestore con un avatar temporal.
