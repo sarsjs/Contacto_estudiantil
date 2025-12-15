@@ -28,12 +28,16 @@ Estas variables ya no tienen valores predeterminados en el código: si falta alg
 2. Exporta la clave en tu entorno (`.env.local` o variables de despliegue):
    ```
    NEXT_PUBLIC_RECAPTCHA_SITE_KEY=<tu_site_key>
+   NEXT_PUBLIC_ENABLE_APPCHECK=true
    # Opcional para pruebas locales (true genera un token de depuración):
    NEXT_PUBLIC_APPCHECK_DEBUG_TOKEN=true
    ```
    - No subas la Site Key real al repositorio; defínela como variable de entorno o secreto en tu plataforma de despliegue.
-3. Para App Hosting, añade el secreto `NEXT_PUBLIC_RECAPTCHA_SITE_KEY` y referencia en `apphosting.yaml` para que Next.js exponga la clave al frontend.
-4. Reconstruye/despliega; los formularios ya inicializan App Check automáticamente cuando la clave está presente.
+   - Si dejas `NEXT_PUBLIC_ENABLE_APPCHECK=false`, la app no intentará inicializar App Check (útil para depurar sin la clave).
+3. Para App Hosting, añade el secreto `NEXT_PUBLIC_RECAPTCHA_SITE_KEY` y el flag `NEXT_PUBLIC_ENABLE_APPCHECK=true` en `apphosting.yaml` para que Next.js exponga la clave al frontend.
+4. Reconstruye/despliega; los formularios inicializan App Check solo cuando la clave está presente y el flag está en `true`.
+
+> Nota sobre App Hosting: define los valores reales de Firebase en `apphosting.yaml` (o como secretos referenciados allí). Si quedan vacíos, la app no se inicia y mostrará qué variables faltan, evitando que se use la configuración antigua del repositorio.
 
 > Nota sobre App Hosting: define los valores reales de Firebase en `apphosting.yaml` (o como secretos referenciados allí). Si quedan vacíos, la app no se inicia y mostrará qué variables faltan, evitando que se use la configuración antigua del repositorio.
 

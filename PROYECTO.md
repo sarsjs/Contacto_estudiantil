@@ -234,3 +234,7 @@ Requisitos:
 26/12/2025 14:00 - Restaurar configuración pública por defecto.
 - **Corregido:** `src/lib/firebase/client.ts` vuelve a incluir las llaves públicas del proyecto `contacto-estudiantil` como respaldo, evitando el bloqueo de inicio de sesión por variables vacías en App Hosting.
 - **Configurado:** `apphosting.yaml` y `.env.example` ya traen los valores completos para que el build use la configuración correcta sin intervención manual; se pueden sobreescribir cuando se requiera apuntar a otro proyecto.
+
+27/12/2025 09:00 - Control explícito de App Check por variable de entorno.
+- **Añadido:** Bandera `NEXT_PUBLIC_ENABLE_APPCHECK` para decidir cuándo inicializar App Check; por defecto queda desactivado para evitar advertencias cuando falta la `NEXT_PUBLIC_RECAPTCHA_SITE_KEY`.
+- **Actualizado:** Documentación (`README.md`, `.env.example`, `apphosting.yaml`) para indicar cómo habilitar App Check sólo cuando ya se cuenta con la clave pública de reCAPTCHA.
