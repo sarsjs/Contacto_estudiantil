@@ -14,37 +14,52 @@ interface CreateUserData {
   groupId?: string; // Opcional, principalmente para estudiantes
 }
 
-// Renombramos la función a 'createUser' para que sea más genérica
-export const createUser = functions
-  .region('us-central1')
-  .https.onCall({ enforceAppCheck: false }, async (data: CreateUserData, context) => {
-  if (!context.auth) {
-    throw new functions.https.HttpsError(
-      "unauthenticated",
-      "La función solo puede ser llamada por un usuario autenticado."
-    );
+export const createUser = functions.region('us-central1').https.onRequest(async (req, res) => {
+  // Configurar CORS
+  res.set('Access-Control-Allow-Origin', 'https://fir08121146--contacto-estudiantil.us-east4.hosted.app');
+  res.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+  if (req.method === 'OPTIONS') {
+    res.status(204).send('');
+    return;
+  }
+  
+  // La lógica original de onCall ahora se maneja dentro de onRequest
+  // 1. Verificación de autenticación
+  const idToken = req.headers.authorization?.split('Bearer ')[1];
+  if (!idToken) {
+    res.status(401).send('Unauthorized');
+    return;
   }
 
-  const callerDoc = await db.collection("users").doc(context.auth.uid).get();
-  const callerRole = callerDoc.data()?.role;
+  let decodedToken;
+  try {
+    decodedToken = await admin.auth().verifyIdToken(idToken);
+  } catch (error) {
+    res.status(401).send('Unauthorized');
+    return;
+  }
 
-  // Permisos:
-  // - Director: puede crear cualquier rol.
-  // - Orientador: solo puede crear estudiantes.
+  const uid = decodedToken.uid;
+  const callerDoc = await db.collection("users").doc(uid).get();
+  const callerRole = callerDoc.data()?.role;
+  
+  const data: CreateUserData = req.body;
+
+  // 2. Permisos (la misma lógica que antes)
   if (
     callerRole !== 'director' && !(callerRole === 'orientador' && data.role === 'estudiante')
   ) {
-    throw new functions.https.HttpsError(
-      "permission-denied",
-      "Solo un director o un orientador (para alumnos) puede crear usuarios."
-    );
+    res.status(403).send('Permission denied');
+    return;
   }
 
   const { name, email, role, groupId } = data;
   const emailLower = email.toLowerCase();
 
   try {
-    // 2. Crear el usuario en Firebase Authentication
+    // 3. Crear el usuario en Firebase Authentication
     const userRecord = await admin.auth().createUser({
       email: emailLower,
       emailVerified: false,
@@ -52,7 +67,7 @@ export const createUser = functions
       disabled: false,
     });
 
-    // 3. Preparar el documento del usuario para Firestore
+    // 4. Preparar el documento del usuario para Firestore
     const avatarSeed = Math.floor(Math.random() * 1000);
     const avatarUrl = `https://picsum.photos/seed/${avatarSeed}/100/100`;
 
@@ -64,7 +79,6 @@ export const createUser = functions
       avatarUrl,
     };
 
-    // Si el rol es estudiante, añadir campos específicos
     if (role === 'estudiante') {
       const year = new Date().getFullYear().toString().slice(-2);
       const randomDigits = Math.floor(1000 + Math.random() * 9000).toString();
@@ -74,32 +88,21 @@ export const createUser = functions
       }
     }
 
-    // 4. Crear el documento del usuario en la colección 'users'
+    // 5. Crear el documento del usuario en la colección 'users'
     await db.collection("users").doc(userRecord.uid).set(userData);
     
-    // 5. Opcional: Enviar correo para restablecer contraseña.
-    // Es buena práctica que el usuario establezca su propia contraseña.
-    const passwordResetLink = await admin.auth().generatePasswordResetLink(emailLower);
-    // (Aquí se podría integrar un servicio de email para enviar el link)
-
-    return { success: true, uid: userRecord.uid, message: `Usuario ${name} creado con éxito.` };
+    // 6. Enviar respuesta exitosa
+    res.status(200).send({ success: true, uid: userRecord.uid, message: `Usuario ${name} creado con éxito.` });
 
   } catch (error: any) {
-    // Si el usuario ya existe en Auth, arrojar un error claro
     if (error.code === 'auth/email-already-exists') {
-      throw new functions.https.HttpsError(
-        "already-exists",
-        "El correo electrónico ya está en uso por otro usuario."
-      );
+      res.status(409).send('El correo electrónico ya está en uso por otro usuario.');
+    } else {
+      console.error("Error al crear usuario:", error);
+      res.status(500).send('Ocurrió un error interno al crear el usuario.');
     }
-    console.error("Error al crear usuario:", error);
-    throw new functions.https.HttpsError(
-      "internal",
-      "Ocurrió un error interno al crear el usuario.",
-      error
-    );
   }
-  });
+});
 
 interface DeleteUserData {
   uid: string;
@@ -107,7 +110,7 @@ interface DeleteUserData {
 
 export const deleteUser = functions
   .region('us-central1')
-  .https.onCall({ enforceAppCheck: false }, async (data: DeleteUserData, context) => {
+  .https.onCall(async (data: DeleteUserData, context: functions.https.CallableContext) => {
   if (!context.auth) {
     throw new functions.https.HttpsError(
       "unauthenticated",
