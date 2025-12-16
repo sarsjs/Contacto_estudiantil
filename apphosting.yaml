@@ -19,7 +19,7 @@ runConfig:
       value: "G-109KM3955D"
     # Clave pública de reCAPTCHA v3 para App Check (opcional pero recomendada)
     - variable: NEXT_PUBLIC_RECAPTCHA_SITE_KEY
-      value: ""
+      value: "6LdWiCwsAAAAAP0tpLGcgpIl1V_8TlnDQj0xgJ0b"
     # Control para habilitar o deshabilitar App Check en el frontend; con Site Key se enciende automáticamente
     - variable: NEXT_PUBLIC_ENABLE_APPCHECK
-      value: ""
+      value: "true"
