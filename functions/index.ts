@@ -6,16 +6,16 @@ admin.initializeApp();
 
 const db = admin.firestore();
 
-// Interface para la data de entrada de la función
+// Interface for the data coming from the client
 interface CreateUserData {
   name: string;
   email: string;
   role: 'director' | 'orientador' | 'profesor' | 'estudiante';
-  groupId?: string; // Opcional, principalmente para estudiantes
+  groupId?: string; // Optional, mainly for students
 }
 
 export const createUser = functions.region('us-central1').https.onRequest(async (req, res) => {
-  // Configurar CORS
+  // Set CORS headers
   res.set('Access-Control-Allow-Origin', 'https://fir08121146--contacto-estudiantil.us-east4.hosted.app');
   res.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
@@ -24,12 +24,14 @@ export const createUser = functions.region('us-central1').https.onRequest(async 
     res.status(204).send('');
     return;
   }
-  
-  // La lógica original de onCall ahora se maneja dentro de onRequest
-  // 1. Verificación de autenticación
+
+  // 1. Authentication check
   const idToken = req.headers.authorization?.split('Bearer ')[1];
   if (!idToken) {
-    res.status(401).send('Unauthorized');
+    res.status(401).json({
+        error: 'unauthenticated',
+        message: 'El token de autorización no fue provisto.'
+    });
     return;
   }
 
@@ -37,37 +39,48 @@ export const createUser = functions.region('us-central1').https.onRequest(async 
   try {
     decodedToken = await admin.auth().verifyIdToken(idToken);
   } catch (error) {
-    res.status(401).send('Unauthorized');
+    res.status(401).json({
+        error: 'invalid-token',
+        message: 'El token de autorización es inválido.'
+    });
     return;
   }
 
   const uid = decodedToken.uid;
   const callerDoc = await db.collection("users").doc(uid).get();
   const callerRole = callerDoc.data()?.role;
-  
+
   const data: CreateUserData = req.body;
 
-  // 2. Permisos (la misma lógica que antes)
+  // 2. Permission check
   if (
     callerRole !== 'director' && !(callerRole === 'orientador' && data.role === 'estudiante')
   ) {
-    res.status(403).send('Permission denied');
+    res.status(403).json({
+        error: 'permission-denied',
+        message: 'No tienes permisos para realizar esta acción.'
+    });
     return;
   }
 
   const { name, email, role, groupId } = data;
   const emailLower = email.toLowerCase();
+  
+  // Generate a temporary password if not provided
+  const tempPassword = `Tmp!${Math.random().toString(36).slice(2)}A9#${Date.now().toString(36)}`;
+
 
   try {
-    // 3. Crear el usuario en Firebase Authentication
+    // 3. Create user in Firebase Authentication
     const userRecord = await admin.auth().createUser({
       email: emailLower,
       emailVerified: false,
+      password: tempPassword,
       displayName: name,
       disabled: false,
     });
 
-    // 4. Preparar el documento del usuario para Firestore
+    // 4. Prepare user document for Firestore
     const avatarSeed = Math.floor(Math.random() * 1000);
     const avatarUrl = `https://picsum.photos/seed/${avatarSeed}/100/100`;
 
@@ -88,22 +101,46 @@ export const createUser = functions.region('us-central1').https.onRequest(async 
       }
     }
 
-    // 5. Crear el documento del usuario en la colección 'users'
+    // 5. Create user document in 'users' collection
     await db.collection("users").doc(userRecord.uid).set(userData);
     
-    // 6. Enviar respuesta exitosa
-    res.status(200).send({ success: true, uid: userRecord.uid, message: `Usuario ${name} creado con éxito.` });
+    // 6. Send successful response
+    res.status(201).json({ success: true, uid: userRecord.uid, message: `Usuario ${name} creado con éxito.` });
 
   } catch (error: any) {
-    if (error.code === 'auth/email-already-exists') {
-      res.status(409).send('El correo electrónico ya está en uso por otro usuario.');
-    } else {
-      console.error("Error al crear usuario:", error);
-      res.status(500).send('Ocurrió un error interno al crear el usuario.');
+    switch (error.code) {
+        case 'auth/email-already-exists':
+            res.status(409).json({
+                error: 'email-already-exists',
+                message: 'El correo electrónico ya está en uso por otro usuario.',
+                code: 'auth/email-already-exists'
+            });
+            break;
+        case 'auth/invalid-email':
+            res.status(400).json({
+                error: 'invalid-email',
+                message: 'El formato del correo electrónico no es válido.',
+                code: 'auth/invalid-email'
+            });
+            break;
+        case 'auth/weak-password':
+             res.status(400).json({
+                error: 'weak-password',
+                message: 'La contraseña no es lo suficientemente segura.',
+                code: 'auth/weak-password'
+            });
+            break;
+        default:
+            console.error("Error creating user:", error);
+            res.status(500).json({
+                error: 'internal-error',
+                message: 'Ocurrió un error interno al crear el usuario.',
+                code: error.code
+            });
+            break;
     }
   }
 });
-
 interface DeleteUserData {
   uid: string;
 }
@@ -133,9 +170,9 @@ export const deleteUser = functions
   const targetDoc = await db.collection("users").doc(uid).get();
   const targetRole = targetDoc.data()?.role;
 
-  // Permisos:
-  // - Director: puede eliminar cualquier usuario (menos a sí mismo).
-  // - Orientador: solo puede eliminar estudiantes.
+  // Permissions:
+  // - Director: can delete any user (except themselves).
+  // - Counselor: can only delete students.
   if (
     callerRole !== 'director' && !(callerRole === 'orientador' && targetRole === 'estudiante')
   ) {
@@ -146,21 +183,21 @@ export const deleteUser = functions
   }
 
   try {
-    // 2. Eliminar el usuario de Firebase Authentication
+    // 2. Delete the user from Firebase Authentication
     await admin.auth().deleteUser(uid);
 
-    // 3. Eliminar el documento del usuario de Firestore
+    // 3. Delete the user's document from Firestore
     await db.collection("users").doc(uid).delete();
 
-    // 4. Opcional: Podrías aquí también limpiar otros datos relacionados, 
-    // como sus registros en la colección 'students' si aún la usas, etc.
+    // 4. Optional: Clean up other related data here
+    // e.g., their records in the 'students' collection if you still use it, etc.
 
     return { success: true, message: `Usuario ${uid} eliminado con éxito.` };
 
   } catch (error: any) {
     console.error(`Error al eliminar usuario ${uid}:`, error);
     if (error.code === 'auth/user-not-found') {
-      // Si el usuario no existe en Auth, intenta borrarlo de Firestore de todas formas
+      // If the user doesn't exist in Auth, try to delete from Firestore anyway
       try {
         await db.collection("users").doc(uid).delete();
         return { success: true, message: `Usuario ${uid} no encontrado en Auth, pero eliminado de Firestore.` };

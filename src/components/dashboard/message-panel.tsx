@@ -213,8 +213,8 @@ export function MessagePanel({ showHistory = true }: MessagePanelProps) {
       toast({ title: "Selecciona destinatario", description: "Elige una opción." });
       return;
     }
-    if ((recipient.needsTarget && !targetId) || loadingTargets) {
-      toast({ title: "Selecciona un objetivo", variant: "destructive" });
+    if (recipient.needsTarget && !targetId) {
+      toast({ title: "Selecciona un destinatario", variant: "destructive" });
       return;
     }
 
@@ -227,7 +227,7 @@ export function MessagePanel({ showHistory = true }: MessagePanelProps) {
         recipientLabel:
           recipient?.label +
           (targetLabel ? ` · ${targetLabel}` : ""),
-        recipientId: targetId || undefined,
+        recipientId: targetId,
         createdBy: profile.email,
         createdByRole: profile.role,
       });

@@ -1,10 +1,12 @@
 import { FieldValue } from "firebase/firestore";
 
+export type UserRole = 'director' | 'orientador' | 'profesor' | 'estudiante';
+
 export interface User {
     id: string;
     name: string;
     email: string;
-    role: 'director' | 'orientador' | 'profesor' | 'estudiante';
+    role: UserRole;
     groupId?: string;
     groups?: string[];
 }
