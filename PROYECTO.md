@@ -11,30 +11,36 @@ El objetivo principal sigue siendo crear un ecosistema digital unificado que mej
 ## 2. Funcionalidades Implementadas (estado real)
 
 ### a. Autenticación y roles
+
 * Se utiliza Firebase Authentication; las rutas están protegidas con AuthGuard y, tras iniciar sesión, se sincroniza el perfil desde Firestore.
 * El dashboard se renderiza según el rol real (director, orientador, profesor, estudiante) y la sesión se restaura automáticamente después de crear nuevos alumnos mediante validación adicional.
 
 ### b. Dashboards dinámicos
+
 * Cada rol consume datos en tiempo real: el director obtiene métricas de personal, estudiantes, grupos, ciclos y orientadores; el orientador gestiona grupos, horarios, materias e importaciones masivas; los profesores manejan asistencia/calificaciones y los estudiantes ven su horario, ID digital y pase de lista.
 * Se han creado componentes reutilizables (CalendarPanel, MessagePanel, StatCard, MessageHistory) para mantener la consistencia visual y funcional.
 * El calendario admite selección de fechas, muestra eventos desde Firestore y permite la creación/eliminación de eventos según permisos (director/orientador/profesor para crear; director/orientador para eliminar).
 
 ### c. Comunicación y alertas
+
 * Hay un sistema de comunicados filtrado por destinatario (grupos, alumnos, orientadores, director, todos) con historial y etiquetas en español.
 * Se mantiene el componente de alertas de seguridad (autorizadas/no autorizadas) que filtra según pertenencia al grupo.
 
 ### d. Gestión de estudiantes y horarios
+
 * El director puede crear, editar y eliminar estudiantes desde modales; cada alta crea un usuario Firebase, genera matrícula y envía correo de restablecimiento.
 * Tanto asistentes como orientadores pueden importar alumnos masivamente mediante CSV con columnas `name,email,groupId` y ver los resultados/errores en pantalla.
 * Las vistas de horarios y materias están enlazadas: el orientador puede navegar entre módulos y vincular grupos con materias sin salir del rol.
 
 ### e. Helpers y persistencia
+
 * Los helpers en src/lib/firebase/data.ts cubren todas las operaciones CRUD (estudiantes, mensajes, eventos, grupos, asistencia, calificaciones) y aprovechan Firestore para mantener datos persistentes.
 * Se incorporaron toasts y estados de carga para informar acciones exitosas o errores.
 
 ---
 
 ## 3. Tecnologías Utilizadas
+
 * **Framework:** Next.js (App Router)
 * **Lenguaje:** TypeScript
 * **UI:** Tailwind CSS y componentes de ShadCN UI
@@ -47,12 +53,14 @@ El objetivo principal sigue siendo crear un ecosistema digital unificado que mej
 ## 4. Pendientes y hallazgos actuales
 
 ### a. Pendientes del documento original
+
 * **Refuerzo de backend:** Aunque Firestore sirve como backend, aún faltan validaciones serverless/Cloud Functions para garantizar reglas de negocio estrictas (ej. evitar ediciones directas desde la consola).
 * **Controles RBAC en servidor:** El control de accesos sigue siendo mayormente frontend; se debe crear un middleware (Cloud Functions o API routes) que valide cada acción.
 * **GPS/QR y reportes IA:** Las funcionalidades mencionadas en el documento (pase de lista por GPS/QR, reportes predictivos, chatbot) siguen pendientes.
 * **Notificaciones push:** Todavía no se ha integrado Firebase Cloud Messaging ni otras formas de notificación en tiempo real.
 
 ### b. Hallazgos y errores recientes
+
 * **Parpadeo en portal del director:** El director puede perder la sesión tras crear un alumno porque Firebase cambia el user; actualmente se obliga a reingresar la contraseña, pero se necesita un flujo más suave o guardar la sesión en un token.
 * **Pantalla  Tu perfil no está registrado:** Aparece al crear alumnos si la sesión cambia; se recomienda capturar el estado antes de la petición y restaurarlo sin reauth manual.
 * **Errores de iconos:** Algunos iconos de Lucide (como Chalkboard) no estaban disponibles, y se sustituyeron por variantes exportadas (UserCheck); conviene auditar importaciones para evitar errores de compilación.
@@ -62,6 +70,7 @@ El objetivo principal sigue siendo crear un ecosistema digital unificado que mej
 ---
 
 ## 5. Próximos pasos sugeridos
+
 1. Refactorizar el flujo de alta de alumnos para mantener intacta la sesión del director sin solicitar contraseña extra y documentar los pasos.
 2. Auditar las reglas de Firestore, crear un conjunto de funciones Cloud (o API routes) que validen el acceso a mensajes, eventos y estudiantes según rol.
 3. Introducir pruebas end-to-end (por ejemplo con Playwright) para cada rol y así detectar regresiones como el parpadeo del portal.
@@ -71,13 +80,16 @@ El objetivo principal sigue siendo crear un ecosistema digital unificado que mej
 ---
 
 ## 6. Registro de avances con fecha y hora
+
 Fecha de referencia: **14/12/2025 01:17**. A partir de ese momento cada desarrollador que trabaje en EduChain debe añadir al final de este documento un breve resumen con:
+
 1. Fecha y hora de la actualización (formato `dd/mm/yyyy hh:mm`).
 2. Qué componente o área del proyecto se tocó.
 3. Qué se implementó, corrigió o mejoró.
 4. Si quedan tareas relacionadas pendientes o problemas conocidos que aparecieron durante el trabajo.
 
 Ejemplo:
+
 ```
 14/12/2025 02:45 - Ajuste del calendario en el rol de orientador: alineación corregida y lectura de eventos del día seleccionado. Pendiente: revisar estilos móviles.
 ```
@@ -85,123 +97,138 @@ Ejemplo:
 Este registro servirá como historial vivo del progreso; antes de cerrar tu sesión, asegúrate de documentar aquí tus cambios y, si es necesario, referenciar el `git status` relevante o issues asociados.
 
 14/12/2025 03:45 - Refactorización del sistema de autenticación y gestión de usuarios.
-- **Implementado:** Creación de Cloud Functions (`createUser`, `deleteUser`) para automatizar el alta y baja de usuarios (personal y estudiantes) de forma atómica entre Firebase Auth y Firestore.
-- **Corregido:** Solucionado bucle de redirección en el login ("parpadeo") mediante la centralización de la lógica en `AuthGuard`.
-- **Mejorado:** Unificado el modelo de datos. Todos los usuarios ahora residen en la colección `users` con un campo `role`. Se eliminó la lógica que dependía de la colección `students`.
-- **Mejorado:** Refactorizada la página de gestión de alumnos del director para usar las nuevas Cloud Functions, aumentando la seguridad.
-- **Pendiente:** Migrar los registros existentes de la colección `students` a `users` para que los alumnos antiguos puedan acceder. La función para actualizar alumnos (`updateUser`) podría requerir una revisión final para asegurar la compatibilidad con el nuevo modelo de datos unificado.
+
+* **Implementado:** Creación de Cloud Functions (`createUser`, `deleteUser`) para automatizar el alta y baja de usuarios (personal y estudiantes) de forma atómica entre Firebase Auth y Firestore.
+* **Corregido:** Solucionado bucle de redirección en el login ("parpadeo") mediante la centralización de la lógica en `AuthGuard`.
+* **Mejorado:** Unificado el modelo de datos. Todos los usuarios ahora residen en la colección `users` con un campo `role`. Se eliminó la lógica que dependía de la colección `students`.
+* **Mejorado:** Refactorizada la página de gestión de alumnos del director para usar las nuevas Cloud Functions, aumentando la seguridad.
+* **Pendiente:** Migrar los registros existentes de la colección `students` a `users` para que los alumnos antiguos puedan acceder. La función para actualizar alumnos (`updateUser`) podría requerir una revisión final para asegurar la compatibilidad con el nuevo modelo de datos unificado.
 
 14/12/2025 04:15 - Mejora del sistema de mensajes y horarios escolares.
-- **Implementado:** Funcionalidades avanzadas de mensajería con múltiples filtros de destinatarios según roles (director, orientador, profesor, alumno) con envío a grupos específicos, profesores específicos, orientadores, etc.
-- **Mejorado:** Sistema de horarios escolares completo con asignación por grupos, visualización para alumnos y vistas específicas por roles.
-- **Corregido:** Alineación del componente CalendarPanel para mejor experiencia de usuario.
-- **Corregido:** Modelo de datos TimetableEntry para uso consistente (day/time en lugar de dayOfWeek/timeSlot).
-- **Implementado:** Tutorial de importación CSV integrado en la aplicación para guiar orientadores y directores.
-- **Mejorado:** Funcionalidad AuthGuard para prevenir redirecciones temporales durante operaciones de gestión de usuarios.
-- **Implementado:** Funciones auxiliares para obtener destinatarios según roles (profesor-alumnos, orientador-grupos, etc.).
-- **Implementado:** Vista de horarios para profesores mostrando sus clases por día, hora y grupo asignados.
-- **Pendiente:** Implementar Cloud Functions para validaciones de backend y RBAC, integrar notificaciones push con FCM.
+
+* **Implementado:** Funcionalidades avanzadas de mensajería con múltiples filtros de destinatarios según roles (director, orientador, profesor, alumno) con envío a grupos específicos, profesores específicos, orientadores, etc.
+* **Mejorado:** Sistema de horarios escolares completo con asignación por grupos, visualización para alumnos y vistas específicas por roles.
+* **Corregido:** Alineación del componente CalendarPanel para mejor experiencia de usuario.
+* **Corregido:** Modelo de datos TimetableEntry para uso consistente (day/time en lugar de dayOfWeek/timeSlot).
+* **Implementado:** Tutorial de importación CSV integrado en la aplicación para guiar orientadores y directores.
+* **Mejorado:** Funcionalidad AuthGuard para prevenir redirecciones temporales durante operaciones de gestión de usuarios.
+* **Implementado:** Funciones auxiliares para obtener destinatarios según roles (profesor-alumnos, orientador-grupos, etc.).
+* **Implementado:** Vista de horarios para profesores mostrando sus clases por día, hora y grupo asignados.
+* **Pendiente:** Implementar Cloud Functions para validaciones de backend y RBAC, integrar notificaciones push con FCM.
 
 14/12/2025 05:30 - Implementación de credenciales digitales con Firebase Storage.
-- **Implementado:** Sistema completo de credenciales digitales similar a credencial física de la escuela.
-- **Implementado:** Integración con Firebase Storage para almacenar fotos en 'fotos/' y credenciales en 'credenciales/'.
-- **Implementado:** Funciones para subir, descargar y eliminar fotos de credenciales con controles de permisos.
-- **Implementado:** Componente de cámara para que alumnos tomen fotos para sus credenciales con la cámara del dispositivo.
-- **Implementado:** Diseño de credencial digital con datos fijos de la escuela y datos variables del alumno (nombre, grado, grupo, foto).
-- **Implementado:** Restricciones de permisos: solo orientadores pueden borrar fotos de credenciales de alumnos.
-- **Implementado:** Integración en panel de alumno con vista previa de credencial y funcionalidad de toma de fotos.
-- **Implementado:** Código de verificación único por usuario para autenticidad de credenciales.
-- **Pendiente:** Implementar generación automática de credenciales en PDF y funcionalidad de verificación por QR.
+
+* **Implementado:** Sistema completo de credenciales digitales similar a credencial física de la escuela.
+* **Implementado:** Integración con Firebase Storage para almacenar fotos en 'fotos/' y credenciales en 'credenciales/'.
+* **Implementado:** Funciones para subir, descargar y eliminar fotos de credenciales con controles de permisos.
+* **Implementado:** Componente de cámara para que alumnos tomen fotos para sus credenciales con la cámara del dispositivo.
+* **Implementado:** Diseño de credencial digital con datos fijos de la escuela y datos variables del alumno (nombre, grado, grupo, foto).
+* **Implementado:** Restricciones de permisos: solo orientadores pueden borrar fotos de credenciales de alumnos.
+* **Implementado:** Integración en panel de alumno con vista previa de credencial y funcionalidad de toma de fotos.
+* **Implementado:** Código de verificación único por usuario para autenticidad de credenciales.
+* **Pendiente:** Implementar generación automática de credenciales en PDF y funcionalidad de verificación por QR.
 
 14/12/2025 05:45 - Resolución de errores de compilación en credenciales digitales.
-- **Corregido:** Error de duplicación de función fetchStudentTeachers en data.ts que causaba fallo de compilación.
-- **Corregido:** Error de componente no encontrado para DigitalIdCard y CameraCapture.
-- **Implementado:** Componentes faltantes requeridos para funcionalidad de credenciales digitales.
-- **Implementado:** Solución temporal para visualización de credencial en panel de alumno.
-- **Resuelto:** Errores que impedían la compilación del proyecto.
+
+* **Corregido:** Error de duplicación de función fetchStudentTeachers en data.ts que causaba fallo de compilación.
+* **Corregido:** Error de componente no encontrado para DigitalIdCard y CameraCapture.
+* **Implementado:** Componentes faltantes requeridos para funcionalidad de credenciales digitales.
+* **Implementado:** Solución temporal para visualización de credencial en panel de alumno.
+* **Resuelto:** Errores que impedían la compilación del proyecto.
 
 14/12/2025 05:55 - Corrección de problema de navegación en AuthGuard.
-- **Corregido:** Error que causaba pantalla de carga infinita al visitar la página principal sin autenticación.
-- **Mejorado:** Lógica de redirección para usuarios no autenticados hacia la página de login.
-- **Mejorado:** Manejo de estados de carga y perfil en AuthGuard.
-- **Resuelto:** Ahora los usuarios son redirigidos adecuadamente según su estado de autenticación.
+
+* **Corregido:** Error que causaba pantalla de carga infinita al visitar la página principal sin autenticación.
+* **Mejorado:** Lógica de redirección para usuarios no autenticados hacia la página de login.
+* **Mejorado:** Manejo de estados de carga y perfil en AuthGuard.
+* **Resuelto:** Ahora los usuarios son redirigidos adecuadamente según su estado de autenticación.
 
 14/12/2025 06:00 - Mejora de manejo de usuarios sin perfil en AuthGuard.
-- **Corregido:** Error que causaba pantalla de "Cargando perfil..." para usuarios autenticados sin perfil en Firestore.
-- **Mejorado:** Mensaje descriptivo cuando no se encuentra el perfil del usuario.
-- **Implementado:** Opción para cerrar sesión cuando no se encuentra el perfil registrado.
-- **Resuelto:** Ahora los usuarios reciben feedback claro sobre el estado de su sesión.
+
+* **Corregido:** Error que causaba pantalla de "Cargando perfil..." para usuarios autenticados sin perfil en Firestore.
+* **Mejorado:** Mensaje descriptivo cuando no se encuentra el perfil del usuario.
+* **Implementado:** Opción para cerrar sesión cuando no se encuentra el perfil registrado.
+* **Resuelto:** Ahora los usuarios reciben feedback claro sobre el estado de su sesión.
 
 14/12/2025 06:15 - Identificación de componentes faltantes en el sistema.
-- **Detectado:** Falta la implementación de la página de horarios para el rol de director (director/horarios/page.tsx).
-- **Detectado:** Falta la implementación de la página de horarios para el rol de profesor (profesor/horario/page.tsx).
-- **Detectado:** Falta el componente TimetableManager en el sistema (solucionado con creación).
-- **Detectado:** Problema con perfil de alumno no encontrado cuando usuario está registrado en Firebase pero no en Firestore.
-- **Implementado:** Creación del componente TimetableManager para gestión de horarios.
-- **Implementado:** Creación de páginas de horarios para director y profesor.
-- **Resuelto:** Ahora todos los roles tienen acceso a la funcionalidad de horarios.
+
+* **Detectado:** Falta la implementación de la página de horarios para el rol de director (director/horarios/page.tsx).
+* **Detectado:** Falta la implementación de la página de horarios para el rol de profesor (profesor/horario/page.tsx).
+* **Detectado:** Falta el componente TimetableManager en el sistema (solucionado con creación).
+* **Detectado:** Problema con perfil de alumno no encontrado cuando usuario está registrado en Firebase pero no en Firestore.
+* **Implementado:** Creación del componente TimetableManager para gestión de horarios.
+* **Implementado:** Creación de páginas de horarios para director y profesor.
+* **Resuelto:** Ahora todos los roles tienen acceso a la funcionalidad de horarios.
 15/12/2025 09:00 - Verificación de accesos por roles (director, orientador, maestro y alumno).
-- **Hallazgo:** Ninguna de las credenciales proporcionadas permitió salir de /login; tras ingresar usuario y contraseña la vista permanece en la pantalla de inicio de sesión (sin redirección al dashboard).
-- **Implementado:** Se habilitó el entorno local con Playwright + dependencias de Chromium para automatizar las pruebas de login y capturar evidencia.
-- **Pendiente:** Revisar en Firebase Auth/Firestore la validez de las cuentas y la existencia de perfiles vinculados; volver a probar el alta de alumno desde el panel de director cuando el flujo de autenticación funcione.
+* **Hallazgo:** Ninguna de las credenciales proporcionadas permitió salir de /login; tras ingresar usuario y contraseña la vista permanece en la pantalla de inicio de sesión (sin redirección al dashboard).
+* **Implementado:** Se habilitó el entorno local con Playwright + dependencias de Chromium para automatizar las pruebas de login y capturar evidencia.
+* **Pendiente:** Revisar en Firebase Auth/Firestore la validez de las cuentas y la existencia de perfiles vinculados; volver a probar el alta de alumno desde el panel de director cuando el flujo de autenticación funcione.
 16/12/2025 10:30 - Redirección automática después de iniciar sesión.
-- **Implementado:** Se añadió un efecto en la página de login que detecta sesión/perfil cargado y envía al dashboard correspondiente según rol (director, orientador, profesor o alumno), evitando que la vista se quede en /login.
-- **Pendiente:** Validar nuevamente las credenciales compartidas (director, orientador, maestro y alumno) y confirmar que la redirección ocurre tras recuperar los perfiles desde Firestore.
+* **Implementado:** Se añadió un efecto en la página de login que detecta sesión/perfil cargado y envía al dashboard correspondiente según rol (director, orientador, profesor o alumno), evitando que la vista se quede en /login.
+* **Pendiente:** Validar nuevamente las credenciales compartidas (director, orientador, maestro y alumno) y confirmar que la redirección ocurre tras recuperar los perfiles desde Firestore.
 17/12/2025 12:30 - Ajustes de calendario y comunicados.
-- **Implementado:** Se agregó visibilidad por rol (personal, orientadores, maestros, alumnos o todos) al crear eventos de calendario y se muestra el público objetivo en cada tarjeta.
-- **Corregido:** El listado de eventos del día se muestra debajo del formulario de alta y respeta la visibilidad del creador para que los eventos guardados en Firestore sean visibles según rol.
-- **Corregido:** Se bloqueó el envío de comunicados a roles sin permiso y se registra el autor de cada mensaje para reducir errores de publicación.
-- **Pendiente:** Validar visualmente en producción la nueva distribución del panel y el filtrado de eventos con datos reales.
+* **Implementado:** Se agregó visibilidad por rol (personal, orientadores, maestros, alumnos o todos) al crear eventos de calendario y se muestra el público objetivo en cada tarjeta.
+* **Corregido:** El listado de eventos del día se muestra debajo del formulario de alta y respeta la visibilidad del creador para que los eventos guardados en Firestore sean visibles según rol.
+* **Corregido:** Se bloqueó el envío de comunicados a roles sin permiso y se registra el autor de cada mensaje para reducir errores de publicación.
+* **Pendiente:** Validar visualmente en producción la nueva distribución del panel y el filtrado de eventos con datos reales.
 17/12/2025 17:30 - Alta y baja de personal/alumnos ligada a Firebase Auth.
-- **Corregido:** La eliminación de personal ahora llama a la Cloud Function `deleteUser` para borrar tanto en Auth como en Firestore, evitando correos duplicados al re-crear maestros u orientadores.
-- **Mejorado:** El alta de personal reusa la función `createUser`, normaliza el correo a minúsculas y muestra un mensaje claro cuando el email ya existe.
-- **Mejorado:** El formulario de alumnos usa la misma instancia de funciones callable para evitar errores de referencia y crear/eliminar cuentas de forma consistente.
+* **Corregido:** La eliminación de personal ahora llama a la Cloud Function `deleteUser` para borrar tanto en Auth como en Firestore, evitando correos duplicados al re-crear maestros u orientadores.
+* **Mejorado:** El alta de personal reusa la función `createUser`, normaliza el correo a minúsculas y muestra un mensaje claro cuando el email ya existe.
+* **Mejorado:** El formulario de alumnos usa la misma instancia de funciones callable para evitar errores de referencia y crear/eliminar cuentas de forma consistente.
 
 18/12/2025 11:00 - Gestor visual de horarios sin empalmes.
-- **Implementado:** Página de horarios para director y orientador con un gestor visual tipo cuadrícula que crea bloques por grupo, día y hora, evitando empalmes por grupo o docente.
-- **Implementado:** Vista de horario para profesores con tabla semanal que muestra día, hora y grupo asignado para cada clase.
-- **Mejorado:** El horario del alumno se alinea por día y hora con formato en español y se reutiliza el mismo grid para todos los roles.
-- **Pendiente:** Validar en producción la carga completa de materias/docentes para asegurar que el detector de empalmes siempre encuentre coincidencias.
+
+* **Implementado:** Página de horarios para director y orientador con un gestor visual tipo cuadrícula que crea bloques por grupo, día y hora, evitando empalmes por grupo o docente.
+* **Implementado:** Vista de horario para profesores con tabla semanal que muestra día, hora y grupo asignado para cada clase.
+* **Mejorado:** El horario del alumno se alinea por día y hora con formato en español y se reutiliza el mismo grid para todos los roles.
+* **Pendiente:** Validar en producción la carga completa de materias/docentes para asegurar que el detector de empalmes siempre encuentre coincidencias.
 18/12/2025 15:00 - Integración opcional de App Check y mensajes de error guiados.
-- **Implementado:** Inicialización de App Check con reCAPTCHA v3 cuando se define `NEXT_PUBLIC_RECAPTCHA_SITE_KEY`, con token de depuración opcional para pruebas locales.
-- **Mejorado:** Mensajes de error al crear alumnos o personal que indican si la solicitud fue bloqueada por App Check o por falta de sesión/permiso.
-- **Pendiente:** Registrar la app web en App Check y configurar la clave pública en el entorno para validar el alta de usuarios en producción.
+* **Implementado:** Inicialización de App Check con reCAPTCHA v3 cuando se define `NEXT_PUBLIC_RECAPTCHA_SITE_KEY`, con token de depuración opcional para pruebas locales.
+* **Mejorado:** Mensajes de error al crear alumnos o personal que indican si la solicitud fue bloqueada por App Check o por falta de sesión/permiso.
+* **Pendiente:** Registrar la app web en App Check y configurar la clave pública en el entorno para validar el alta de usuarios en producción.
 
 19/12/2025 10:30 - Desbloqueo temporal de altas mientras se configura App Check.
-- **Corregido:** Las funciones `createUser` y `deleteUser` se ejecutan en `us-central1` y desactivan la exigencia de App Check para que los directores puedan dar de alta/baja personal y alumnos aunque la web aún no tenga clave reCAPTCHA configurada.
-- **Mejorado:** Las llamadas desde el dashboard usan explícitamente la región correcta y normalizan el correo de alumnos en minúsculas para evitar duplicados.
-- **Pendiente:** Rehabilitar App Check con la clave pública de reCAPTCHA v3 cuando esté disponible y volver a exigirlo en las funciones callable.
+
+* **Corregido:** Las funciones `createUser` y `deleteUser` se ejecutan en `us-central1` y desactivan la exigencia de App Check para que los directores puedan dar de alta/baja personal y alumnos aunque la web aún no tenga clave reCAPTCHA configurada.
+* **Mejorado:** Las llamadas desde el dashboard usan explícitamente la región correcta y normalizan el correo de alumnos en minúsculas para evitar duplicados.
+* **Pendiente:** Rehabilitar App Check con la clave pública de reCAPTCHA v3 cuando esté disponible y volver a exigirlo en las funciones callable.
 
 20/12/2025 09:30 - Configuración de variables para App Check (reCAPTCHA v3).
-- **Añadido:** Archivo `.env.example` con las variables `NEXT_PUBLIC_RECAPTCHA_SITE_KEY` y `NEXT_PUBLIC_APPCHECK_DEBUG_TOKEN` para guiar la configuración local.
-- **Añadido:** Sección en README con pasos para registrar la clave de reCAPTCHA v3 y exportarla en entorno local y App Hosting.
-- **Actualizado:** `apphosting.yaml` ahora expone `NEXT_PUBLIC_RECAPTCHA_SITE_KEY` como variable de entorno para que Next.js inicialice App Check en producción.
-- **Pendiente:** Proveer la Site Key real como secreto en App Hosting y reactivar la exigencia de App Check en las funciones callable tras verificar que el frontend emite tokens válidos.
+
+* **Añadido:** Archivo `.env.example` con las variables `NEXT_PUBLIC_RECAPTCHA_SITE_KEY` y `NEXT_PUBLIC_APPCHECK_DEBUG_TOKEN` para guiar la configuración local.
+* **Añadido:** Sección en README con pasos para registrar la clave de reCAPTCHA v3 y exportarla en entorno local y App Hosting.
+* **Actualizado:** `apphosting.yaml` ahora expone `NEXT_PUBLIC_RECAPTCHA_SITE_KEY` como variable de entorno para que Next.js inicialice App Check en producción.
+* **Pendiente:** Proveer la Site Key real como secreto en App Hosting y reactivar la exigencia de App Check en las funciones callable tras verificar que el frontend emite tokens válidos.
 
 20/12/2025 18:00 - Site Key de App Check: retirada del repositorio público.
-- **Corregido:** Se eliminó la Site Key pública del repositorio y se dejó como variable de entorno/secret en `apphosting.yaml` para evitar exponerla en GitHub.
-- **Documentado:** README y `.env.example` instruyen a usar la propia clave generada en Firebase en lugar de una valor hardcodeado.
-- **Pendiente:** Cargar la Site Key como secreto gestionado en App Hosting y reactivar la exigencia de App Check en las funciones callable tras validar que el frontend emite tokens válidos.
+
+* **Corregido:** Se eliminó la Site Key pública del repositorio y se dejó como variable de entorno/secret en `apphosting.yaml` para evitar exponerla en GitHub.
+* **Documentado:** README y `.env.example` instruyen a usar la propia clave generada en Firebase en lugar de una valor hardcodeado.
+* **Pendiente:** Cargar la Site Key como secreto gestionado en App Hosting y reactivar la exigencia de App Check en las funciones callable tras validar que el frontend emite tokens válidos.
 
 21/12/2025 09:00 - Evitar fallos por secretos ausentes en App Hosting.
-- **Corregido:** `apphosting.yaml` deja de mapear las claves públicas de Firebase como secretos para impedir que el despliegue falle cuando no existen versiones configuradas en el proyecto.
-- **Corregido:** `firebase.json` ya no declara secretos disponibles para frameworks, evitando que Cloud Run intente recuperar versiones inexistentes.
-- **Documentado:** README aclara que las claves públicas vienen embebidas y cómo volver a mapear `NEXT_PUBLIC_RECAPTCHA_SITE_KEY` si se desea gestionarla como secreto.
+
+* **Corregido:** `apphosting.yaml` deja de mapear las claves públicas de Firebase como secretos para impedir que el despliegue falle cuando no existen versiones configuradas en el proyecto.
+* **Corregido:** `firebase.json` ya no declara secretos disponibles para frameworks, evitando que Cloud Run intente recuperar versiones inexistentes.
+* **Documentado:** README aclara que las claves públicas vienen embebidas y cómo volver a mapear `NEXT_PUBLIC_RECAPTCHA_SITE_KEY` si se desea gestionarla como secreto.
 
 22/12/2025 12:00 - Configuración explícita de llaves públicas de Firebase.
-- **Corregido:** `src/lib/firebase/client.ts` ahora lee las llaves públicas desde variables de entorno para poder rotar la API key y dominios autorizados sin cambios de código.
-- **Corregido:** `apphosting.yaml` expone todas las variables de Firebase y App Check para cargarlas en App Hosting y evitar errores de "API key not valid" en el login.
-- **Documentado:** `.env.example` y `README.md` listan las variables necesarias para autenticación y App Check.
+
+* **Corregido:** `src/lib/firebase/client.ts` ahora lee las llaves públicas desde variables de entorno para poder rotar la API key y dominios autorizados sin cambios de código.
+* **Corregido:** `apphosting.yaml` expone todas las variables de Firebase y App Check para cargarlas en App Hosting y evitar errores de "API key not valid" en el login.
+* **Documentado:** `.env.example` y `README.md` listan las variables necesarias para autenticación y App Check.
 
 23/12/2025 09:15 - Permisos diferenciados para orientadores sobre alumnos.
-- **Implementado:** Los orientadores pueden crear, editar y eliminar perfiles con rol `alumno` en la colección `users` sin acceder al resto de roles.
-- **Corregido:** Los orientadores también pueden leer perfiles de alumnos para gestionarlos desde el panel sin necesitar permisos de director.
-- **Pendiente:** Mantener el refuerzo de validaciones vía Cloud Functions para evitar elevaciones de privilegios desde la consola.
+
+* **Implementado:** Los orientadores pueden crear, editar y eliminar perfiles con rol `alumno` en la colección `users` sin acceder al resto de roles.
+* **Corregido:** Los orientadores también pueden leer perfiles de alumnos para gestionarlos desde el panel sin necesitar permisos de director.
+* **Pendiente:** Mantener el refuerzo de validaciones vía Cloud Functions para evitar elevaciones de privilegios desde la consola.
 
 24/12/2025 12:00 - Limpieza de compilaciones viejas en Cloud Build.
-- **Añadido:** Script `scripts/clean_cloud_builds.sh` para borrar en lote compilaciones antiguas y conservar sólo las más recientes.
-- **Instrucción:** Ejecutar con `KEEP_BUILDS=2` (por defecto) para dejar únicamente las dos últimas compilaciones del historial.
-- **Requisito:** Tener `gcloud` instalado y autenticado con permisos de administrador de Cloud Build.
+
+* **Añadido:** Script `scripts/clean_cloud_builds.sh` para borrar en lote compilaciones antiguas y conservar sólo las más recientes.
+* **Instrucción:** Ejecutar con `KEEP_BUILDS=2` (por defecto) para dejar únicamente las dos últimas compilaciones del historial.
+* **Requisito:** Tener `gcloud` instalado y autenticado con permisos de administrador de Cloud Build.
 
 ## Mantenimiento de compilaciones de Cloud Build
 
@@ -220,24 +247,70 @@ KEEP_BUILDS=2 \
 
 Requisitos:
 
-- Tener el SDK de gcloud instalado y autenticado con permisos de administrador de Cloud Build.
-- Ejecutar en la terminal: el script listará las compilaciones más recientes y eliminará el resto en lote.
+* Tener el SDK de gcloud instalado y autenticado con permisos de administrador de Cloud Build.
+* Ejecutar en la terminal: el script listará las compilaciones más recientes y eliminará el resto en lote.
 
 24/12/2025 11:30 - Función callable `createUser` (antes `createStaffUser`).
-- **Documentado:** La Cloud Function expuesta en Firebase Console como `createStaffUser` corresponde al endpoint callable que usan los directores para dar de alta personal o alumnos. Ver `functions/index.ts` (`createUser`) para el código fuente y permisos.
-- **Contexto:** El trigger es HTTPS callable (no cron ni pub/sub); verifica que quien la invoca sea un director y luego crea la cuenta en Auth y el documento en Firestore con un avatar temporal.
-- **Nota:** Si se despliega con un nombre nuevo (`createUser`), la consola mostrará el identificador actualizado; en despliegues anteriores se mantiene el alias `createStaffUser` pero la lógica es la misma.
+
+* **Documentado:** La Cloud Function expuesta en Firebase Console como `createStaffUser` corresponde al endpoint callable que usan los directores para dar de alta personal o alumnos. Ver `functions/index.ts` (`createUser`) para el código fuente y permisos.
+* **Contexto:** El trigger es HTTPS callable (no cron ni pub/sub); verifica que quien la invoca sea un director y luego crea la cuenta en Auth y el documento en Firestore con un avatar temporal.
+* **Nota:** Si se despliega con un nombre nuevo (`createUser`), la consola mostrará el identificador actualizado; en despliegues anteriores se mantiene el alias `createStaffUser` pero la lógica es la misma.
 
 25/12/2025 10:00 - Bloqueo de configuraciones obsoletas de Firebase.
-- **Corregido:** `src/lib/firebase/client.ts` elimina las llaves públicas embebidas y falla de forma explícita cuando faltan variables, evitando que el frontend apunte por error al proyecto equivocado y rechace credenciales válidas.
-- **Documentado:** README aclara que todas las llaves deben declararse en `.env.local` o en `apphosting.yaml`; si quedan vacías, la app indicará cuáles faltan en lugar de permitir un login contra el proyecto incorrecto.
+
+* **Corregido:** `src/lib/firebase/client.ts` elimina las llaves públicas embebidas y falla de forma explícita cuando faltan variables, evitando que el frontend apunte por error al proyecto equivocado y rechace credenciales válidas.
+* **Documentado:** README aclara que todas las llaves deben declararse en `.env.local` o en `apphosting.yaml`; si quedan vacías, la app indicará cuáles faltan en lugar de permitir un login contra el proyecto incorrecto.
 26/12/2025 14:00 - Restaurar configuración pública por defecto.
-- **Corregido:** `src/lib/firebase/client.ts` vuelve a incluir las llaves públicas del proyecto `contacto-estudiantil` como respaldo, evitando el bloqueo de inicio de sesión por variables vacías en App Hosting.
-- **Configurado:** `apphosting.yaml` y `.env.example` ya traen los valores completos para que el build use la configuración correcta sin intervención manual; se pueden sobreescribir cuando se requiera apuntar a otro proyecto.
+* **Corregido:** `src/lib/firebase/client.ts` vuelve a incluir las llaves públicas del proyecto `contacto-estudiantil` como respaldo, evitando el bloqueo de inicio de sesión por variables vacías en App Hosting.
+* **Configurado:** `apphosting.yaml` y `.env.example` ya traen los valores completos para que el build use la configuración correcta sin intervención manual; se pueden sobreescribir cuando se requiera apuntar a otro proyecto.
 
 27/12/2025 09:00 - Control explícito de App Check por variable de entorno.
-- **Añadido:** Bandera `NEXT_PUBLIC_ENABLE_APPCHECK` para decidir cuándo inicializar App Check; por defecto queda desactivado para evitar advertencias cuando falta la `NEXT_PUBLIC_RECAPTCHA_SITE_KEY`.
-- **Actualizado:** Documentación (`README.md`, `.env.example`, `apphosting.yaml`) para indicar cómo habilitar App Check sólo cuando ya se cuenta con la clave pública de reCAPTCHA.
+
+* **Añadido:** Bandera `NEXT_PUBLIC_ENABLE_APPCHECK` para decidir cuándo inicializar App Check; por defecto queda desactivado para evitar advertencias cuando falta la `NEXT_PUBLIC_RECAPTCHA_SITE_KEY`.
+* **Actualizado:** Documentación (`README.md`, `.env.example`, `apphosting.yaml`) para indicar cómo habilitar App Check sólo cuando ya se cuenta con la clave pública de reCAPTCHA.
 27/12/2025 18:00 - Encendido automático de App Check al detectar Site Key.
-- **Corregido:** `src/lib/firebase/client.ts` ahora inicializa App Check en cuanto encuentra `NEXT_PUBLIC_RECAPTCHA_SITE_KEY`, a menos que el flag `NEXT_PUBLIC_ENABLE_APPCHECK` se fuerce a `false`; evita que la protección falle cuando la clave existe pero el flag quedó vacío.
-- **Actualizado:** `.env.example`, `apphosting.yaml` y `README.md` aclaran que el flag es opcional (para apagarlo o forzar el encendido) y que la detección automática usa la Site Key si está configurada.
+* **Corregido:** `src/lib/firebase/client.ts` ahora inicializa App Check en cuanto encuentra `NEXT_PUBLIC_RECAPTCHA_SITE_KEY`, a menos que el flag `NEXT_PUBLIC_ENABLE_APPCHECK` se fuerce a `false`; evita que la protección falle cuando la clave existe pero el flag quedó vacío.
+* **Actualizado:** `.env.example`, `apphosting.yaml` y `README.md` aclaran que el flag es opcional (para apagarlo o forzar el encendido) y que la detección automática usa la Site Key si está configurada.
+
+28/12/2025 09:30 - Rotación de llaves de Firebase por exposición en GitHub.
+
+* **Corregido:** Se reemplazaron las llaves de Firebase canceladas por las nuevas proporcionadas por el usuario en `.env.example`, `src/lib/firebase/client.ts` y `apphosting.yaml`.
+* **Seguridad:** Se actualizaron los valores de respaldo y configuración de despliegue para asegurar la conectividad con el nuevo set de credenciales de Firebase.
+
+28/12/2025 10:00 - Refactorización de Cloud Functions y corrección de CORS.
+
+* **Corregido:** Se convirtió la función `createUser` de `onRequest` a `onCall` para que sea compatible con `httpsCallable` usado en el frontend.
+* **Mejorado:** Se eliminó la restricción de CORS hardcodeada que impedía el registro de personal/alumnos desde `localhost`.
+* **Seguridad:** Se añadió validación de roles en la función `createUser`; ahora verifica que el solicitante sea Director (o Orientador para alumnos) antes de proceder.
+* **Pendiente:** El usuario debe ejecutar `firebase deploy --only functions` para aplicar estos cambios en el servidor.
+
+28/12/2025 10:15 - Corrección del ID de proyecto en .firebaserc.
+
+* **Corregido:** Se detectó que `.firebaserc` apuntaba al proyecto antiguo `educhain-ccb42`. Se actualizó a `contacto-estudiantil` para coincidir con las nuevas llaves.
+
+29/12/2025 10:10 - Mejoras en el Gestor de Horarios.
+
+* **Mejorado:** Se implementó filtrado dinámico en el "Resumen de todo el horario" para mostrar solo el grupo seleccionado.
+* **Mejorado:** Se habilitó la selección de grupos mediante clics en los botones (badges) del resumen, facilitando la navegación entre horarios de diferentes grados.
+* **Corregido:** Se optimizó el ordenamiento de las clases por día y hora en la vista de resumen.
+
+29/12/2025 10:30 - Rediseño de Calendario e Integración SEP.
+
+* **Corregido:** Se arregló el diseño "revuelto" del calendario escolar, optimizando la cuadrícula para dispositivos modernos.
+* **Añadido:** Integración del Calendario Oficial SEP 2025-2026 con marcado automático de suspensiones, CTE (Consejo Técnico), vacaciones y talleres.
+* **Mejorado:** Implementación de indicadores visuales (puntos de color) para eventos: azul para eventos escolares generales y púrpura para eventos personales.
+* **Añadido:** Panel de leyenda para identificar rápidamente el significado de los colores y marcas en el calendario.
+
+29/12/2025 14:15 - Rediseño de Mensajería y Sistema de Alertas.
+
+* **Corregido:** Se eliminó el panel de envío de comunicados manuales y se transformó el historial en un Centro de **NOTIFICACIONES** automatizado.
+* **Añadido:** Implementación de la nueva interfaz de mensajería estilo WhatsApp/Telegram bajo la sección "Mensajes", permitiendo chats directos entre usuarios (Directores, Maestros, Alumnos) sin necesidad de números telefónicos.
+* **Planificado:** Sistema de Geocerca GPS para detección automática de entrada/salida de alumnos y alertas de puntualidad docente (Notificaciones automáticas del sistema).
+
+29/12/2025 16:20 - Geofencing Estudiantil y Asistencia Segura.
+
+* **Añadido:** Sistema de **Monitoreo Inteligente por Horario**: El GPS solo se activa 15 min antes de la primera clase y se apaga al terminar la última. Respeta fines de semana y calendario SEP.
+* **Añadido:** Nueva sección de **Gestión de Alumnos** para Orientadores: Registro individual y masivo (CSV) con vista de expedientes dedicada.
+* **Añadido:** Panel de **"Pulso de Asistencia Real"** para Orientadores: Vista en tiempo real de quién está en plantel, quién viene en camino y quién falta por localizar.
+* **Mejorado:** Rediseño del **Dashboard del Orientador**: Ahora alineado con la estética del Director, incluyendo StatCards de métricas clave, alertas en tiempo real y acceso rápido a grupos.
+* **Corregido:** Eliminación de errores de compilación por archivos faltantes y optimización de la navegación lateral.

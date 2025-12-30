@@ -10,7 +10,7 @@ import { Pencil, Trash2, Mail, GraduationCap } from "lucide-react";
 interface IdCardProps {
   user: User | Student;
   onEdit: (user: User | Student) => void;
-  onDelete: (userId: string) => void;
+  onDelete?: (userId: string) => void;
 }
 
 export function IdCard({ user, onEdit, onDelete }: IdCardProps) {
@@ -36,21 +36,21 @@ export function IdCard({ user, onEdit, onDelete }: IdCardProps) {
             <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
           </Avatar>
           <h3 className="text-lg font-semibold">{user.name}</h3>
-          
+
           <Badge variant={getBadgeVariant()} className="capitalize mt-1">
             {role}
           </Badge>
 
           <div className="mt-4 text-sm text-muted-foreground space-y-2">
-             <div className="flex items-center gap-2 justify-center">
-                <Mail className="h-4 w-4" />
-                <span>{user.email}</span>
+            <div className="flex items-center gap-2 justify-center">
+              <Mail className="h-4 w-4" />
+              <span>{user.email}</span>
             </div>
             {isStudent && (user as Student).matricula && (
-                 <div className="flex items-center gap-2 justify-center">
-                    <GraduationCap className="h-4 w-4" />
-                    <span>{(user as Student).matricula}</span>
-                </div>
+              <div className="flex items-center gap-2 justify-center">
+                <GraduationCap className="h-4 w-4" />
+                <span>{(user as Student).matricula}</span>
+              </div>
             )}
           </div>
 
@@ -60,10 +60,12 @@ export function IdCard({ user, onEdit, onDelete }: IdCardProps) {
             <Pencil className="h-4 w-4 mr-2" />
             Editar
           </Button>
-          <Button variant="destructive" size="sm" onClick={() => onDelete(user.id)}>
-            <Trash2 className="h-4 w-4 mr-2" />
-            Eliminar
-          </Button>
+          {onDelete && (
+            <Button variant="destructive" size="sm" onClick={() => onDelete(user.id)}>
+              <Trash2 className="h-4 w-4 mr-2" />
+              Eliminar
+            </Button>
+          )}
         </div>
       </CardContent>
     </Card>

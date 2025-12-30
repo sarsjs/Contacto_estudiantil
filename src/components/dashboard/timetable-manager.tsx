@@ -102,11 +102,14 @@ export function TimetableManager({
     return entries.filter((entry) => allowedGroups.has(entry.groupId));
   }, [entries, groups]);
 
+  const selectedEntries = React.useMemo(() => {
+    return visibleEntries.filter((entry) => entry.groupId === selectedGroupId);
+  }, [visibleEntries, selectedGroupId]);
+
   const timetableByDay = React.useMemo(() => {
-    const filtered = visibleEntries.filter((entry) => entry.groupId === selectedGroupId);
     const grouped: Record<string, TimetableEntry[]> = {};
     daysOfWeek.forEach((d) => {
-      grouped[d] = filtered
+      grouped[d] = selectedEntries
         .filter((entry) => entry.day === d)
         .sort((a, b) => {
           const rangeA = parseRange(a.time);
@@ -115,7 +118,7 @@ export function TimetableManager({
         });
     });
     return grouped;
-  }, [selectedGroupId, visibleEntries]);
+  }, [selectedEntries]);
 
   const detectConflict = (newEntry: Omit<TimetableEntry, 'id'>) => {
     const candidateRange = parseRange(newEntry.time);
@@ -382,19 +385,23 @@ export function TimetableManager({
         <CardContent className="space-y-3">
           <div className="flex flex-wrap gap-2">
             {groups.map((group) => (
-              <Badge key={group.id} variant={group.id === selectedGroupId ? 'default' : 'outline'}>
+              <Badge
+                key={group.id}
+                variant={group.id === selectedGroupId ? 'default' : 'outline'}
+                className="cursor-pointer hover:opacity-80 transition-opacity"
+                onClick={() => setSelectedGroupId(group.id)}
+              >
                 {group.name}
               </Badge>
             ))}
           </div>
           <div className="grid gap-3">
-            {visibleEntries
+            {selectedEntries
               .sort((a, b) => {
-                if (a.day === b.day) {
-                  return toMinutes(parseRange(a.time).start) - toMinutes(parseRange(b.time).start);
-                }
-                return daysOfWeek.indexOf(a.day as typeof daysOfWeek[number]) -
+                const dayDiff = daysOfWeek.indexOf(a.day as typeof daysOfWeek[number]) -
                   daysOfWeek.indexOf(b.day as typeof daysOfWeek[number]);
+                if (dayDiff !== 0) return dayDiff;
+                return toMinutes(parseRange(a.time).start) - toMinutes(parseRange(b.time).start);
               })
               .map((entry) => {
                 const subjectName = getSubjectName(entry.subjectId);
@@ -409,8 +416,8 @@ export function TimetableManager({
                   </div>
                 );
               })}
-            {visibleEntries.length === 0 && (
-              <p className="text-sm text-muted-foreground">No hay horarios registrados para los grupos seleccionados.</p>
+            {selectedEntries.length === 0 && (
+              <p className="text-sm text-muted-foreground">No hay horarios registrados para el grupo seleccionado.</p>
             )}
           </div>
         </CardContent>

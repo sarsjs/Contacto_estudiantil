@@ -4,7 +4,7 @@ runConfig:
     # Variables públicas necesarias para la inicialización de Firebase en el cliente.
     # Cárgalas como variables o secretos administrados en App Hosting según el entorno.
     - variable: NEXT_PUBLIC_FIREBASE_API_KEY
-      value: "AIzaSyCWiMV9980JadNny5X9EJcQAo9rClM9uck"
+      value: "AIzaSyBY6aSJYqeX2QsucoagDOg8ZkAu06gEu7k"
     - variable: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
       value: "contacto-estudiantil.firebaseapp.com"
     - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID

@@ -10,63 +10,54 @@ interface CreateUserData {
   name: string;
   email: string;
   role: 'director' | 'orientador' | 'profesor' | 'estudiante';
-  password?: string; // La contraseña es opcional
-  groupId?: string; 
+  password?: string;
+  groupId?: string;
 }
 
-export const createUser = functions.region('us-central1').https.onRequest(async (req, res) => {
-  // Configurar CORS
-  res.set('Access-Control-Allow-Origin', 'https://fir08121146--contacto-estudiantil.us-east4.hosted.app');
-  res.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-
-  if (req.method === 'OPTIONS') {
-    res.status(204).send('');
-    return;
-  }
-
+// Función Callable para crear usuarios (Personal o Alumnos)
+export const createUser = functions.region('us-central1').https.onCall(async (data: CreateUserData, context) => {
   // 1. Verificación de autenticación
-  const idToken = req.headers.authorization?.split('Bearer ')[1];
-  if (!idToken) {
-    res.status(401).json({
-        error: 'unauthenticated',
-        message: 'El token de autorización no fue provisto.',
-        code: 'auth/unauthenticated'
-    });
-    return;
+  if (!context.auth) {
+    throw new functions.https.HttpsError(
+      'unauthenticated',
+      'El usuario debe estar autenticado para realizar esta acción.'
+    );
   }
 
-  try {
-    await admin.auth().verifyIdToken(idToken);
-  } catch (error) {
-    res.status(401).json({
-        error: 'invalid-token',
-        message: 'El token de autorización es inválido.',
-        code: 'auth/invalid-token'
-    });
-    return;
+  // 2. Verificación de permisos (Solo Director puede crear personal, Orientador solo alumnos)
+  const callerDoc = await db.collection("users").doc(context.auth.uid).get();
+  const callerData = callerDoc.data();
+  const callerRole = callerData?.role;
+
+  const { name, email, role, groupId, password } = data;
+
+  if (callerRole !== 'director') {
+    // Si no es director, solo puede crear alumnos si es orientador
+    if (callerRole === 'orientador' && role === 'estudiante') {
+      // Permitido
+    } else {
+      throw new functions.https.HttpsError(
+        'permission-denied',
+        'No tienes permisos suficientes para crear este tipo de usuario.'
+      );
+    }
   }
 
-  // Ajuste para leer el cuerpo de la solicitud, incluso si está anidado
-  const body: CreateUserData = req.body?.data ?? req.body;
-  const { name, email, role, groupId, password } = body;
-
-  // 2. Validar que el email exista
-  if (!email) {
-    res.status(400).json({
-        error: 'invalid-argument',
-        message: 'El correo electrónico es obligatorio.',
-        code: 'auth/invalid-email'
-    });
-    return;
+  // 3. Validar datos mínimos
+  if (!email || !name || !role) {
+    throw new functions.https.HttpsError(
+      'invalid-argument',
+      'Faltan datos obligatorios (nombre, email o rol).'
+    );
   }
 
-  // 3. Generar contraseña temporal si no se proporciona
-  const tempPassword = password || `Tmp!${Math.random().toString(36).slice(2)}A9#${Date.now().toString(36)}`;
+  // 4. Generar contraseña temporal si no se proporciona
+  const tempPassword = password || `Edu${Math.random().toString(36).slice(2, 8).toUpperCase()}!${Date.now().toString(36).slice(-3)}`;
 
   try {
     const emailLower = email.toLowerCase();
-    // 4. Crear el usuario en Firebase Authentication
+
+    // 5. Crear el usuario en Firebase Authentication
     const userRecord = await admin.auth().createUser({
       email: emailLower,
       emailVerified: false,
@@ -75,7 +66,7 @@ export const createUser = functions.region('us-central1').https.onRequest(async 
       disabled: false,
     });
 
-    // 5. Preparar el documento del usuario para Firestore
+    // 6. Preparar el documento del usuario para Firestore
     const avatarSeed = Math.floor(Math.random() * 1000);
     const avatarUrl = `https://picsum.photos/seed/${avatarSeed}/100/100`;
 
@@ -85,6 +76,7 @@ export const createUser = functions.region('us-central1').https.onRequest(async 
       email: emailLower,
       role,
       avatarUrl,
+      createdAt: admin.firestore.FieldValue.serverTimestamp(),
     };
 
     if (role === 'estudiante') {
@@ -96,57 +88,38 @@ export const createUser = functions.region('us-central1').https.onRequest(async 
       }
     }
 
-    // 6. Crear el documento del usuario en la colección 'users'
+    // 7. Crear el documento del usuario en la colección 'users'
     await db.collection("users").doc(userRecord.uid).set(userData);
-    
-    // 7. Enviar respuesta exitosa
-    res.status(201).json({ success: true, uid: userRecord.uid, message: `Usuario ${name} creado con éxito.` });
+
+    return {
+      success: true,
+      uid: userRecord.uid,
+      message: `Usuario ${name} creado con éxito.`
+    };
 
   } catch (error: any) {
-    // 8. Manejo de errores
-    switch (error.code) {
-        case 'auth/email-already-exists':
-            res.status(409).json({
-                error: 'email-already-exists',
-                message: 'El correo electrónico ya está en uso por otro usuario.',
-                code: 'auth/email-already-exists'
-            });
-            break;
-        case 'auth/invalid-email':
-            res.status(400).json({
-                error: 'invalid-email',
-                message: 'El formato del correo electrónico no es válido.',
-                code: 'auth/invalid-email'
-            });
-            break;
-        case 'auth/weak-password':
-             res.status(400).json({
-                error: 'weak-password',
-                message: 'La contraseña no es lo suficientemente segura.',
-                code: 'auth/weak-password'
-            });
-            break;
-        default:
-            console.error("Error al crear usuario:", error);
-            res.status(500).json({
-                error: 'internal-error',
-                message: 'Ocurrió un error interno al crear el usuario.',
-                code: error.code || 'unknown'
-            });
-            break;
+    console.error("Error al crear usuario:", error);
+
+    if (error.code === 'auth/email-already-exists') {
+      throw new functions.https.HttpsError(
+        'already-exists',
+        'El correo electrónico ya está en uso por otro usuario.'
+      );
     }
+
+    throw new functions.https.HttpsError(
+      'internal',
+      error.message || 'Ocurrió un error interno al crear el usuario.'
+    );
   }
 });
-
-// ... (el resto del archivo permanece igual)
 
 interface DeleteUserData {
   uid: string;
 }
 
-export const deleteUser = functions
-  .region('us-central1')
-  .https.onCall(async (data: DeleteUserData, context: functions.https.CallableContext) => {
+// Función Callable para eliminar usuarios
+export const deleteUser = functions.region('us-central1').https.onCall(async (data: DeleteUserData, context) => {
   if (!context.auth) {
     throw new functions.https.HttpsError(
       "unauthenticated",
@@ -162,41 +135,46 @@ export const deleteUser = functions
   if (uid === context.auth.uid) {
     throw new functions.https.HttpsError(
       "invalid-argument",
-      "Un director no se puede eliminar a sí mismo."
+      "Un usuario no se puede eliminar a sí mismo."
     );
   }
 
   const targetDoc = await db.collection("users").doc(uid).get();
-  const targetRole = targetDoc.data()?.role;
+  const targetData = targetDoc.data();
+  const targetRole = targetData?.role;
 
-  if (
-    callerRole !== 'director' && !(callerRole === 'orientador' && targetRole === 'estudiante')
-  ) {
-    throw new functions.https.HttpsError(
-      "permission-denied",
-      "Solo un director o un orientador (para alumnos) puede eliminar usuarios."
-    );
+  // Solo director puede borrar a cualquiera. Orientador solo alumnos.
+  if (callerRole !== 'director') {
+    if (callerRole === 'orientador' && targetRole === 'estudiante') {
+      // Permitido
+    } else {
+      throw new functions.https.HttpsError(
+        "permission-denied",
+        "Solo un director o un orientador (para alumnos) puede eliminar usuarios."
+      );
+    }
   }
 
   try {
+    // 1. Eliminar de Auth
     await admin.auth().deleteUser(uid);
+    // 2. Eliminar de Firestore
     await db.collection("users").doc(uid).delete();
+
     return { success: true, message: `Usuario ${uid} eliminado con éxito.` };
 
   } catch (error: any) {
     console.error(`Error al eliminar usuario ${uid}:`, error);
+
+    // Si no está en Auth, intentar borrar de Firestore de todos modos
     if (error.code === 'auth/user-not-found') {
-      try {
-        await db.collection("users").doc(uid).delete();
-        return { success: true, message: `Usuario ${uid} no encontrado en Auth, pero eliminado de Firestore.` };
-      } catch (dbError) {
-        throw new functions.https.HttpsError("internal", `El usuario no se encontró en Auth y tampoco se pudo eliminar de Firestore.`);
-      }
+      await db.collection("users").doc(uid).delete();
+      return { success: true, message: `Usuario eliminado de Firestore (no existía en Auth).` };
     }
+
     throw new functions.https.HttpsError(
       "internal",
-      `Ocurrió un error interno al eliminar el usuario ${uid}.`,
-      error
+      `Ocurrió un error interno al eliminar el usuario. ${error.message}`
     );
   }
 });

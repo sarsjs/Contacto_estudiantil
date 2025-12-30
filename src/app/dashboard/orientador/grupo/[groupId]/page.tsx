@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Eye } from 'lucide-react';
+import { CounselorClassControl } from '@/components/dashboard/counselor-class-control';
 
 export default function GroupStudentsPage() {
   const params = useParams();
@@ -33,9 +34,9 @@ export default function GroupStudentsPage() {
         const currentGroup = allGroups.find(g => g.id === groupId) || null;
         setStudents(studentsData);
         setGroup(currentGroup);
-        
+
         if (!currentGroup) {
-            setError("El grupo que buscas no existe.");
+          setError("El grupo que buscas no existe.");
         }
 
       } catch (err) {
@@ -59,17 +60,19 @@ export default function GroupStudentsPage() {
 
   return (
     <div className="space-y-6">
-        <div className="flex items-center gap-4">
-            <Link href="/dashboard/orientador" passHref>
-                <Button variant="outline" size="icon">
-                    <ArrowLeft className="h-4 w-4" />
-                </Button>
-            </Link>
-            <div>
-                <h1 className="text-2xl font-bold">Alumnos del {group?.name}</h1>
-                <p className="text-muted-foreground">Lista de estudiantes inscritos en este grupo.</p>
-            </div>
+      <div className="flex items-center gap-4">
+        <Link href="/dashboard/orientador" passHref>
+          <Button variant="outline" size="icon">
+            <ArrowLeft className="h-4 w-4" />
+          </Button>
+        </Link>
+        <div>
+          <h1 className="text-2xl font-bold">Alumnos del {group?.name}</h1>
+          <p className="text-muted-foreground">Lista de estudiantes inscritos en este grupo.</p>
+        </div>
       </div>
+
+      <CounselorClassControl groupId={groupId} groupName={group?.name || ""} />
 
       <Card>
         <CardHeader>
@@ -91,12 +94,12 @@ export default function GroupStudentsPage() {
                     <TableCell className="font-medium">{student.name}</TableCell>
                     <TableCell>{student.email}</TableCell>
                     <TableCell className="text-right">
-                        <Link href={`/dashboard/orientador/alumno/${student.id}`} passHref>
-                            <Button variant="outline" size="sm">
-                                <Eye className="h-4 w-4 mr-2"/>
-                                Ver Detalles
-                            </Button>
-                        </Link>
+                      <Link href={`/dashboard/orientador/alumno/${student.id}`} passHref>
+                        <Button variant="outline" size="sm">
+                          <Eye className="h-4 w-4 mr-2" />
+                          Ver Detalles
+                        </Button>
+                      </Link>
                     </TableCell>
                   </TableRow>
                 ))

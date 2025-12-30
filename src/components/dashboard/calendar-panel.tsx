@@ -15,15 +15,13 @@ import { Button } from '@/components/ui/button';
 import { Trash2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/context/auth-context';
-import {
-  fetchEventsByDate,
-  addEvent,
-  deleteEvent,
-} from '@/lib/firebase/data';
+import { Badge } from '@/components/ui/badge';
+import { SEP_CALENDAR_2025_2026, getSepEvent } from '@/lib/sep-calendar';
+import { fetchEventsByDate, fetchAllEvents, addEvent, deleteEvent } from '@/lib/firebase/data';
+import { AlertCircle, Calendar as CalendarIcon, Info } from 'lucide-react';
 import type { CalendarEvent, CalendarVisibility, UserRole } from '@/lib/types';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
 
 interface CalendarPanelProps {
   role: UserRole;
@@ -34,6 +32,7 @@ export function CalendarPanel({ role, className }: CalendarPanelProps) {
   const { profile } = useAuth();
   const [selectedDate, setSelectedDate] = React.useState<Date>(new Date());
   const [events, setEvents] = React.useState<CalendarEvent[]>([]);
+  const [allEvents, setAllEvents] = React.useState<CalendarEvent[]>([]);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
   const [newTitle, setNewTitle] = React.useState('');
@@ -69,8 +68,12 @@ export function CalendarPanel({ role, className }: CalendarPanelProps) {
     setLoading(true);
     setError(null);
     try {
-      const fetched = await fetchEventsByDate(selectedDateKey);
+      const [fetched, all] = await Promise.all([
+        fetchEventsByDate(selectedDateKey),
+        fetchAllEvents()
+      ]);
       setEvents(fetched);
+      setAllEvents(all);
     } catch (err) {
       console.error('Error loading events', err);
       setError('No se pudieron cargar los eventos para esta fecha.');
@@ -84,7 +87,7 @@ export function CalendarPanel({ role, className }: CalendarPanelProps) {
   }, [loadEvents, reloadKey]);
 
   const visibleEvents = React.useMemo(() => {
-    return events.filter((event) => {
+    const userEvents = events.filter((event) => {
       const audience = event.visibility && event.visibility.length > 0 ? event.visibility : ['todos'];
       if (audience.includes('todos')) return true;
       if (!profile) return false;
@@ -107,7 +110,55 @@ export function CalendarPanel({ role, className }: CalendarPanelProps) {
       if (!mapped) return false;
       return audience.includes(mapped);
     });
+
+    return userEvents;
   }, [events, profile?.email, profile?.role]);
+
+  const sepEvent = React.useMemo(() => getSepEvent(selectedDate), [selectedDate]);
+
+  const calendarModifiers = React.useMemo(() => {
+    // Filtrar todos los eventos que son visibles para el usuario actual
+    const filteredAll = allEvents.filter(event => {
+      const audience = event.visibility && event.visibility.length > 0 ? event.visibility : ['todos'];
+      if (audience.includes('todos')) return true;
+      if (!profile) return false;
+      if (audience.includes('personal')) return event.createdBy === profile.email;
+      if (profile.role === 'director') return true;
+
+      const roleKey: Record<string, string> = { orientador: 'orientadores', profesor: 'maestros', estudiante: 'alumnos' };
+      return audience.includes(roleKey[profile.role]);
+    });
+
+    const eventDates = filteredAll.map(e => e.date);
+    const privateEventDates = filteredAll.filter(e => e.visibility?.includes('personal') || !e.visibility?.length).map(e => e.date);
+
+    return {
+      cte: SEP_CALENDAR_2025_2026.filter(e => e.type === 'cte').map(e => {
+        const [y, m, d] = e.date.split('-').map(Number);
+        return new Date(y, m - 1, d);
+      }),
+      suspension: SEP_CALENDAR_2025_2026.filter(e => e.type === 'suspension').map(e => {
+        const [y, m, d] = e.date.split('-').map(Number);
+        return new Date(y, m - 1, d);
+      }),
+      vacation: SEP_CALENDAR_2025_2026.filter(e => e.type === 'vacation').map(e => {
+        const [y, m, d] = e.date.split('-').map(Number);
+        return new Date(y, m - 1, d);
+      }),
+      taller: SEP_CALENDAR_2025_2026.filter(e => e.type === 'taller').map(e => {
+        const [y, m, d] = e.date.split('-').map(Number);
+        return new Date(y, m - 1, d);
+      }),
+      has_event: eventDates.map(dStr => {
+        const [y, m, d] = dStr.split('-').map(Number);
+        return new Date(y, m - 1, d);
+      }),
+      has_private_event: privateEventDates.map(dStr => {
+        const [y, m, d] = dStr.split('-').map(Number);
+        return new Date(y, m - 1, d);
+      })
+    };
+  }, [allEvents, profile]);
 
   const handleAddEvent = async () => {
     if (!newTitle.trim()) {
@@ -179,34 +230,71 @@ export function CalendarPanel({ role, className }: CalendarPanelProps) {
         <CardTitle>Calendario Escolar</CardTitle>
         <CardDescription>Consulta y administra eventos importantes.</CardDescription>
       </CardHeader>
-      <CardContent className="grid gap-6 lg:grid-cols-[340px_1fr] items-start">
-        <div className="flex flex-col">
+      <CardContent className="grid gap-6 xl:grid-cols-[340px_1fr] items-start">
+        <div className="flex flex-col gap-4">
           <Calendar
             mode="single"
             selected={selectedDate}
             onSelect={(value) => value && setSelectedDate(value)}
-            className="rounded-md border"
+            className="rounded-xl border shadow-sm bg-card"
+            modifiers={calendarModifiers}
           />
+
+          <div className="bg-muted/30 rounded-xl p-4 border border-muted/60 space-y-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Leyenda</h4>
+            <div className="grid grid-cols-1 gap-2">
+              <div className="flex items-center gap-2 text-xs">
+                <div className="w-3 h-3 rounded-full border-2 border-pink-400 bg-pink-50" />
+                <span>Consejo Técnico (CTE)</span>
+              </div>
+              <div className="flex items-center gap-2 text-xs">
+                <div className="w-3 h-3 rounded-full bg-zinc-900" />
+                <span>Suspensión de labores</span>
+              </div>
+              <div className="flex items-center gap-2 text-xs">
+                <div className="w-3 h-3 rounded-md bg-zinc-100" />
+                <span>Vacaciones / Receso</span>
+              </div>
+              <div className="flex items-center gap-2 text-xs">
+                <div className="w-3 h-3 rounded-full bg-blue-500" />
+                <span>Evento escolar</span>
+              </div>
+              <div className="flex items-center gap-2 text-xs">
+                <div className="w-3 h-3 rounded-full bg-purple-500" />
+                <span>Evento personal</span>
+              </div>
+            </div>
+          </div>
         </div>
         <div className="space-y-6">
           {canAdd && (
-            <div className="space-y-3 pt-4 border-t border-muted/60">
-              <h3 className="text-base font-semibold">Agregar evento</h3>
-              <Input
-                placeholder="Título del evento"
-                value={newTitle}
-                onChange={(event) => setNewTitle(event.target.value)}
-              />
-              <Textarea
-                placeholder="Descripción (opcional)"
-                rows={3}
-                value={newDescription}
-                onChange={(event) => setNewDescription(event.target.value)}
-              />
+            <div className="space-y-4 p-5 rounded-2xl bg-muted/30 border border-border shadow-inner">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                  <CalendarIcon className="h-4 w-4" />
+                </div>
+                <h3 className="text-sm font-black uppercase tracking-tight">Crear Nuevo Evento</h3>
+              </div>
 
-              <div className="space-y-2">
-                <Label className="text-sm font-medium">Visibilidad</Label>
-                <div className="grid gap-2 sm:grid-cols-2">
+              <div className="grid gap-3">
+                <Input
+                  className="bg-background border-input focus:ring-primary/20"
+                  placeholder="Título del evento"
+                  value={newTitle}
+                  onChange={(event) => setNewTitle(event.target.value)}
+                />
+                <Textarea
+                  className="bg-background border-input focus:ring-primary/20"
+                  placeholder="Descripción (opcional)"
+                  rows={2}
+                  value={newDescription}
+                  onChange={(event) => setNewDescription(event.target.value)}
+                />
+              </div>
+
+              <div className="space-y-3">
+                <Label className="text-[10px] font-black uppercase text-slate-400 tracking-widest pl-1">Alcance de Visibilidad</Label>
+                <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
                   {[
                     { value: 'orientadores', label: 'Orientadores' },
                     { value: 'maestros', label: 'Maestros' },
@@ -215,7 +303,7 @@ export function CalendarPanel({ role, className }: CalendarPanelProps) {
                   ].map((option) => (
                     <label
                       key={option.value}
-                      className="flex items-start gap-2 rounded-md border p-3 hover:bg-muted"
+                      className="flex items-start gap-2 rounded-xl border border-border bg-background p-3 hover:bg-muted/50 transition-colors shadow-sm cursor-pointer"
                     >
                       <Checkbox
                         checked={visibilitySelection.includes(option.value as CalendarVisibility)}
@@ -229,32 +317,47 @@ export function CalendarPanel({ role, className }: CalendarPanelProps) {
                           });
                         }}
                       />
-                      <div>
-                        <p className="text-sm font-medium leading-tight">{option.label}</p>
-                        <p className="text-xs text-muted-foreground">
-                          {option.value === 'todos'
-                            ? 'Será visible para toda la comunidad.'
-                            : 'Solo visible para el rol seleccionado y quien lo crea.'}
-                        </p>
+                      <div className="flex flex-col">
+                        <span className="text-xs font-bold leading-tight text-slate-700">{option.label}</span>
                       </div>
                     </label>
                   ))}
                 </div>
-                <p className="text-xs text-muted-foreground">
-                  Si no marcas ninguna casilla, el evento quedará como personal (solo tú lo verás).
+                <p className="text-[10px] text-muted-foreground italic pl-1">
+                  * Si no seleccionas nada, el evento será privado.
                 </p>
               </div>
 
-              <Button onClick={handleAddEvent} disabled={submitting} className="w-full">
-                {submitting ? 'Guardando...' : 'Agregar evento'}
+              <Button onClick={handleAddEvent} disabled={submitting} className="w-full shadow-lg shadow-primary/20 font-bold uppercase tracking-widest text-[10px] h-10">
+                {submitting ? 'Sincronizando...' : 'Publicar Evento'}
               </Button>
             </div>
           )}
 
-          <div className="space-y-3">
-            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-              Eventos del día {formattedDayLabel}
-            </p>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                Agenda para el {formattedDayLabel}
+              </p>
+              {sepEvent && (
+                <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200 gap-1 py-1">
+                  <Info className="h-3 w-3" />
+                  Calendario SEP
+                </Badge>
+              )}
+            </div>
+
+            {sepEvent && (
+              <div className="p-4 rounded-xl border-l-4 border-l-amber-400 bg-amber-50/50 flex items-start gap-3">
+                <div className="p-2 rounded-lg bg-amber-100 text-amber-700">
+                  <CalendarIcon className="h-4 w-4" />
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-amber-900">{sepEvent.label}</p>
+                  <p className="text-xs text-amber-700">Evento marcado en el calendario oficial de la SEP 2025-2026.</p>
+                </div>
+              </div>
+            )}
             {loading ? (
               <p>Cargando eventos...</p>
             ) : error ? (
@@ -266,35 +369,35 @@ export function CalendarPanel({ role, className }: CalendarPanelProps) {
                   return (
                     <div
                       key={event.id}
-                      className="rounded-lg border p-3 bg-muted/50 flex justify-between gap-4 items-start"
+                      className="rounded-xl border border-border p-4 bg-card flex justify-between gap-4 items-start shadow-sm hover:shadow-md transition-all group"
                     >
-                      <div className="space-y-1">
+                      <div className="space-y-2">
                         <div className="flex flex-wrap items-center gap-2">
-                          <p className="font-semibold text-sm">{event.title}</p>
-                          <Badge variant="secondary" className="text-[11px]">
+                          <p className="font-black text-foreground tracking-tight">{event.title}</p>
+                          <Badge variant="secondary" className="text-[9px] uppercase font-black bg-muted text-muted-foreground border-none px-2 h-4">
                             {audience.includes('todos')
-                              ? 'Todos'
+                              ? '🌎 Público'
                               : audience.includes('personal')
-                                ? 'Solo quien lo creó'
-                                : audience
-                                    .map((value) => {
-                                      if (value === 'orientadores') return 'Orientadores';
-                                      if (value === 'maestros') return 'Maestros';
-                                      if (value === 'alumnos') return 'Alumnos';
-                                      return value;
-                                    })
-                                    .join(' · ')}
+                                ? '🔒 Privado'
+                                : `👥 ${audience
+                                  .map((value) => {
+                                    if (value === 'orientadores') return 'Orientadores';
+                                    if (value === 'maestros') return 'Maestros';
+                                    if (value === 'alumnos') return 'Alumnos';
+                                    return value;
+                                  })
+                                  .join(' · ')}`}
                           </Badge>
                         </div>
                         {event.description && (
-                          <p className="text-xs text-muted-foreground leading-snug">{event.description}</p>
+                          <p className="text-xs text-muted-foreground leading-relaxed italic">{event.description}</p>
                         )}
                       </div>
                       {canDelete && (
                         <Button
                           size="icon"
                           variant="ghost"
-                          className="h-8 w-8 p-0 rounded-full"
+                          className="h-8 w-8 p-0 rounded-full text-slate-300 hover:text-red-500 hover:bg-red-50 transition-all opacity-0 group-hover:opacity-100"
                           onClick={() => handleDeleteEvent(event.id)}
                         >
                           <Trash2 className="h-4 w-4" />
@@ -304,7 +407,12 @@ export function CalendarPanel({ role, className }: CalendarPanelProps) {
                   );
                 })}
                 {!loading && !error && visibleEvents.length === 0 && (
-                  <p className="text-sm text-muted-foreground">No hay eventos agendados para mostrar.</p>
+                  <div className="py-12 flex flex-col items-center justify-center text-center opacity-40">
+                    <div className="h-12 w-12 rounded-full border-2 border-dashed border-slate-300 flex items-center justify-center mb-2">
+                      <Info className="h-5 w-5 text-slate-400" />
+                    </div>
+                    <p className="text-xs font-bold uppercase tracking-widest text-slate-500">Sin eventos en agenda</p>
+                  </div>
                 )}
               </div>
             )}

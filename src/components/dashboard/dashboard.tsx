@@ -13,6 +13,7 @@ import {
   School,
   Users,
   ClipboardList,
+  MessageSquare,
 } from 'lucide-react';
 
 import {
@@ -33,6 +34,7 @@ import { User } from '@/lib/types';
 import { Logo } from '@/components/icons';
 import { Button } from '../ui/button';
 import { useAuth } from '@/context/auth-context';
+import { ModeToggle } from '../mode-toggle';
 
 const navItems = {
   director: [
@@ -41,31 +43,36 @@ const navItems = {
     { href: '/dashboard/director/alumnos', icon: GraduationCap, label: 'Alumnos' },
     { href: '/dashboard/director/estructura', icon: School, label: 'Estructura' },
     { href: '/dashboard/director/horarios', icon: Calendar, label: 'Horarios' },
+    { href: '/dashboard/director/mensajes', icon: MessageSquare, label: 'Mensajes' },
   ],
   orientador: [
     { href: '/dashboard/orientador', icon: Home, label: 'Panel Principal' },
     { href: '/dashboard/orientador/grupo', icon: ClipboardList, label: 'Grupos' },
+    { href: '/dashboard/orientador/alumnos', icon: GraduationCap, label: 'Alumnos' },
     { href: '/dashboard/orientador/horarios', icon: Calendar, label: 'Horarios' },
     { href: '/dashboard/orientador/materias', icon: BookCopy, label: 'Materias' },
+    { href: '/dashboard/orientador/mensajes', icon: MessageSquare, label: 'Mensajes' },
   ],
   profesor: [
     { href: '/dashboard/profesor', icon: LayoutGrid, label: 'Mis Clases' },
     { href: '/dashboard/profesor/asistencia', icon: ClipboardCheck, label: 'Asistencia' },
     { href: '/dashboard/profesor/calificaciones', icon: GraduationCap, label: 'Calificaciones' },
     { href: '/dashboard/profesor/horario', icon: Calendar, label: 'Mi Horario' },
+    { href: '/dashboard/profesor/mensajes', icon: MessageSquare, label: 'Mensajes' },
   ],
   estudiante: [
     { href: '/dashboard/alumno', icon: LayoutGrid, label: 'Panel Principal' },
     { href: '/dashboard/alumno/horario', icon: Calendar, label: 'Mi Horario' },
     { href: '/dashboard/alumno/calificaciones', icon: GraduationCap, label: 'Mis Calificaciones' },
+    { href: '/dashboard/alumno/mensajes', icon: MessageSquare, label: 'Mensajes' },
   ],
 };
 
 const viewTitles = {
-    director: 'Portal del Director',
-    orientador: 'Portal del Orientador',
-    profesor: 'App del Profesor',
-    estudiante: 'Portal del Estudiante'
+  director: 'Portal del Director',
+  orientador: 'Portal del Orientador',
+  profesor: 'App del Profesor',
+  estudiante: 'Portal del Estudiante'
 }
 
 function AppSidebar({ user }: { user: User }) {
@@ -125,25 +132,26 @@ function AppSidebar({ user }: { user: User }) {
 }
 
 function AppHeader({
-    title,
-    signOut
+  title,
+  signOut
 }: {
-    title: string;
-    signOut: () => Promise<void>;
+  title: string;
+  signOut: () => Promise<void>;
 }) {
-    return (
-        <header className="flex h-14 items-center gap-4 border-b bg-card px-4 lg:h-[60px] lg:px-6">
-            <SidebarTrigger className="md:hidden" />
-            <div className="flex-1">
-                 <div className="flex items-center gap-2">
-                    <h1 className="text-lg font-semibold md:text-2xl">{title}</h1>
-                </div>
-            </div>
-            <div className="flex items-center gap-2">
-                 <Button onClick={signOut} variant="outline">Cerrar Sesión</Button>
-            </div>
-        </header>
-    )
+  return (
+    <header className="flex h-14 items-center gap-4 border-b bg-card px-4 lg:h-[60px] lg:px-6">
+      <SidebarTrigger className="md:hidden" />
+      <div className="flex-1">
+        <div className="flex items-center gap-2">
+          <h1 className="text-lg font-semibold md:text-2xl">{title}</h1>
+        </div>
+      </div>
+      <div className="flex items-center gap-4">
+        <ModeToggle />
+        <Button onClick={signOut} variant="outline">Cerrar Sesión</Button>
+      </div>
+    </header>
+  )
 }
 
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -154,7 +162,8 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
 
   React.useEffect(() => {
     if (loading || !profile) return;
-    const expectedPath = `/dashboard/${profile.role}`;
+    const roleBase = profile.role === 'estudiante' ? 'alumno' : profile.role;
+    const expectedPath = `/dashboard/${roleBase}`;
     if (!pathname.startsWith(expectedPath)) {
       router.push(expectedPath);
     }
@@ -190,7 +199,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
             title={title}
             signOut={signOut}
           />
-          <main className="flex-1 overflow-y-auto bg-muted/40 p-4 lg:p-6">
+          <main className="flex-1 overflow-y-auto bg-muted/40 p-4 lg:p-8">
             {children}
           </main>
         </SidebarInset>

@@ -1,55 +1,150 @@
-import { collection, getDocs, addDoc, doc, deleteDoc, query, where, updateDoc, writeBatch, orderBy, serverTimestamp, getDoc } from "firebase/firestore";
+import { collection, getDocs, addDoc, doc, deleteDoc, query, where, updateDoc, writeBatch, orderBy, serverTimestamp, getDoc, deleteField } from "firebase/firestore";
 import { db, storage } from "./client";
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
-import type { User, Group, Subject, TimetableEntry, Attendance, Message, Grade, CalendarEvent } from "@/lib/types";
+import type { User, Group, Subject, TimetableEntry, Attendance, Message, Grade, CalendarEvent, SubstitutionRequest, WorkLog } from "@/lib/types";
 
 const fetchData = async <T>(fetchFunction: () => Promise<T[]>, entityName: string): Promise<T[]> => {
-  try {
-    return await fetchFunction();
-  } catch (error) {
-    console.error(`Error fetching ${entityName}:`, error);
-    return []; // Return an empty array on error to prevent crashes
-  }
+    try {
+        return await fetchFunction();
+    } catch (error) {
+        console.error(`Error fetching ${entityName}:`, error);
+        return []; // Return an empty array on error to prevent crashes
+    }
+};
+
+// Substitution Requests
+export const createSubstitutionRequest = async (request: Omit<SubstitutionRequest, 'id' | 'timestamp'>) => {
+    return await addDoc(collection(db, "substitution_requests"), {
+        ...request,
+        timestamp: serverTimestamp(),
+        status: 'pending'
+    });
+};
+
+export const fetchSubstitutionRequests = async (toCounselorId: string): Promise<SubstitutionRequest[]> => fetchData(async () => {
+    const q = query(
+        collection(db, "substitution_requests"),
+        where("toCounselorId", "==", toCounselorId),
+        where("status", "==", "pending")
+    );
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as unknown as SubstitutionRequest));
+}, 'substitution requests');
+
+export const handleSubstitutionRequest = async (requestId: string, status: 'accepted' | 'declined', requestBody?: SubstitutionRequest) => {
+    const requestRef = doc(db, "substitution_requests", requestId);
+    await updateDoc(requestRef, { status });
+
+    if (status === 'accepted' && requestBody) {
+        // Update all involved groups
+        const batch = writeBatch(db);
+        requestBody.groupIds.forEach(groupId => {
+            const groupRef = doc(db, "groups", groupId);
+            batch.update(groupRef, {
+                tempCounselorId: requestBody.toCounselorId,
+                absenceStatus: {
+                    isActive: true,
+                    message: requestBody.message || "Encargado por acuerdo entre orientadores."
+                }
+            });
+        });
+        await batch.commit();
+
+        // Notify Director
+        await addDoc(collection(db, "messages"), {
+            content: `Acuerdo de Suplencia: El orientador titular ha cedido el control de sus grupos al orientador suplente por acuerdo mutuo.`,
+            recipientFilter: 'director',
+            timestamp: serverTimestamp(),
+            createdBy: requestBody.fromCounselorId,
+            createdByRole: 'orientador'
+        });
+    }
 };
 
 // Fetch functions
 export const fetchUsers = async (): Promise<User[]> => fetchData(async () => {
-  const querySnapshot = await getDocs(collection(db, "users"));
-  return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as unknown as User));
+    const querySnapshot = await getDocs(collection(db, "users"));
+    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as unknown as User));
 }, 'users');
 
 export const fetchUserByEmail = async (email: string): Promise<User | null> => {
-  try {
-    const normalizedEmail = email.trim().toLowerCase();
-    
-    const q = query(collection(db, "users"), where("email", "==", normalizedEmail));
-    const querySnapshot = await getDocs(q);
-    
-    if (querySnapshot.empty) {
-      console.warn(`No user profile found in Firestore for email: ${normalizedEmail}`);
-      return null;
-    }
-    
-    const userDoc = querySnapshot.docs[0];
-    return { id: userDoc.id, ...userDoc.data() } as unknown as User;
+    try {
+        const normalizedEmail = email.trim().toLowerCase();
 
-  } catch (error) {
-    console.error("Error fetching user by email:", error);
+        const q = query(collection(db, "users"), where("email", "==", normalizedEmail));
+        const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.empty) {
+            console.warn(`No user profile found in Firestore for email: ${normalizedEmail}`);
+            return null;
+        }
+
+        const userDoc = querySnapshot.docs[0];
+        return { id: userDoc.id, ...userDoc.data() } as unknown as User;
+
+    } catch (error) {
+        console.error("Error fetching user by email:", error);
+        return null;
+    }
+};
+
+export const fetchUserById = async (id: string): Promise<User | null> => {
+    try {
+        const docRef = doc(db, "users", id);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+            return { id: docSnap.id, ...docSnap.data() } as unknown as User;
+        }
+        return null;
+    } catch (error) {
+        console.error("Error fetching user by id:", error);
+        return null;
+    }
+};
+
+export const fetchStudentByEmail = async (email: string): Promise<User | null> => {
+    const user = await fetchUserByEmail(email);
+    if (user && (user.role === 'estudiante' || user.role === 'alumno')) {
+        return user;
+    }
     return null;
-  }
 };
 
 export const fetchGroups = async (): Promise<Group[]> => fetchData(async () => {
-  const querySnapshot = await getDocs(collection(db, "groups"));
-  return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as unknown as Group));
+    const querySnapshot = await getDocs(collection(db, "groups"));
+    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as unknown as Group));
 }, 'groups');
 
 export const fetchGroupsByCounselor = async (counselorId: string): Promise<Group[]> => fetchData(async () => {
-    const q = query(collection(db, "groups"), where("counselorId", "==", counselorId));
-    const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as unknown as Group));
+    const q1 = query(collection(db, "groups"), where("counselorId", "==", counselorId));
+    const q2 = query(collection(db, "groups"), where("tempCounselorId", "==", counselorId));
+
+    const [snap1, snap2] = await Promise.all([getDocs(q1), getDocs(q2)]);
+
+    const groupsMap = new Map<string, Group>();
+
+    snap1.docs.forEach(doc => {
+        groupsMap.set(doc.id, { id: doc.id, ...doc.data() } as unknown as Group);
+    });
+
+    snap2.docs.forEach(doc => {
+        groupsMap.set(doc.id, { id: doc.id, ...doc.data() } as unknown as Group);
+    });
+
+    return Array.from(groupsMap.values());
 }, 'groups by counselor');
+
+export const updateGroupAbsence = async (groupId: string, data: { tempCounselorId?: string, isActive: boolean, message?: string }) => {
+    const groupRef = doc(db, "groups", groupId);
+    await updateDoc(groupRef, {
+        tempCounselorId: data.isActive ? data.tempCounselorId : deleteField(),
+        absenceStatus: {
+            isActive: data.isActive,
+            message: data.message || ""
+        }
+    });
+};
 
 export const fetchGroupsBySubject = async (subjectId: string): Promise<Group[]> => fetchData(async () => {
     const timetableQuery = query(collection(db, "timetables"), where("subjectId", "==", subjectId));
@@ -98,6 +193,12 @@ export const fetchEventsByDate = async (date: string): Promise<CalendarEvent[]> 
         .map(doc => ({ id: doc.id, ...doc.data() } as unknown as CalendarEvent))
         .filter(event => event.date === date);
 }, 'events by date');
+
+export const fetchAllEvents = async (): Promise<CalendarEvent[]> => fetchData(async () => {
+    const q = query(collection(db, "events"), orderBy("createdAt", "desc"));
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as unknown as CalendarEvent));
+}, 'all events');
 
 export const fetchAttendanceForDate = async (date: string): Promise<Attendance[]> => fetchData(async () => {
     const q = query(collection(db, "attendance"), where("date", "==", date));
@@ -269,20 +370,7 @@ export const fetchStudentsByGroup = async (groupId: string): Promise<User[]> => 
 };
 
 // Función para obtener un usuario por ID
-export const fetchUserById = async (id: string): Promise<User | null> => {
-    try {
-        const userDoc = doc(db, 'users', id);
-        const userSnapshot = await getDoc(userDoc);
 
-        if (userSnapshot.exists()) {
-            return { id: userSnapshot.id, ...userSnapshot.data() } as unknown as User;
-        }
-        return null;
-    } catch (error) {
-        console.error('Error fetching user by id:', error);
-        return null;
-    }
-};
 
 // Funciones para manejar imágenes en Firebase Storage
 export const uploadStudentPhoto = async (userId: string, file: File): Promise<string> => {
@@ -340,38 +428,38 @@ export const updateGroup = async (groupId: string, data: Partial<Group>) => awai
 // Renamed updateStudent to updateUser and targeting 'users' collection
 // Enhanced for unified user model compatibility
 export const updateUser = async (userId: string, data: Partial<User>) => {
-  // Prepare update data, ensuring we don't accidentally change the role field unless explicitly allowed
-  const updateData = { ...data };
+    // Prepare update data, ensuring we don't accidentally change the role field unless explicitly allowed
+    const updateData = { ...data };
 
-  // Remove the id field if present as it should not be updated
-  if (updateData.id) {
-    delete updateData.id;
-  }
+    // Remove the id field if present as it should not be updated
+    if (updateData.id) {
+        delete updateData.id;
+    }
 
-  // Ensure role field is not accidentally changed in regular updates
-  if (updateData.role !== undefined) {
-    // In a production environment, role changes should likely be restricted
-    // and performed only through specific administrative functions
-    console.warn(`Updating role for user ${userId}. Ensure this is intentional.`);
-  }
+    // Ensure role field is not accidentally changed in regular updates
+    if (updateData.role !== undefined) {
+        // In a production environment, role changes should likely be restricted
+        // and performed only through specific administrative functions
+        console.warn(`Updating role for user ${userId}. Ensure this is intentional.`);
+    }
 
-  // Perform the update
-  return await updateDoc(doc(db, "users", userId), updateData);
+    // Perform the update
+    return await updateDoc(doc(db, "users", userId), updateData);
 };
 export const addSubject = async (subject: Omit<Subject, "id">) => await addDoc(collection(db, "subjects"), subject);
 export const updateSubject = async (subjectId: string, data: Partial<Subject>) => await updateDoc(doc(db, "subjects", subjectId), data);
 export const addTimetableEntry = async (entry: Omit<TimetableEntry, "id">) => await addDoc(collection(db, "timetables"), entry);
 // Función para enviar mensajes a múltiples destinatarios según filtros
 export const addMessage = async (message: Omit<Message, "id" | "timestamp">) => {
-  // Para mantener compatibilidad con la estructura actual, primero guardamos el mensaje general
-  const docRef = await addDoc(collection(db, "messages"), {
-    ...message,
-    timestamp: serverTimestamp()
-  });
+    // Para mantener compatibilidad con la estructura actual, primero guardamos el mensaje general
+    const docRef = await addDoc(collection(db, "messages"), {
+        ...message,
+        timestamp: serverTimestamp()
+    });
 
-  // Aquí es donde expandiríamos la funcionalidad para enviar a múltiples destinatarios
-  // según el filtro de destinatarios, pero por ahora guardamos el mensaje base
-  return docRef;
+    // Aquí es donde expandiríamos la funcionalidad para enviar a múltiples destinatarios
+    // según el filtro de destinatarios, pero por ahora guardamos el mensaje base
+    return docRef;
 };
 export const addEvent = async (event: Omit<CalendarEvent, "id" | "createdAt">) => {
     const docRef = await addDoc(collection(db, "events"), {
@@ -423,8 +511,125 @@ export const setGradeBatch = async (records: Omit<Grade, "id" | "createdAt">[]) 
 
 export const deleteTimetableEntry = async (entryId: string) => await deleteDoc(doc(db, "timetables", entryId));
 
+export const deleteMessage = async (messageId: string) => await deleteDoc(doc(db, "messages", messageId));
+
 // Delete functions
 export const deleteGroup = async (groupId: string) => await deleteDoc(doc(db, "groups", groupId));
 export const deleteSubject = async (subjectId: string) => await deleteDoc(doc(db, "subjects", subjectId));
 // This function is for deleting a user doc directly, but the callable cloud function is preferred.
 export const deleteUser = async (userId: string) => await deleteDoc(doc(db, "users", userId));
+
+export const sendMessage = async (message: Omit<Message, "id" | "timestamp">) => {
+    return await addDoc(collection(db, "messages"), {
+        ...message,
+        timestamp: serverTimestamp()
+    });
+};
+
+export const updateUserStatus = async (userId: string, status: 'inside' | 'outside' | 'coming' | 'unknown', userName?: string) => {
+    const userRef = doc(db, "users", userId);
+    await updateDoc(userRef, {
+        gpsStatus: status,
+        lastGpsUpdate: serverTimestamp()
+    });
+
+    // Check-in logic for staff
+    if (userName && (status === 'inside' || status === 'outside')) {
+        await registerWorkCheck(userId, userName, status);
+    }
+};
+
+const registerWorkCheck = async (userId: string, userName: string, status: 'inside' | 'outside') => {
+    const today = new Date().toISOString().split('T')[0];
+    const q = query(
+        collection(db, "work_logs"),
+        where("userId", "==", userId),
+        where("date", "==", today)
+    );
+    const snapshot = await getDocs(q);
+
+    if (snapshot.empty && status === 'inside') {
+        const now = new Date();
+        const isLate = now.getHours() > 7 || (now.getHours() === 7 && now.getMinutes() > 15);
+
+        await addDoc(collection(db, "work_logs"), {
+            userId,
+            userName,
+            date: today,
+            checkIn: serverTimestamp(),
+            status: isLate ? 'late' : 'present'
+        });
+    } else if (!snapshot.empty && status === 'outside') {
+        const logDoc = snapshot.docs[0];
+        const logId = logDoc.id;
+        const logData = logDoc.data();
+
+        let hours = 0;
+        if (logData.checkIn) {
+            const checkInDate = logData.checkIn.toDate ? logData.checkIn.toDate() : new Date(logData.checkIn);
+            const now = new Date();
+            hours = (now.getTime() - checkInDate.getTime()) / (1000 * 60 * 60);
+        }
+
+        await updateDoc(doc(db, "work_logs", logId), {
+            checkOut: serverTimestamp(),
+            totalHours: Number(hours.toFixed(2))
+        });
+    }
+};
+
+export const fetchWorkLogs = async (date?: string, userId?: string): Promise<WorkLog[]> => fetchData(async () => {
+    const targetDate = date || new Date().toISOString().split('T')[0];
+    let q = query(
+        collection(db, "work_logs"),
+        where("date", "==", targetDate)
+    );
+
+    if (userId) {
+        q = query(q, where("userId", "==", userId));
+    }
+
+    q = query(q, orderBy("checkIn", "desc"));
+
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as unknown as WorkLog));
+}, 'work logs');
+
+
+/**
+ * Generates a temporary 4-digit code for a class session.
+ */
+export const generateAttendanceToken = async (subjectId: string, groupId: string) => {
+    const code = Math.floor(1000 + Math.random() * 9000).toString();
+    const tokenData = {
+        subjectId,
+        groupId,
+        code,
+        expiresAt: new Date(Date.now() + 5 * 60 * 1000), // 5 minutes validity
+        createdAt: serverTimestamp()
+    };
+    const docRef = await addDoc(collection(db, "attendance_tokens"), tokenData);
+    return { id: docRef.id, code };
+};
+
+/**
+ * Verifies if a code is valid for a specific student's class.
+ */
+export const verifyAttendanceToken = async (groupId: string, code: string) => {
+    const now = new Date();
+    const q = query(
+        collection(db, "attendance_tokens"),
+        where("groupId", "==", groupId),
+        where("code", "==", code)
+    );
+
+    const querySnapshot = await getDocs(q);
+    if (querySnapshot.empty) return null;
+
+    const tokenDoc = querySnapshot.docs[0].data();
+    const expiresAt = tokenDoc.expiresAt.toDate();
+
+    if (now > expiresAt) return null; // Token expired
+
+    return tokenDoc;
+};

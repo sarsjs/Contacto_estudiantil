@@ -38,13 +38,14 @@ export default function AlumnosPage() {
   const [studentList, setStudentList] = React.useState<User[]>([]); // Changed from Student[] to User[]
   const [groupList, setGroupList] = React.useState<Group[]>([]);
   const [dataLoading, setDataLoading] = React.useState(false);
-  
+
   const [addStudentOpen, setAddStudentOpen] = React.useState(false);
   const [editStudentOpen, setEditStudentOpen] = React.useState(false);
   const [editingStudent, setEditingStudent] = React.useState<User | null>(null); // Changed from Student to User
 
   const [newStudentName, setNewStudentName] = React.useState("");
   const [newStudentEmail, setNewStudentEmail] = React.useState("");
+  const [newStudentMatricula, setNewStudentMatricula] = React.useState("");
   const [newStudentGroupId, setNewStudentGroupId] = React.useState<string>("none");
 
   const [searchTerm, setSearchTerm] = React.useState("");
@@ -89,6 +90,7 @@ export default function AlumnosPage() {
         email: newStudentEmail.trim().toLowerCase(),
         role: 'estudiante',
         groupId: newStudentGroupId === 'none' ? undefined : newStudentGroupId,
+        matricula: newStudentMatricula.trim() || undefined,
       });
 
       await loadData();
@@ -96,6 +98,7 @@ export default function AlumnosPage() {
       setAddStudentOpen(false);
       setNewStudentName('');
       setNewStudentEmail('');
+      setNewStudentMatricula('');
       setNewStudentGroupId('none');
     } catch (error: any) {
       console.error("create student error", error);
@@ -122,8 +125,8 @@ export default function AlumnosPage() {
       await updateUser(editingStudent.id, {
         name: editingStudent.name,
         email: editingStudent.email,
-        // @ts-ignore
-        groupId: editingStudent.groupId || undefined
+        groupId: editingStudent.groupId || undefined,
+        matricula: editingStudent.matricula || undefined
       });
       await loadData();
       toast({ title: "Alumno actualizado", description: `Los datos de ${editingStudent.name} fueron actualizados.` });
@@ -154,107 +157,109 @@ export default function AlumnosPage() {
 
   const filteredStudents = React.useMemo(() => {
     return studentList.filter(student => {
-        // @ts-ignore
-        if (filterGroup !== "all" && student.groupId !== filterGroup) {
-            return false;
-        }
-        if (searchTerm && !student.name.toLowerCase().includes(searchTerm.toLowerCase())) {
-            return false;
-        }
-        return true;
+      // @ts-ignore
+      if (filterGroup !== "all" && student.groupId !== filterGroup) {
+        return false;
+      }
+      if (searchTerm && !student.name.toLowerCase().includes(searchTerm.toLowerCase())) {
+        return false;
+      }
+      return true;
     });
   }, [studentList, filterGroup, searchTerm]);
 
   return (
     <div className="space-y-6">
-        <Card>
-            <CardHeader>
-                <CardTitle>Gestionar Alumnos</CardTitle>
-                <CardDescription>Crea y gestiona las cuentas de los alumnos.</CardDescription>
-            </CardHeader>
-            <CardContent>
-                <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
-                    <div className="flex-1 w-full">
-                        <div className="relative">
-                            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                            <Input placeholder="Buscar por nombre..." className="pl-8" value={searchTerm} onChange={e => setSearchTerm(e.target.value)} />
-                        </div>
-                    </div>
-                    <div className="flex-1 w-full">
-                        <Select value={filterGroup} onValueChange={setFilterGroup}>
-                            <SelectTrigger><SelectValue placeholder="Filtrar por grupo" /></SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="all">Todos los grupos</SelectItem>
-                                {groupList.map(group => <SelectItem key={group.id} value={group.id}>{group.name}</SelectItem>)}
-                            </SelectContent>
-                        </Select>
-                    </div>
-                    <Dialog open={addStudentOpen} onOpenChange={setAddStudentOpen}>
-                        <DialogTrigger asChild>
-                            <Button className="w-full md:w-auto"><PlusCircle className="h-4 w-4 mr-2"/>Agregar Alumno</Button>
-                        </DialogTrigger>
-                        <DialogContent>
-                            <DialogHeader><DialogTitle>Agregar Alumno</DialogTitle><DialogDescription>Ingresa la información del nuevo alumno.</DialogDescription></DialogHeader>
-                            <div className="space-y-4">
-                                <div className="space-y-2"><label className="block text-sm font-medium">Nombre Completo</label><Input value={newStudentName} onChange={(e) => setNewStudentName(e.target.value)} placeholder="Ej. Juan Pérez"/></div>
-                                <div className="space-y-2"><label className="block text-sm font-medium">Correo electrónico</label><Input value={newStudentEmail} onChange={(e) => setNewStudentEmail(e.target.value)} placeholder="ejemplo@correo.com" type="email"/></div>
-                                <div className="space-y-2">
-                                    <label className="block text-sm font-medium">Asignar Grupo (Opcional)</label>
-                                    <Select value={newStudentGroupId} onValueChange={setNewStudentGroupId}>
-                                        <SelectTrigger><SelectValue placeholder="Seleccionar grupo" /></SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="none">Sin grupo</SelectItem>
-                                            {groupList.map(group => (<SelectItem key={group.id} value={group.id}>{group.name}</SelectItem>))}
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                            </div>
-                            <DialogFooter className="mt-4"><Button onClick={handleCreateStudent} disabled={dataLoading}>Crear Alumno</Button></DialogFooter>
-                        </DialogContent>
-                    </Dialog>
+      <Card>
+        <CardHeader>
+          <CardTitle>Gestionar Alumnos</CardTitle>
+          <CardDescription>Crea y gestiona las cuentas de los alumnos.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
+            <div className="flex-1 w-full">
+              <div className="relative">
+                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Input placeholder="Buscar por nombre..." className="pl-8" value={searchTerm} onChange={e => setSearchTerm(e.target.value)} />
+              </div>
+            </div>
+            <div className="flex-1 w-full">
+              <Select value={filterGroup} onValueChange={setFilterGroup}>
+                <SelectTrigger><SelectValue placeholder="Filtrar por grupo" /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Todos los grupos</SelectItem>
+                  {groupList.map(group => <SelectItem key={group.id} value={group.id}>{group.name}</SelectItem>)}
+                </SelectContent>
+              </Select>
+            </div>
+            <Dialog open={addStudentOpen} onOpenChange={setAddStudentOpen}>
+              <DialogTrigger asChild>
+                <Button className="w-full md:w-auto"><PlusCircle className="h-4 w-4 mr-2" />Agregar Alumno</Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader><DialogTitle>Agregar Alumno</DialogTitle><DialogDescription>Ingresa la información del nuevo alumno.</DialogDescription></DialogHeader>
+                <div className="space-y-4">
+                  <div className="space-y-2"><label className="block text-sm font-medium">Nombre Completo</label><Input value={newStudentName} onChange={(e) => setNewStudentName(e.target.value)} placeholder="Ej. Juan Pérez" /></div>
+                  <div className="space-y-2"><label className="block text-sm font-medium">Matrícula (Opcional)</label><Input value={newStudentMatricula} onChange={(e) => setNewStudentMatricula(e.target.value)} placeholder="Ej. 20251234" /></div>
+                  <div className="space-y-2"><label className="block text-sm font-medium">Correo electrónico</label><Input value={newStudentEmail} onChange={(e) => setNewStudentEmail(e.target.value)} placeholder="ejemplo@correo.com" type="email" /></div>
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium">Asignar Grupo (Opcional)</label>
+                    <Select value={newStudentGroupId} onValueChange={setNewStudentGroupId}>
+                      <SelectTrigger><SelectValue placeholder="Seleccionar grupo" /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="none">Sin grupo</SelectItem>
+                        {groupList.map(group => (<SelectItem key={group.id} value={group.id}>{group.name}</SelectItem>))}
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
+                <DialogFooter className="mt-4"><Button onClick={handleCreateStudent} disabled={dataLoading}>Crear Alumno</Button></DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                    {filteredStudents.map(student => (
-                        <IdCard 
-                            key={student.id}
-                            user={student} 
-                            onEdit={() => openEditModal(student)}
-                            onDelete={() => handleRemoveStudent(student.id)}
-                        />
-                    ))}
-                </div>
-            </CardContent>
-        </Card>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {filteredStudents.map(student => (
+              <IdCard
+                key={student.id}
+                user={student}
+                onEdit={() => openEditModal(student)}
+                onDelete={() => handleRemoveStudent(student.id)}
+              />
+            ))}
+          </div>
+        </CardContent>
+      </Card>
 
-        {/* Edit Student Modal */}
-        <Dialog open={editStudentOpen} onOpenChange={setEditStudentOpen}>
-            <DialogContent>
-                <DialogHeader><DialogTitle>Editar Alumno</DialogTitle><DialogDescription>Actualiza la información del alumno.</DialogDescription></DialogHeader>
-                {editingStudent && (
-                    <div className="space-y-4">
-                        <div className="space-y-2"><label className="block text-sm font-medium">Nombre</label><Input value={editingStudent.name} onChange={(e) => setEditingStudent({...editingStudent, name: e.target.value})} placeholder="Nombre completo"/></div>
-                        <div className="space-y-2"><label className="block text-sm font-medium">Email</label><Input value={editingStudent.email} onChange={(e) => setEditingStudent({...editingStudent, email: e.target.value})} placeholder="Email" type="email"/></div>
-                        <div className="space-y-2">
-                            <label className="block text-sm font-medium">Grupo</label>
-                            <Select 
-                                // @ts-ignore
-                                value={editingStudent.groupId || 'none'} 
-                                // @ts-ignore
-                                onValueChange={(value) => setEditingStudent({ ...editingStudent, groupId: value === 'none' ? undefined : value })}                            
-                            >
-                                <SelectTrigger><SelectValue placeholder="Seleccionar grupo" /></SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="none">Sin grupo</SelectItem>
-                                    {groupList.map(group => (<SelectItem key={group.id} value={group.id}>{group.name}</SelectItem>))}
-                                </SelectContent>
-                            </Select>
-                        </div>
-                    </div>
-                )}
-                <DialogFooter className="mt-4"><Button onClick={handleUpdateStudent} disabled={dataLoading}>Actualizar Alumno</Button></DialogFooter>
-            </DialogContent>
-        </Dialog>
+      {/* Edit Student Modal */}
+      <Dialog open={editStudentOpen} onOpenChange={setEditStudentOpen}>
+        <DialogContent>
+          <DialogHeader><DialogTitle>Editar Alumno</DialogTitle><DialogDescription>Actualiza la información del alumno.</DialogDescription></DialogHeader>
+          {editingStudent && (
+            <div className="space-y-4">
+              <div className="space-y-2"><label className="block text-sm font-medium">Nombre</label><Input value={editingStudent.name} onChange={(e) => setEditingStudent({ ...editingStudent, name: e.target.value })} placeholder="Nombre completo" /></div>
+              <div className="space-y-2"><label className="block text-sm font-medium">Matrícula</label><Input value={editingStudent.matricula || ''} onChange={(e) => setEditingStudent({ ...editingStudent, matricula: e.target.value })} placeholder="Número de matrícula" /></div>
+              <div className="space-y-2"><label className="block text-sm font-medium">Email</label><Input value={editingStudent.email} onChange={(e) => setEditingStudent({ ...editingStudent, email: e.target.value })} placeholder="Email" type="email" /></div>
+              <div className="space-y-2">
+                <label className="block text-sm font-medium">Grupo</label>
+                <Select
+                  // @ts-ignore
+                  value={editingStudent.groupId || 'none'}
+                  // @ts-ignore
+                  onValueChange={(value) => setEditingStudent({ ...editingStudent, groupId: value === 'none' ? undefined : value })}
+                >
+                  <SelectTrigger><SelectValue placeholder="Seleccionar grupo" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none">Sin grupo</SelectItem>
+                    {groupList.map(group => (<SelectItem key={group.id} value={group.id}>{group.name}</SelectItem>))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          )}
+          <DialogFooter className="mt-4"><Button onClick={handleUpdateStudent} disabled={dataLoading}>Actualizar Alumno</Button></DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

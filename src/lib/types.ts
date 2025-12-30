@@ -9,6 +9,10 @@ export interface User {
     role: UserRole;
     groupId?: string;
     groups?: string[];
+    matricula?: string;
+    avatarUrl?: string;
+    gpsStatus?: 'inside' | 'outside' | 'coming' | 'unknown';
+    lastGpsUpdate?: FieldValue;
 }
 
 export interface Group {
@@ -16,7 +20,12 @@ export interface Group {
     name: string;
     semester: number;
     cycleId: string;
-    counselorId: string; 
+    counselorId: string;
+    tempCounselorId?: string; // ID del orientador suplente
+    absenceStatus?: {
+        isActive: boolean;
+        message?: string;
+    };
 }
 
 export interface Student {
@@ -26,6 +35,8 @@ export interface Student {
     groupId?: string;
     matricula?: string;
     avatarUrl?: string;
+    gpsStatus?: 'inside' | 'outside' | 'coming' | 'unknown';
+    lastGpsUpdate?: FieldValue;
 }
 
 export interface Subject {
@@ -52,22 +63,22 @@ export interface Attendance {
 }
 
 export type RecipientFilter =
-  | "all"           // Todos los usuarios
-  | "personal"      // Todo el personal (director, orientadores, profesores)
-  | "teachers"      // Solo profesores
-  | "counselors"    // Solo orientadores
-  | "students"      // Todos los estudiantes
-  | "director"      // Solo director
-  | "group"         // Grupo específico
-  | "student"       // Estudiante específico
-  | "myStudents"    // Solo estudiantes de las materias que imparto
-  | "myGroups"      // Solo estudiantes de los grupos de mis materias
-  | "myCounselor"   // Solo mi orientador (para estudiantes)
-  | "myTeacher"     // Solo profesores de mi grupo (para estudiantes)
-  | "specificClass" // Clase específica
-  | "specificTeacher" // Profesor específico
-  | "specificCounselor" // Orientador específico
-  | "specificGroupStudents"; // Solo estudiantes de un grupo específico
+    | "all"           // Todos los usuarios
+    | "personal"      // Todo el personal (director, orientadores, profesores)
+    | "teachers"      // Solo profesores
+    | "counselors"    // Solo orientadores
+    | "students"      // Todos los estudiantes
+    | "director"      // Solo director
+    | "group"         // Grupo específico
+    | "student"       // Estudiante específico
+    | "myStudents"    // Solo estudiantes de las materias que imparto
+    | "myGroups"      // Solo estudiantes de los grupos de mis materias
+    | "myCounselor"   // Solo mi orientador (para estudiantes)
+    | "myTeacher"     // Solo profesores de mi grupo (para estudiantes)
+    | "specificClass" // Clase específica
+    | "specificTeacher" // Profesor específico
+    | "specificCounselor" // Orientador específico
+    | "specificGroupStudents"; // Solo estudiantes de un grupo específico
 
 export interface Message {
     id: string;
@@ -81,11 +92,11 @@ export interface Message {
 }
 
 export type CalendarVisibility =
-  | 'personal'
-  | 'orientadores'
-  | 'maestros'
-  | 'alumnos'
-  | 'todos';
+    | 'personal'
+    | 'orientadores'
+    | 'maestros'
+    | 'alumnos'
+    | 'todos';
 
 
 // NUEVO TIPO PARA CALIFICACIONES
@@ -98,6 +109,16 @@ export interface Grade {
     createdAt: FieldValue;
 }
 
+export interface SubstitutionRequest {
+    id: string;
+    fromCounselorId: string;
+    toCounselorId: string;
+    groupIds: string[];
+    status: 'pending' | 'accepted' | 'declined';
+    message?: string;
+    timestamp: FieldValue;
+}
+
 export interface CalendarEvent {
     id: string;
     title: string;
@@ -107,4 +128,15 @@ export interface CalendarEvent {
     createdBy?: string;
     createdByRole?: User['role'];
     visibility?: CalendarVisibility[];
+}
+
+export interface WorkLog {
+    id: string;
+    userId: string;
+    userName: string;
+    date: string; // YYYY-MM-DD
+    checkIn?: FieldValue;
+    checkOut?: FieldValue;
+    status: 'present' | 'late' | 'absent';
+    totalHours?: number;
 }

@@ -54,7 +54,9 @@ export default function PersonalPage() {
     setDataLoading(true);
     try {
       const users = await fetchUsers();
-      setStaffList(users);
+      // Filtrar para mostrar solo el personal (director, orientadores, profesores)
+      const staffMembers = users.filter(user => user.role !== 'estudiante');
+      setStaffList(staffMembers);
     } catch (error) {
       console.error("Error loading Firebase data", error);
       toast({ title: "Error al cargar datos", description: "No se pudieron obtener los datos del servidor.", variant: "destructive" });
@@ -114,14 +116,14 @@ export default function PersonalPage() {
   const handleUpdateStaff = async () => {
     if (!editingStaff) return;
     try {
-        await updateUser(editingStaff.id, { name: editingStaff.name, role: editingStaff.role, email: editingStaff.email });
-        toast({ title: "Personal actualizado", description: `Los datos de ${editingStaff.name} han sido actualizados.` });
-        setEditStaffOpen(false);
-        setEditingStaff(null);
-        await loadData();
+      await updateUser(editingStaff.id, { name: editingStaff.name, role: editingStaff.role, email: editingStaff.email });
+      toast({ title: "Personal actualizado", description: `Los datos de ${editingStaff.name} han sido actualizados.` });
+      setEditStaffOpen(false);
+      setEditingStaff(null);
+      await loadData();
     } catch (error) {
-        console.error("update staff error", error);
-        toast({ title: "No se pudo actualizar", description: "Intenta nuevamente.", variant: "destructive" });
+      console.error("update staff error", error);
+      toast({ title: "No se pudo actualizar", description: "Intenta nuevamente.", variant: "destructive" });
     }
   };
 
@@ -146,65 +148,65 @@ export default function PersonalPage() {
 
   return (
     <div className="space-y-6">
-        <Card>
-            <CardHeader>
-                <CardTitle>Gestionar Personal</CardTitle>
-                <CardDescription>Crea y gestiona cuentas para profesores y orientadores.</CardDescription>
-            </CardHeader>
-            <CardContent>
-                <div className="flex justify-between items-center mb-6">
-                    <div className="relative w-full max-w-sm">
-                        <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                        <Input 
-                            placeholder="Buscar por nombre..."
-                            className="pl-8"
-                            value={searchTerm}
-                            onChange={e => setSearchTerm(e.target.value)}
-                        />
-                    </div>
-                    <Dialog open={addStaffOpen} onOpenChange={setAddStaffOpen}>
-                        <DialogTrigger asChild>
-                            <Button><PlusCircle className="h-4 w-4 mr-2"/>Agregar Personal</Button>
-                        </DialogTrigger>
-                        <DialogContent>
-                            <DialogHeader><DialogTitle>Agregar Personal</DialogTitle><DialogDescription>Ingresa la información del nuevo personal.</DialogDescription></DialogHeader>
-                            <div className="space-y-4">
-                                <div className="space-y-2"><label className="block text-sm font-medium">Nombre</label><Input value={newStaffName} onChange={(e) => setNewStaffName(e.target.value)} placeholder="Nombre completo"/></div>
-                                <div className="space-y-2"><label className="block text-sm font-medium">Correo electrónico</label><Input value={newStaffEmail} onChange={(e) => setNewStaffEmail(e.target.value)} placeholder="Correo" type="email"/></div>
-                                <div className="space-y-2"><label className="block text-sm font-medium">Rol</label><Select value={newStaffRole} onValueChange={(value) => setNewStaffRole(value as UserRole)}><SelectTrigger><SelectValue placeholder="Seleccionar Rol" /></SelectTrigger><SelectContent><SelectItem value="orientador">Orientador</SelectItem><SelectItem value="profesor">Profesor</SelectItem></SelectContent></Select></div>
-                            </div>
-                            <DialogFooter className="mt-4"><Button onClick={handleCreateStaff} disabled={dataLoading}>Guardar</Button></DialogFooter>
-                        </DialogContent>
-                    </Dialog>
+      <Card>
+        <CardHeader>
+          <CardTitle>Gestionar Personal</CardTitle>
+          <CardDescription>Crea y gestiona cuentas para profesores y orientadores.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex justify-between items-center mb-6">
+            <div className="relative w-full max-w-sm">
+              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Buscar por nombre..."
+                className="pl-8"
+                value={searchTerm}
+                onChange={e => setSearchTerm(e.target.value)}
+              />
+            </div>
+            <Dialog open={addStaffOpen} onOpenChange={setAddStaffOpen}>
+              <DialogTrigger asChild>
+                <Button><PlusCircle className="h-4 w-4 mr-2" />Agregar Personal</Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader><DialogTitle>Agregar Personal</DialogTitle><DialogDescription>Ingresa la información del nuevo personal.</DialogDescription></DialogHeader>
+                <div className="space-y-4">
+                  <div className="space-y-2"><label className="block text-sm font-medium">Nombre</label><Input value={newStaffName} onChange={(e) => setNewStaffName(e.target.value)} placeholder="Nombre completo" /></div>
+                  <div className="space-y-2"><label className="block text-sm font-medium">Correo electrónico</label><Input value={newStaffEmail} onChange={(e) => setNewStaffEmail(e.target.value)} placeholder="Correo" type="email" /></div>
+                  <div className="space-y-2"><label className="block text-sm font-medium">Rol</label><Select value={newStaffRole} onValueChange={(value) => setNewStaffRole(value as UserRole)}><SelectTrigger><SelectValue placeholder="Seleccionar Rol" /></SelectTrigger><SelectContent><SelectItem value="orientador">Orientador</SelectItem><SelectItem value="profesor">Profesor</SelectItem></SelectContent></Select></div>
                 </div>
+                <DialogFooter className="mt-4"><Button onClick={handleCreateStaff} disabled={dataLoading}>Guardar</Button></DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                    {filteredStaff.map(user => (
-                        <IdCard 
-                            key={user.id}
-                            user={user} 
-                            onEdit={() => openEditModal(user)}
-                            onDelete={() => handleRemoveStaff(user.id)}
-                        />
-                    ))}
-                </div>
-            </CardContent>
-        </Card>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {filteredStaff.map(user => (
+              <IdCard
+                key={user.id}
+                user={user}
+                onEdit={() => openEditModal(user)}
+                onDelete={() => handleRemoveStaff(user.id)}
+              />
+            ))}
+          </div>
+        </CardContent>
+      </Card>
 
-        {/* Edit Staff Modal */}
-        <Dialog open={editStaffOpen} onOpenChange={setEditStaffOpen}>
-            <DialogContent>
-                <DialogHeader><DialogTitle>Editar Personal</DialogTitle><DialogDescription>Actualiza la información del personal.</DialogDescription></DialogHeader>
-                {editingStaff && (
-                    <div className="space-y-4">
-                        <div className="space-y-2"><label className="block text-sm font-medium">Nombre</label><Input value={editingStaff.name} onChange={(e) => setEditingStaff({...editingStaff, name: e.target.value})} placeholder="Nombre completo"/></div>
-                        <div className="space-y-2"><label className="block text-sm font-medium">Correo electrónico</label><Input value={editingStaff.email} onChange={(e) => setEditingStaff({...editingStaff, email: e.target.value})} placeholder="Correo" type="email"/></div>
-                        <div className="space-y-2"><label className="block text-sm font-medium">Rol</label><Select value={editingStaff.role} onValueChange={(value) => setEditingStaff({...editingStaff, role: value as UserRole})}><SelectTrigger><SelectValue placeholder="Seleccionar Rol" /></SelectTrigger><SelectContent><SelectItem value="orientador">Orientador</SelectItem><SelectItem value="profesor">Profesor</SelectItem></SelectContent></Select></div>
-                    </div>
-                )}
-                <DialogFooter className="mt-4"><Button onClick={handleUpdateStaff} disabled={dataLoading}>Actualizar</Button></DialogFooter>
-            </DialogContent>
-        </Dialog>
+      {/* Edit Staff Modal */}
+      <Dialog open={editStaffOpen} onOpenChange={setEditStaffOpen}>
+        <DialogContent>
+          <DialogHeader><DialogTitle>Editar Personal</DialogTitle><DialogDescription>Actualiza la información del personal.</DialogDescription></DialogHeader>
+          {editingStaff && (
+            <div className="space-y-4">
+              <div className="space-y-2"><label className="block text-sm font-medium">Nombre</label><Input value={editingStaff.name} onChange={(e) => setEditingStaff({ ...editingStaff, name: e.target.value })} placeholder="Nombre completo" /></div>
+              <div className="space-y-2"><label className="block text-sm font-medium">Correo electrónico</label><Input value={editingStaff.email} onChange={(e) => setEditingStaff({ ...editingStaff, email: e.target.value })} placeholder="Correo" type="email" /></div>
+              <div className="space-y-2"><label className="block text-sm font-medium">Rol</label><Select value={editingStaff.role} onValueChange={(value) => setEditingStaff({ ...editingStaff, role: value as UserRole })}><SelectTrigger><SelectValue placeholder="Seleccionar Rol" /></SelectTrigger><SelectContent><SelectItem value="orientador">Orientador</SelectItem><SelectItem value="profesor">Profesor</SelectItem></SelectContent></Select></div>
+            </div>
+          )}
+          <DialogFooter className="mt-4"><Button onClick={handleUpdateStaff} disabled={dataLoading}>Actualizar</Button></DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

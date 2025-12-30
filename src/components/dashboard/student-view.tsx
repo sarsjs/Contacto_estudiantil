@@ -22,13 +22,16 @@ import { CheckCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/context/auth-context";
 import { IdCard } from "@/components/dashboard/id-card";
-import { MessagePanel } from "@/components/dashboard/message-panel";
 import { CalendarPanel } from "@/components/dashboard/calendar-panel";
+import { GPSMonitor } from "@/components/dashboard/gps-monitor";
 import {
   fetchStudentByEmail,
   fetchSubjects,
   fetchTimetableByGroup,
+  verifyAttendanceToken,
 } from "@/lib/firebase/data";
+import { verifyUserLocation } from "@/lib/gps-utils";
+import { KeyRound, ShieldCheck, MapPin } from "lucide-react";
 import type { Student, TimetableEntry } from "@/lib/types";
 
 const daysOfWeek: TimetableEntry["day"][] = [
@@ -47,6 +50,58 @@ export function StudentView() {
   const [subjectsMap, setSubjectsMap] = React.useState<Record<string, string>>({});
   const [fetching, setFetching] = React.useState(false);
   const [attendedClasses, setAttendedClasses] = React.useState<Set<string>>(new Set());
+  const [validationCode, setValidationCode] = React.useState("");
+  const [isVerifying, setIsVerifying] = React.useState(false);
+
+  const handleVerifyAttendance = async () => {
+    if (validationCode.length !== 4) {
+      toast({ title: "Código incompleto", description: "Debes ingresar los 4 dígitos." });
+      return;
+    }
+
+    setIsVerifying(true);
+    try {
+      // 1. Verificar GPS primero (Anti-cheat)
+      const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject, { enableHighAccuracy: true });
+      });
+
+      const gpsResult = await verifyUserLocation(position);
+      if (!gpsResult.isInside) {
+        toast({
+          title: "Fuera de rango",
+          description: "Debes estar dentro del plantel para marcar asistencia.",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      if (gpsResult.isMocked) {
+        toast({
+          title: "Seguridad GPS",
+          description: "Se detectó una ubicación no válida.",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      // 2. Verificar Token Dinámico
+      const token = await verifyAttendanceToken(student?.groupId || "", validationCode);
+      if (token) {
+        toast({ title: "Asistencia Confirmada", description: "¡Qué tengas una excelente clase!" });
+        setAttendedClasses(prev => new Set(prev).add(token.subjectId)); // Marcar como asistida
+        setValidationCode("");
+      } else {
+        toast({ title: "Código inválido", description: "El código es incorrecto o ya expiró.", variant: "destructive" });
+      }
+
+    } catch (err) {
+      console.error("Verification error:", err);
+      toast({ title: "Error", description: "Permiso de GPS denegado o error de conexión.", variant: "destructive" });
+    } finally {
+      setIsVerifying(false);
+    }
+  };
 
   React.useEffect(() => {
     const loadSubjects = async () => {
@@ -158,6 +213,46 @@ export function StudentView() {
         </CardContent>
       </Card>
 
+      <Card className="bg-gradient-to-br from-primary/5 to-transparent border-primary/20">
+        <CardHeader>
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-primary rounded-lg text-white">
+              <ShieldCheck className="h-5 w-5" />
+            </div>
+            <div>
+              <CardTitle>Confirmar Asistencia a Clase</CardTitle>
+              <CardDescription>Ingresa el código proporcionado por tu profesor.</CardDescription>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex flex-col sm:flex-row items-center gap-4">
+            <div className="relative flex-1 w-full">
+              <KeyRound className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
+              <Input
+                placeholder="Código de 4 dígitos"
+                className="pl-10 h-11 text-lg tracking-[0.5em] font-black uppercase text-center"
+                maxLength={4}
+                value={validationCode}
+                onChange={(e) => setValidationCode(e.target.value)}
+              />
+            </div>
+            <Button
+              className="h-11 px-8 w-full sm:w-auto font-bold"
+              onClick={handleVerifyAttendance}
+              disabled={isVerifying || validationCode.length < 4}
+            >
+              {isVerifying ? "Verificando..." : "Validar mi Clase"}
+            </Button>
+          </div>
+          <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
+            <MapPin className="h-3 w-3" />
+            <span>Se verificará tu ubicación GPS y la vigencia del código en tiempo real.</span>
+          </div>
+        </CardContent>
+      </Card>
+
+
       <Card>
         <CardHeader>
           <CardTitle>Mis calificaciones</CardTitle>
@@ -177,17 +272,16 @@ export function StudentView() {
                   <TableCell className="font-medium">{grade.subjectName}</TableCell>
                   <TableCell className="text-right">
                     <Badge
-                      className={`text-base ${
-                        grade.grade
-                          ? grade.grade >= 90
-                            ? "bg-green-100 text-green-800"
-                            : grade.grade >= 80
-                              ? "bg-blue-100 text-blue-800"
-                              : grade.grade >= 70
-                                ? "bg-yellow-100 text-yellow-800"
-                                : "bg-red-100 text-red-800"
-                          : "bg-gray-100 text-gray-800"
-                      }`}
+                      className={`text-base ${grade.grade
+                        ? grade.grade >= 90
+                          ? "bg-green-100 text-green-800"
+                          : grade.grade >= 80
+                            ? "bg-blue-100 text-blue-800"
+                            : grade.grade >= 70
+                              ? "bg-yellow-100 text-yellow-800"
+                              : "bg-red-100 text-red-800"
+                        : "bg-gray-100 text-gray-800"
+                        }`}
                     >
                       {grade.grade ?? "N/A"}
                     </Badge>
@@ -248,10 +342,10 @@ export function StudentView() {
         </CardContent>
       </Card>
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <MessagePanel />
+      <div className="grid grid-cols-1 gap-6">
         <CalendarPanel role="estudiante" />
       </div>
+      <GPSMonitor />
     </div>
   );
 }

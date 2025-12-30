@@ -52,6 +52,8 @@ import { SecurityAlerts } from './security-alerts';
 import { IdCard } from './id-card';
 import { CalendarPanel } from './calendar-panel';
 import { MessagePanel } from './message-panel';
+import { RealTimeAttendance } from './real-time-attendance';
+import { NotificationPanel } from './notification-panel';
 
 export function CounselorView({ currentUser }: { currentUser: User }) {
   const [students, setStudents] = React.useState<Student[]>([]);
@@ -138,26 +140,26 @@ export function CounselorView({ currentUser }: { currentUser: User }) {
     const gradeList = subjects.map((s) => ({ subjectId: s.id, grade: null }));
 
     try {
-        await addStudent({
-            name: newStudentName,
-            email: newStudentEmail,
-            avatarUrl,
-            groupId: newStudentGroupId,
-            grades: gradeList,
-        });
+      await addStudent({
+        name: newStudentName,
+        email: newStudentEmail,
+        avatarUrl,
+        groupId: newStudentGroupId,
+        grades: gradeList,
+      });
 
-        setNewStudentName('');
-        setNewStudentEmail('');
-        setNewStudentGroupId(assignedGroupIds[0] ?? '');
-        setAddStudentOpen(false);
-        toast({
-            title: 'Estudiante inscrito',
-            description: `Se inscribió a ${newStudentName}.`,
-        });
-        loadData();
+      setNewStudentName('');
+      setNewStudentEmail('');
+      setNewStudentGroupId(assignedGroupIds[0] ?? '');
+      setAddStudentOpen(false);
+      toast({
+        title: 'Estudiante inscrito',
+        description: `Se inscribió a ${newStudentName}.`,
+      });
+      loadData();
     } catch (error) {
-        console.error('Failed to add student', error);
-        toast({ title: 'Error', description: 'Failed to inscribe the student.' });
+      console.error('Failed to add student', error);
+      toast({ title: 'Error', description: 'Failed to inscribe the student.' });
     }
   };
 
@@ -171,35 +173,51 @@ export function CounselorView({ currentUser }: { currentUser: User }) {
     }
 
     try {
-        await addTimetableEntry({
-            groupId: newScheduleGroupId,
-            subjectId: newScheduleSubjectId,
-            day: newScheduleDay,
-            time: newScheduleTime,
-        });
+      await addTimetableEntry({
+        groupId: newScheduleGroupId,
+        subjectId: newScheduleSubjectId,
+        day: newScheduleDay,
+        time: newScheduleTime,
+      });
 
-        setNewScheduleDay('Lunes');
-        setNewScheduleTime('');
-        setNewScheduleSubjectId(subjects[0]?.id ?? '');
-        setNewScheduleGroupId(assignedGroupIds[0] ?? '');
-        setAddScheduleOpen(false);
-        toast({
-            title: 'Horario agregado',
-            description: `Se agregó la clase al horario.`,
-        });
-        loadData();
+      setNewScheduleDay('Lunes');
+      setNewScheduleTime('');
+      setNewScheduleSubjectId(subjects[0]?.id ?? '');
+      setNewScheduleGroupId(assignedGroupIds[0] ?? '');
+      setAddScheduleOpen(false);
+      toast({
+        title: 'Horario agregado',
+        description: `Se agregó la clase al horario.`,
+      });
+      loadData();
     } catch (error) {
-        console.error('Failed to add schedule', error);
-        toast({ title: 'Error', description: 'Failed to add the schedule.' });
+      console.error('Failed to add schedule', error);
+      toast({ title: 'Error', description: 'Failed to add the schedule.' });
     }
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="animate-pulse flex flex-col items-center gap-4">
+          <div className="h-12 w-12 bg-primary/20 rounded-full" />
+          <p className="text-sm font-medium text-muted-foreground tracking-widest uppercase">Cargando Panel de Orientación...</p>
+        </div>
+      </div>
+    );
   }
 
   return (
     <div className='space-y-6'>
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-black tracking-tighter text-foreground">Portal del Orientador 📋</h1>
+          <p className="text-muted-foreground font-medium">Control Escolar y Seguimiento de Grupos</p>
+        </div>
+        <div className="px-4 py-2 bg-primary/10 rounded-full border border-primary/20">
+          <span className="text-xs font-black uppercase text-primary">Gestión de Turno</span>
+        </div>
+      </div>
       <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-4'>
         <StatCard
           title='Total de Estudiantes'
@@ -227,11 +245,14 @@ export function CounselorView({ currentUser }: { currentUser: User }) {
         />
       </div>
 
-       {assignedAlerts.length > 0 && (
-         <div className='grid grid-cols-1 gap-6'>
-           <SecurityAlerts alerts={assignedAlerts} students={students} />
-         </div>
-       )}
+      {assignedAlerts.length > 0 && (
+        <div className='grid grid-cols-1 gap-6'>
+          <SecurityAlerts alerts={assignedAlerts} students={students} />
+        </div>
+      )}
+
+      <RealTimeAttendance students={assignedStudents} />
+
 
       {profile?.role === 'orientador' && (
         <Card>
@@ -329,19 +350,20 @@ export function CounselorView({ currentUser }: { currentUser: User }) {
                 {assignedStudents.map((student) => {
                   const group = groups.find(g => g.id === student.groupId);
                   return (
-                  <TableRow key={student.id}>
-                    <TableCell>
-                      <div className='flex items-center gap-3'>
-                        <Avatar className='h-8 w-8'>
-                          <AvatarImage src={student.avatarUrl} alt={student.name} />
-                          <AvatarFallback>{student.name.charAt(0)}</AvatarFallback>
-                        </Avatar>
-                        <span className='font-medium'>{student.name}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell>{group?.name || 'N/A'}</TableCell>
-                  </TableRow>
-                )})}
+                    <TableRow key={student.id}>
+                      <TableCell>
+                        <div className='flex items-center gap-3'>
+                          <Avatar className='h-8 w-8'>
+                            <AvatarImage src={student.avatarUrl} alt={student.name} />
+                            <AvatarFallback>{student.name.charAt(0)}</AvatarFallback>
+                          </Avatar>
+                          <span className='font-medium'>{student.name}</span>
+                        </div>
+                      </TableCell>
+                      <TableCell>{group?.name || 'N/A'}</TableCell>
+                    </TableRow>
+                  )
+                })}
               </TableBody>
             </Table>
           </CardContent>
@@ -349,94 +371,94 @@ export function CounselorView({ currentUser }: { currentUser: User }) {
 
         <Card>
           <CardHeader>
-             <div className='flex items-center justify-between'>
-                <div>
-                    <CardTitle>Gestión de Horarios</CardTitle>
-                    <CardDescription>
-                    Crea horarios y asigna materias a los profesores.
-                    </CardDescription>
-                </div>
-                {/* Dialog for adding a new schedule entry */}
-                <Dialog open={addScheduleOpen} onOpenChange={setAddScheduleOpen}>
-                  <DialogTrigger asChild>
-                    <Button>Nuevo Horario</Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Nuevo Horario</DialogTitle>
-                      <DialogDescription>
-                        Completa la información para programar una nueva clase.
-                      </DialogDescription>
-                    </DialogHeader>
-                    <div className='space-y-4'>
-                      <div className='space-y-2'>
-                        <label className='block text-sm font-medium'>Día</label>
-                        <Select
-                          value={newScheduleDay}
-                          onValueChange={(value) => setNewScheduleDay(value as TimetableEntry['day'])}
-                        >
-                          <SelectTrigger className='w-full'>
-                            <SelectValue placeholder='Seleccionar día' />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {daysOfWeek.map((day) => (
-                              <SelectItem key={day} value={day}>
-                                {day}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div className='space-y-2'>
-                        <label className='block text-sm font-medium'>Hora</label>
-                        <Input
-                          value={newScheduleTime}
-                          onChange={(e) => setNewScheduleTime(e.target.value)}
-                          placeholder='Ej. 10:00 - 11:00'
-                        />
-                      </div>
-                      <div className='space-y-2'>
-                        <label className='block text-sm font-medium'>Materia</label>
-                        <Select
-                          value={newScheduleSubjectId}
-                          onValueChange={(value) => setNewScheduleSubjectId(value)}
-                        >
-                          <SelectTrigger className='w-full'>
-                            <SelectValue placeholder='Seleccionar materia' />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {subjects.map((s) => (
-                              <SelectItem key={s.id} value={s.id}>
-                                {s.name}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div className='space-y-2'>
-                        <label className='block text-sm font-medium'>Grupo</label>
-                        <Select
-                          value={newScheduleGroupId}
-                          onValueChange={(value) => setNewScheduleGroupId(value)}
-                        >
-                          <SelectTrigger className='w-full'>
-                            <SelectValue placeholder='Seleccionar grupo' />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {assignedGroups.map((g) => (
-                              <SelectItem key={g.id} value={g.id}>
-                                {g.name}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
+            <div className='flex items-center justify-between'>
+              <div>
+                <CardTitle>Gestión de Horarios</CardTitle>
+                <CardDescription>
+                  Crea horarios y asigna materias a los profesores.
+                </CardDescription>
+              </div>
+              {/* Dialog for adding a new schedule entry */}
+              <Dialog open={addScheduleOpen} onOpenChange={setAddScheduleOpen}>
+                <DialogTrigger asChild>
+                  <Button>Nuevo Horario</Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Nuevo Horario</DialogTitle>
+                    <DialogDescription>
+                      Completa la información para programar una nueva clase.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className='space-y-4'>
+                    <div className='space-y-2'>
+                      <label className='block text-sm font-medium'>Día</label>
+                      <Select
+                        value={newScheduleDay}
+                        onValueChange={(value) => setNewScheduleDay(value as TimetableEntry['day'])}
+                      >
+                        <SelectTrigger className='w-full'>
+                          <SelectValue placeholder='Seleccionar día' />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {daysOfWeek.map((day) => (
+                            <SelectItem key={day} value={day}>
+                              {day}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </div>
-                    <DialogFooter className='mt-4'>
-                      <Button onClick={handleAddSchedule}>Agregar</Button>
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
+                    <div className='space-y-2'>
+                      <label className='block text-sm font-medium'>Hora</label>
+                      <Input
+                        value={newScheduleTime}
+                        onChange={(e) => setNewScheduleTime(e.target.value)}
+                        placeholder='Ej. 10:00 - 11:00'
+                      />
+                    </div>
+                    <div className='space-y-2'>
+                      <label className='block text-sm font-medium'>Materia</label>
+                      <Select
+                        value={newScheduleSubjectId}
+                        onValueChange={(value) => setNewScheduleSubjectId(value)}
+                      >
+                        <SelectTrigger className='w-full'>
+                          <SelectValue placeholder='Seleccionar materia' />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {subjects.map((s) => (
+                            <SelectItem key={s.id} value={s.id}>
+                              {s.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className='space-y-2'>
+                      <label className='block text-sm font-medium'>Grupo</label>
+                      <Select
+                        value={newScheduleGroupId}
+                        onValueChange={(value) => setNewScheduleGroupId(value)}
+                      >
+                        <SelectTrigger className='w-full'>
+                          <SelectValue placeholder='Seleccionar grupo' />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {assignedGroups.map((g) => (
+                            <SelectItem key={g.id} value={g.id}>
+                              {g.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                  <DialogFooter className='mt-4'>
+                    <Button onClick={handleAddSchedule}>Agregar</Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             </div>
           </CardHeader>
           <CardContent>
@@ -446,28 +468,32 @@ export function CounselorView({ currentUser }: { currentUser: User }) {
                   <TableHead>Día</TableHead>
                   <TableHead>Hora</TableHead>
                   <TableHead>Materia</TableHead>
-                   <TableHead>Grupo</TableHead>
+                  <TableHead>Grupo</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {assignedTimetable.sort((a,b) => daysOfWeek.indexOf(a.day) - daysOfWeek.indexOf(b.day)).map((entry) => {
+                {assignedTimetable.sort((a, b) => daysOfWeek.indexOf(a.day) - daysOfWeek.indexOf(b.day)).map((entry) => {
                   const subject = subjects.find(s => s.id === entry.subjectId);
                   const group = groups.find(g => g.id === entry.groupId);
                   return (
-                  <TableRow key={entry.id}>
-                    <TableCell className='font-medium'>{entry.day}</TableCell>
-                    <TableCell>{entry.time}</TableCell>
-                    <TableCell>{subject?.name || 'N/A'}</TableCell>
-                    <TableCell>{group?.name || 'N/A'}</TableCell>
-                  </TableRow>
-                )})}
+                    <TableRow key={entry.id}>
+                      <TableCell className='font-medium'>{entry.day}</TableCell>
+                      <TableCell>{entry.time}</TableCell>
+                      <TableCell>{subject?.name || 'N/A'}</TableCell>
+                      <TableCell>{group?.name || 'N/A'}</TableCell>
+                    </TableRow>
+                  )
+                })}
               </TableBody>
             </Table>
           </CardContent>
         </Card>
       </div>
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <MessagePanel />
+      <div className="grid grid-cols-1 gap-6">
+        <NotificationPanel />
+      </div>
+
+      <div className="grid grid-cols-1 gap-6">
         <CalendarPanel role="orientador" />
       </div>
     </div>

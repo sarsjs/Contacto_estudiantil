@@ -9,7 +9,8 @@ import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/comp
 import { Button } from '@/components/ui/button';
 import { BookMarked } from 'lucide-react';
 import { CalendarPanel } from '@/components/dashboard/calendar-panel';
-import { MessagePanel } from '@/components/dashboard/message-panel';
+import { GPSMonitor } from '@/components/dashboard/gps-monitor';
+import { WorkAttendanceTable } from '@/components/dashboard/work-attendance-table';
 
 // Componente para una sola materia
 function SubjectCard({ subject }: { subject: Subject }) {
@@ -17,13 +18,13 @@ function SubjectCard({ subject }: { subject: Subject }) {
     <Card>
       <CardHeader>
         <div className="flex items-start justify-between">
-            <div className="flex items-center">
-                <BookMarked className="mr-3 h-8 w-8 text-gray-400" />
-                <div>
-                    <CardTitle>{subject.name}</CardTitle>
-                    <CardDescription>Materia Asignada</CardDescription>
-                </div>
+          <div className="flex items-center">
+            <BookMarked className="mr-3 h-8 w-8 text-gray-400" />
+            <div>
+              <CardTitle>{subject.name}</CardTitle>
+              <CardDescription>Materia Asignada</CardDescription>
             </div>
+          </div>
         </div>
       </CardHeader>
       <CardFooter className="grid grid-cols-2 gap-2">
@@ -100,7 +101,8 @@ export default function ProfesorPage() {
           ))}
         </div>
       )}
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <WorkAttendanceTable userId={user?.id} title="Mi Registro de Asistencia" />
         <Card>
           <CardHeader>
             <CardTitle>Mi Horario de Clases</CardTitle>
@@ -112,11 +114,11 @@ export default function ProfesorPage() {
             </Link>
           </CardFooter>
         </Card>
-        <MessagePanel />
       </div>
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-6">
         <CalendarPanel role="profesor" />
       </div>
+      <GPSMonitor />
     </div>
   );
 }

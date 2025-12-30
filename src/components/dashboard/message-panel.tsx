@@ -31,7 +31,7 @@ import {
   fetchTimetableByTeacher,
   fetchUsers,
 } from "@/lib/firebase/data";
-import { MessageHistory } from "./message-history";
+// import { MessageHistory } from "./message-history"; // Missing file, using NotificationPanel or nothing for now
 import type { Group, RecipientFilter, Student, User, UserRole } from "@/lib/types";
 
 interface RecipientOption {
@@ -364,7 +364,7 @@ export function MessagePanel({ showHistory = true }: MessagePanelProps) {
         </CardContent>
       </Card>
 
-      {showHistory && <MessageHistory key={historyKey} />}
+      {/* {showHistory && <MessageHistory key={historyKey} />} */}
     </div>
   );
 }

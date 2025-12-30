@@ -3,15 +3,17 @@
 import * as React from 'react';
 import { useAuth } from '@/context/auth-context';
 import { fetchStudentByEmail, fetchGradesByStudent, fetchSubjects } from '@/lib/firebase/data';
-import type { Grade, Student } from '@/lib/types';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import type { Grade, Student, Subject } from '@/lib/types';
+import { Card, CardContent } from '@/components/ui/card';
+import { StudentGrades } from '@/components/dashboard/student-grades';
+import { GraduationCap, Award, TrendingUp, AlertCircle } from 'lucide-react';
+import { StatCard } from '@/components/dashboard/stat-card';
 
 export default function StudentGradesPage() {
   const { profile } = useAuth();
   const [student, setStudent] = React.useState<Student | null>(null);
   const [grades, setGrades] = React.useState<Grade[]>([]);
-  const [subjectLookup, setSubjectLookup] = React.useState<Record<string, string>>({});
+  const [subjects, setSubjects] = React.useState<Subject[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
 
@@ -25,24 +27,25 @@ export default function StudentGradesPage() {
       try {
         setLoading(true);
         const studentRecord = await fetchStudentByEmail(profile.email);
+
         if (!studentRecord) {
-          setError('No se encontró tu registro de estudiante.');
+          setError('No encontramos tu expediente académico.');
           return;
         }
+
         setStudent(studentRecord);
 
-        const gradesData = await fetchGradesByStudent(studentRecord.id);
-        setGrades(gradesData);
+        const [gradesData, subjectsData] = await Promise.all([
+          fetchGradesByStudent(studentRecord.id),
+          fetchSubjects()
+        ]);
 
-        const subjects = await fetchSubjects();
-        const subjectMap: Record<string, string> = {};
-        subjects.forEach((subject) => {
-          subjectMap[subject.id] = subject.name;
-        });
-        setSubjectLookup(subjectMap);
+        setGrades(gradesData);
+        setSubjects(subjectsData);
+
       } catch (err) {
-        console.error(err);
-        setError('No se pudieron cargar tus calificaciones.');
+        console.error("Error loading grades:", err);
+        setError('Ocurrió un error al cargar tus calificaciones. Intenta nuevamente.');
       } finally {
         setLoading(false);
       }
@@ -51,68 +54,95 @@ export default function StudentGradesPage() {
     loadGrades();
   }, [profile]);
 
+  const stats = React.useMemo(() => {
+    if (!grades.length) return null;
+    const validGrades = grades.filter(g => g.grade !== null && g.grade !== undefined);
+    if (!validGrades.length) return null;
+
+    const average = validGrades.reduce((acc, curr) => acc + curr.grade!, 0) / validGrades.length;
+    const maxGrade = Math.max(...validGrades.map(g => g.grade!));
+    const minGrade = Math.min(...validGrades.map(g => g.grade!));
+
+    return {
+      average: average.toFixed(1),
+      max: maxGrade,
+      min: minGrade,
+      total: validGrades.length
+    };
+  }, [grades]);
+
   if (loading) {
-    return <p>Cargando calificaciones...</p>;
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="animate-pulse flex flex-col items-center gap-4">
+          <div className="h-12 w-12 bg-primary/20 rounded-full" />
+          <p className="text-sm font-medium text-muted-foreground tracking-widest uppercase">Cargando Calificaciones...</p>
+        </div>
+      </div>
+    );
   }
 
   if (error) {
-    return <p className="text-red-500">{error}</p>;
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[400px] text-center space-y-4">
+        <div className="p-4 bg-destructive/10 rounded-full text-destructive">
+          <AlertCircle className="h-8 w-8" />
+        </div>
+        <h3 className="text-xl font-bold">Error de Carga</h3>
+        <p className="text-muted-foreground max-w-md">{error}</p>
+      </div>
+    );
   }
 
-  const grouped = React.useMemo(() => {
-    const map: Record<string, Grade[]> = {};
-    grades.forEach((grade) => {
-      if (!map[grade.subjectId]) {
-        map[grade.subjectId] = [];
-      }
-      map[grade.subjectId].push(grade);
-    });
-    return map;
-  }, [grades]);
-
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">Mis calificaciones</h1>
-        <p className="text-muted-foreground">Consulta tu desempeño por materia y parcial.</p>
+    <div className="space-y-8">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-black tracking-tighter text-foreground">Historial Académico 🎓</h1>
+          <p className="text-muted-foreground font-medium">Consulta detallada de desempeño</p>
+        </div>
+        <div className="px-4 py-2 bg-primary/10 rounded-full border border-primary/20">
+          <span className="text-xs font-black uppercase text-primary">Promedio General: {stats?.average || '0.0'}</span>
+        </div>
       </div>
+
+      {stats && (
+        <div className="grid gap-4 grid-cols-2 md:grid-cols-4">
+          <StatCard
+            title="Promedio"
+            value={stats.average}
+            icon={TrendingUp}
+            description="Acumulado del ciclo"
+          />
+          <StatCard
+            title="Materias"
+            value={subjects.length.toString()}
+            icon={GraduationCap}
+            description="Plan de estudios"
+          />
+          <StatCard
+            title="Nota Más Alta"
+            value={stats.max.toString()}
+            icon={Award}
+            description="Excelente desempeño"
+          />
+          <StatCard
+            title="Evaluaciones"
+            value={stats.total.toString()}
+            icon={AlertCircle}
+            description="Parciales registrados"
+          />
+        </div>
+      )}
+
       {student ? (
-        <Card>
-          <CardHeader>
-            <CardTitle>{student.name}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {Object.keys(grouped).length === 0 ? (
-              <p>Aún no tienes calificaciones registradas.</p>
-            ) : (
-              <div className="space-y-4">
-                {Object.entries(grouped).map(([subjectId, gradesBySubject]) => (
-                  <div key={subjectId}>
-                    <p className="font-semibold">{subjectLookup[subjectId] || subjectId}</p>
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Parcial</TableHead>
-                          <TableHead>Calificación</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {gradesBySubject.map((grade) => (
-                          <TableRow key={`${grade.subjectId}-${grade.partial}`}>
-                            <TableCell>{grade.partial}º</TableCell>
-                            <TableCell>{grade.grade}</TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </div>
-                ))}
-              </div>
-            )}
+        <StudentGrades grades={grades} subjects={subjects} />
+      ) : (
+        <Card className="border-dashed">
+          <CardContent className="flex flex-col items-center justify-center py-12 text-center text-muted-foreground">
+            <p>No se encontraron datos del estudiante.</p>
           </CardContent>
         </Card>
-      ) : (
-        <p>No se encontró tu registro.</p>
       )}
     </div>
   );

@@ -129,36 +129,65 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle>Iniciar sesión</CardTitle>
-          <CardDescription>Utiliza tu correo institucional para acceder.</CardDescription>
+    <div className="min-h-screen flex items-center justify-center bg-black px-4 overflow-hidden relative">
+      {/* Abstract Background Glows */}
+      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-red-900/20 blur-[120px] rounded-full" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-red-900/20 blur-[120px] rounded-full" />
+
+      <Card className="w-full max-w-sm bg-zinc-950 border-red-900/40 shadow-[0_0_40px_rgba(153,27,27,0.15)] relative z-10">
+        <CardHeader className="text-center pb-2">
+          <div className="mx-auto mb-6 w-32 h-32 flex items-center justify-center">
+            <img
+              src="/logo.png"
+              alt="Logo EPO 264"
+              className="w-full h-full object-contain"
+            />
+          </div>
+          <CardTitle className="text-2xl font-black text-white tracking-widest uppercase mb-1">
+            Iniciar Sesión
+          </CardTitle>
+          <CardDescription className="text-zinc-500 font-medium tracking-tight">
+            Panel Institucional EPO 264
+          </CardDescription>
         </CardHeader>
         <form onSubmit={handleSignIn}>
-          <CardContent className="space-y-4">
-            <Input
-              type="email"
-              placeholder="usuario@school.com"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              required
-            />
-            <Input
-              type="password"
-              placeholder="Contraseña"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              required
-            />
+          <CardContent className="space-y-4 pt-6">
+            <div className="space-y-1">
+              <Input
+                type="email"
+                placeholder="usuario@school.com"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                required
+                className="bg-zinc-900/50 border-zinc-800 text-white placeholder:text-zinc-600 focus:border-red-600 focus:ring-red-600 h-11"
+              />
+            </div>
+            <div className="space-y-1">
+              <Input
+                type="password"
+                placeholder="Contraseña"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                required
+                className="bg-zinc-900/50 border-zinc-800 text-white placeholder:text-zinc-600 focus:border-red-600 focus:ring-red-600 h-11"
+              />
+            </div>
           </CardContent>
-          <CardFooter className="flex flex-col gap-2">
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Iniciando..." : "Iniciar sesión"}
+          <CardFooter className="flex flex-col gap-4 pb-8">
+            <Button
+              type="submit"
+              className="w-full h-12 bg-red-700 hover:bg-red-800 text-white font-black tracking-widest uppercase transition-all shadow-lg shadow-red-900/20 active:scale-[0.98]"
+              disabled={loading}
+            >
+              {loading ? "Verificando..." : "Acceder"}
             </Button>
-            <Button variant="ghost" className="w-full" type="button" onClick={handleForgotPassword}>
-              Recuperar contraseña
-            </Button>
+            <button
+              type="button"
+              onClick={handleForgotPassword}
+              className="text-xs text-zinc-600 hover:text-red-500 transition-colors font-medium underline-offset-4 hover:underline"
+            >
+              ¿Olvidaste tu contraseña?
+            </button>
           </CardFooter>
         </form>
       </Card>
