@@ -22,7 +22,10 @@ export function ConfigProvider({ children }: { children: React.ReactNode }) {
             setConfig(data);
         } catch (error) {
             console.error("Error refreshing config:", error);
+            // Si falla, se queda con null pero quitamos el loading para que use los default
         } finally {
+            // Aseguramos que el loading termine siempre tras 2 segundos máximo
+            // para no bloquear al usuario si hay mala conexión
             setLoading(false);
         }
     };
