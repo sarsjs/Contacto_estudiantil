@@ -1,6 +1,6 @@
 import { FieldValue } from "firebase/firestore";
 
-export type UserRole = 'director' | 'orientador' | 'profesor' | 'estudiante';
+export type UserRole = 'admin' | 'director' | 'orientador' | 'profesor' | 'estudiante';
 
 export interface User {
     id: string;
@@ -123,6 +123,35 @@ export interface SubstitutionRequest {
     status: 'pending' | 'accepted' | 'declined';
     message?: string;
     timestamp: FieldValue;
+}
+
+export interface AppConfig {
+    id: string;
+    appName: string;
+    appLogoUrl?: string; // Icono de la sidebar
+    schoolLogoUrl?: string; // Logo de la pantalla de login
+    institutionName: string; // Ej: "Panel Institucional EPO 264"
+    terminology: {
+        orientador: string; // "Orientador", "Prefecto", etc.
+        semestre: string; // "Semestre", "Cuatrimestre", etc.
+        grado: string; // "Grado", "Nivel", etc.
+        alumno: string; // "Alumno", "Estudiante", etc.
+    };
+    geofence: {
+        enabled: boolean;
+        center: { lat: number; lng: number };
+        radius: number; // en metros
+        points?: { lat: number; lng: number }[]; // Para polígonos
+    };
+    features: {
+        badges: boolean;
+        attendanceGps: boolean;
+        attendanceQr: boolean;
+        grades: boolean;
+    };
+    theme: {
+        primaryColor: string;
+    };
 }
 
 export interface CalendarEvent {

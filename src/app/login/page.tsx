@@ -16,12 +16,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import { useAppConfig } from "@/context/config-context";
 
 const roleRoutes: Record<string, string> = {
   director: "/dashboard/director",
   orientador: "/dashboard/orientador",
   profesor: "/dashboard/profesor",
   estudiante: "/dashboard/alumno",
+  admin: "/dashboard/admin",
 };
 
 export default function LoginPage() {
@@ -29,6 +31,7 @@ export default function LoginPage() {
   const [password, setPassword] = React.useState("");
   const [loading, setLoading] = React.useState(false);
   const { signIn, profile, user, loading: authLoading } = useAuth();
+  const { config } = useAppConfig();
   const { toast } = useToast();
   const router = useRouter();
 
@@ -138,8 +141,8 @@ export default function LoginPage() {
         <CardHeader className="text-center pb-2">
           <div className="mx-auto mb-6 w-32 h-32 flex items-center justify-center">
             <img
-              src="/logo.png"
-              alt="Logo EPO 264"
+              src={config?.schoolLogoUrl || "/logo.png"}
+              alt="Logo Institucional"
               className="w-full h-full object-contain"
             />
           </div>
@@ -147,7 +150,7 @@ export default function LoginPage() {
             Iniciar Sesión
           </CardTitle>
           <CardDescription className="text-zinc-500 font-medium tracking-tight">
-            Panel Institucional EPO 264
+            {config?.institutionName || "Panel Institucional EPO 264"}
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSignIn}>

@@ -13,8 +13,10 @@ import {
     Download,
     UserCircle,
     ShieldCheck,
-    GraduationCap
+    GraduationCap,
+    Contact
 } from 'lucide-react';
+import { useAppConfig } from '@/context/config-context';
 import { toPng } from 'html-to-image';
 import { useToast } from '@/hooks/use-toast';
 
@@ -23,6 +25,7 @@ export default function CredencialPage() {
     const [student, setStudent] = React.useState<Student | null>(null);
     const [group, setGroup] = React.useState<Group | null>(null);
     const [isLoading, setIsLoading] = React.useState(true);
+    const { config } = useAppConfig();
     const { toast } = useToast();
 
     React.useEffect(() => {
@@ -100,7 +103,9 @@ export default function CredencialPage() {
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div>
                     <h1 className="text-3xl font-black tracking-tighter text-foreground uppercase italic">Mi Identificación Oficial 🪪</h1>
-                    <p className="text-muted-foreground font-medium uppercase text-xs tracking-widest">Credencial Digital del Estudiante EPO 264</p>
+                    <p className="text-muted-foreground font-medium uppercase text-xs tracking-widest">
+                        Credencial Digital del {config?.terminology.alumno || 'Estudiante'} {config?.appName !== 'EduChain' ? config?.appName : 'EPO 264'}
+                    </p>
                 </div>
                 <Button onClick={handleDownloadCard} className="shadow-lg shadow-primary/20 uppercase font-black tracking-widest text-xs">
                     <Download className="h-4 w-4 mr-2" />
@@ -130,7 +135,7 @@ export default function CredencialPage() {
                                     </div>
                                 </div>
                                 <div className="bg-[#8B1A2B] text-white py-0.5 text-center rounded-full shadow-sm">
-                                    <p className="text-[6px] font-black uppercase tracking-widest">Estudiante</p>
+                                    <p className="text-[6px] font-black uppercase tracking-widest">{config?.terminology.alumno || 'Estudiante'}</p>
                                 </div>
                             </div>
                             <div className="flex-1 flex flex-col">
@@ -141,7 +146,7 @@ export default function CredencialPage() {
                                 </div>
                                 <div className="space-y-1 mt-0.5">
                                     <div>
-                                        <p className="text-[5px] text-gray-400 font-bold uppercase mb-[1px]">Nombre del Alumno</p>
+                                        <p className="text-[5px] text-gray-400 font-bold uppercase mb-[1px]">Nombre del {config?.terminology.alumno || 'Alumno'}</p>
                                         <p className="text-[10px] font-black text-gray-800 leading-tight uppercase">{student.name}</p>
                                     </div>
                                     <div className="grid grid-cols-2 gap-1">
@@ -193,7 +198,7 @@ export default function CredencialPage() {
                                         </div>
                                     </div>
                                     <p className="text-[5px] text-justify text-gray-500 leading-relaxed font-medium">
-                                        Esta credencial es personal e intransferible y acredita al portador como alumno de la <span className="text-[#8B1A2B] font-bold">EPO 264</span>.
+                                        Esta credencial es personal e intransferible y acredita al portador como {config?.terminology.alumno.toLowerCase() || 'alumno'} de la <span className="text-[#8B1A2B] font-bold">{config?.appName !== 'EduChain' ? config?.appName : 'EPO 264'}</span>.
                                         En caso de extravío, favor de reportarlo inmediatamente a la dirección escolar.
                                     </p>
                                 </div>
@@ -214,7 +219,7 @@ export default function CredencialPage() {
                     </div>
                     <div>
                         <h4 className="font-bold text-sm uppercase">Soporte Escolar</h4>
-                        <p className="text-xs text-muted-foreground">Si tus datos son incorrectos o necesitas actualizar tu fotografía, dirígete al departamento de control escolar con tu orientador.</p>
+                        <p className="text-xs text-muted-foreground">Si tus datos son incorrectos o necesitas actualizar tu fotografía, dirígete al departamento de control escolar con tu {config?.terminology.orientador.toLowerCase() || 'orientador'}.</p>
                     </div>
                 </CardContent>
             </Card>

@@ -35,18 +35,24 @@ export interface LocationScanResult {
 /**
  * Verifies if the user is within the school perimeter and checks for GPS spoofing.
  */
-export async function verifyUserLocation(position: GeolocationPosition): Promise<LocationScanResult> {
+export async function verifyUserLocation(
+    position: GeolocationPosition,
+    customLocation?: { latitude: number; longitude: number; radius: number }
+): Promise<LocationScanResult> {
     const { latitude, longitude, accuracy, speed } = position.coords;
-    const timestamp = position.timestamp;
+
+    const targetLat = customLocation?.latitude ?? SCHOOL_LOCATION.latitude;
+    const targetLon = customLocation?.longitude ?? SCHOOL_LOCATION.longitude;
+    const targetRadius = customLocation?.radius ?? SCHOOL_LOCATION.radius;
 
     const distance = calculateDistance(
         latitude,
         longitude,
-        SCHOOL_LOCATION.latitude,
-        SCHOOL_LOCATION.longitude
+        targetLat,
+        targetLon
     );
 
-    const isInside = distance <= SCHOOL_LOCATION.radius;
+    const isInside = distance <= targetRadius;
 
     // --- Heurísticas Anti-Spoofing ---
     let isMocked = false;

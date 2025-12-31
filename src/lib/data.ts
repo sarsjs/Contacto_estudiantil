@@ -8,6 +8,7 @@ export const users: User[] = [
   { id: 'user-5', name: 'Lic. Marcus Holloway', role: 'orientador', avatarUrl: 'https://picsum.photos/seed/5/100/100', email: 'm.holloway@school.com' },
   { id: 'user-6', name: 'Profa. Olivia Wells', role: 'profesor', avatarUrl: 'https://picsum.photos/seed/6/100/100', email: 'o.wells@school.com' },
   { id: 'user-7', name: 'Prof. David Grant', role: 'profesor', avatarUrl: 'https://picsum.photos/seed/7/100/100', email: 'd.grant@school.com' },
+  { id: 'admin-master', name: 'Administrador Maestro', role: 'admin', avatarUrl: 'https://picsum.photos/seed/admin/100/100', email: 'admin@school.com' },
 ];
 
 export const schoolCycles: SchoolCycle[] = [
@@ -30,26 +31,34 @@ export const subjects: Subject[] = [
 ];
 
 export const students: Student[] = [
-  { id: 'student-1', name: 'Alex Johnson', email: 'a.johnson@student.com', avatarUrl: 'https://picsum.photos/seed/4/100/100', groupId: 'group-1', grades: [
-    { subjectId: 'subj-1', grade: 88 },
-    { subjectId: 'subj-2', grade: 92 },
-    { subjectId: 'subj-3', grade: 76 },
-  ]},
-  { id: 'student-2', name: 'Maria Garcia', email: 'm.garcia@student.com', avatarUrl: 'https://picsum.photos/seed/11/100/100', groupId: 'group-1', grades: [
-    { subjectId: 'subj-1', grade: 95 },
-    { subjectId: 'subj-2', grade: 89 },
-    { subjectId: 'subj-3', grade: 91 },
-  ]},
-  { id: 'student-3', name: 'Ben Carter', email: 'b.carter@student.com', avatarUrl: 'https://picsum.photos/seed/12/100/100', groupId: 'group-2', grades: [
-    { subjectId: 'subj-1', grade: 75 },
-    { subjectId: 'subj-2', grade: 82 },
-    { subjectId: 'subj-3', grade: 88 },
-  ]},
-  { id: 'student-4', name: 'Chloe Kim', email: 'c.kim@student.com', avatarUrl: 'https://picsum.photos/seed/13/100/100', groupId: 'group-3', grades: [
-    { subjectId: 'subj-1', grade: 91 },
-    { subjectId: 'subj-2', grade: null },
-    { subjectId: 'subj-3', grade: 85 },
-  ]},
+  {
+    id: 'student-1', name: 'Alex Johnson', email: 'a.johnson@student.com', avatarUrl: 'https://picsum.photos/seed/4/100/100', groupId: 'group-1', grades: [
+      { subjectId: 'subj-1', grade: 88 },
+      { subjectId: 'subj-2', grade: 92 },
+      { subjectId: 'subj-3', grade: 76 },
+    ]
+  },
+  {
+    id: 'student-2', name: 'Maria Garcia', email: 'm.garcia@student.com', avatarUrl: 'https://picsum.photos/seed/11/100/100', groupId: 'group-1', grades: [
+      { subjectId: 'subj-1', grade: 95 },
+      { subjectId: 'subj-2', grade: 89 },
+      { subjectId: 'subj-3', grade: 91 },
+    ]
+  },
+  {
+    id: 'student-3', name: 'Ben Carter', email: 'b.carter@student.com', avatarUrl: 'https://picsum.photos/seed/12/100/100', groupId: 'group-2', grades: [
+      { subjectId: 'subj-1', grade: 75 },
+      { subjectId: 'subj-2', grade: 82 },
+      { subjectId: 'subj-3', grade: 88 },
+    ]
+  },
+  {
+    id: 'student-4', name: 'Chloe Kim', email: 'c.kim@student.com', avatarUrl: 'https://picsum.photos/seed/13/100/100', groupId: 'group-3', grades: [
+      { subjectId: 'subj-1', grade: 91 },
+      { subjectId: 'subj-2', grade: null },
+      { subjectId: 'subj-3', grade: 85 },
+    ]
+  },
 ];
 
 export const timetable: TimetableEntry[] = [
@@ -61,25 +70,25 @@ export const timetable: TimetableEntry[] = [
 ];
 
 export const attendance: Attendance[] = [
-    { studentId: 'student-1', date: '2024-05-20', present: true },
-    { studentId: 'student-2', date: '2024-05-20', present: true },
-    // student-4 in group-1 has no attendance record for this date, so is absent
+  { studentId: 'student-1', date: '2024-05-20', present: true },
+  { studentId: 'student-2', date: '2024-05-20', present: true },
+  // student-4 in group-1 has no attendance record for this date, so is absent
 ];
 
 export const securityAlerts: SecurityAlert[] = [
-    { 
-        id: 'alert-1', 
-        studentId: 'student-2', 
-        timestamp: '2024-05-20 10:30:00',
-        type: 'unauthorized_exit',
-        details: 'Salida no autorizada del plantel. Clases pendientes.'
-    },
-    { 
-        id: 'alert-2', 
-        studentId: 'student-4', 
-        timestamp: '2024-05-20 11:15:00',
-        type: 'authorized_exit',
-        details: 'Salida autorizada por Director.',
-        authorizationId: 'DIR-2024-05-20-1112'
-    },
+  {
+    id: 'alert-1',
+    studentId: 'student-2',
+    timestamp: '2024-05-20 10:30:00',
+    type: 'unauthorized_exit',
+    details: 'Salida no autorizada del plantel. Clases pendientes.'
+  },
+  {
+    id: 'alert-2',
+    studentId: 'student-4',
+    timestamp: '2024-05-20 11:15:00',
+    type: 'authorized_exit',
+    details: 'Salida autorizada por Director.',
+    authorizationId: 'DIR-2024-05-20-1112'
+  },
 ];

@@ -15,9 +15,12 @@ import {
   ClipboardList,
   MessageSquare,
   ShieldCheck,
-  Clock,
   Contact,
+  Settings,
+  Clock,
 } from 'lucide-react';
+
+import { useAppConfig } from '@/context/config-context';
 
 import {
   SidebarProvider,
@@ -40,6 +43,10 @@ import { useAuth } from '@/context/auth-context';
 import { ModeToggle } from '../mode-toggle';
 
 const navItems = {
+  admin: [
+    { href: '/dashboard/admin', icon: Settings, label: 'Control Maestro' },
+    { href: '/dashboard/director/bitacora', icon: Clock, label: 'Auditoría Global' },
+  ],
   director: [
     { href: '/dashboard/director', icon: Home, label: 'Panel Principal' },
     { href: '/dashboard/director/personal', icon: Users, label: 'Personal' },
@@ -75,23 +82,38 @@ const navItems = {
 };
 
 const viewTitles = {
+  admin: 'Panel de Super Admin',
   director: 'Portal del Director',
   orientador: 'Portal del Orientador',
   profesor: 'App del Profesor',
   estudiante: 'Portal del Estudiante'
-}
+};
 
 function AppSidebar({ user }: { user: User }) {
   const { open } = useSidebar();
+  const { config } = useAppConfig();
   const pathname = usePathname();
-  const currentNav = navItems[user.role];
+
+  // Dynamic Role Names from Config
+  const getLabel = (item: { label: string; href: string }) => {
+    if (!config) return item.label;
+    if (item.label === 'Alumnos' || item.label === 'Mis Calificaciones') return config.terminology.alumno + 's';
+    if (item.label === 'Personal') return 'Personal';
+    return item.label;
+  };
+
+  const currentNav = navItems[user.role as keyof typeof navItems] || [];
 
   return (
     <Sidebar>
       <SidebarHeader>
         <div className="flex items-center gap-3">
-          <Logo className="size-8 text-primary" />
-          <span className="text-lg font-semibold">EduChain</span>
+          {config?.appLogoUrl ? (
+            <img src={config.appLogoUrl} alt="Logo" className="size-8 object-contain" />
+          ) : (
+            <Logo className="size-8 text-primary" />
+          )}
+          <span className="text-lg font-black tracking-tighter uppercase italic">{config?.appName || 'EduChain'}</span>
         </div>
       </SidebarHeader>
       <SidebarContent>
@@ -101,7 +123,7 @@ function AppSidebar({ user }: { user: User }) {
             const buttonContent = (
               <>
                 <item.icon />
-                <span>{item.label}</span>
+                <span>{getLabel(item)}</span>
               </>
             );
 
@@ -162,6 +184,7 @@ function AppHeader({
 
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { profile, loading, signOut } = useAuth();
+  const { config } = useAppConfig();
   const router = useRouter();
 
   const pathname = usePathname();

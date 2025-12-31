@@ -13,6 +13,7 @@ import {
 import type { Student, TimetableEntry, Subject, Grade, Group, User } from '@/lib/types';
 import { StudentSchedule } from '@/components/dashboard/student-schedule';
 import { StudentGrades } from '@/components/dashboard/student-grades';
+import { useAppConfig } from '@/context/config-context';
 import { verifyUserLocation } from '@/lib/gps-utils';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -39,6 +40,7 @@ import { useToast } from '@/hooks/use-toast';
 
 export default function AlumnoPage() {
   const { profile: user } = useAuth();
+  const { config } = useAppConfig();
   const [student, setStudent] = React.useState<Student | null>(null);
   const [schedule, setSchedule] = React.useState<TimetableEntry[]>([]);
   const [subjects, setSubjects] = React.useState<Subject[]>([]);
@@ -64,7 +66,11 @@ export default function AlumnoPage() {
         navigator.geolocation.getCurrentPosition(resolve, reject, { enableHighAccuracy: true });
       });
 
-      const gpsResult = await verifyUserLocation(position);
+      const gpsResult = await verifyUserLocation(position, config?.geofence ? {
+        latitude: config.geofence.center.lat,
+        longitude: config.geofence.center.lng,
+        radius: config.geofence.radius
+      } : undefined);
       if (!gpsResult.isInside) {
         toast({
           title: "Fuera de rango",
@@ -168,7 +174,7 @@ export default function AlumnoPage() {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
           <h1 className="text-3xl font-black tracking-tighter text-foreground">Hola, {student?.name?.split(' ')[0] || 'Estudiante'} 👋</h1>
-          <p className="text-muted-foreground font-medium">Panel Académico Institucional EPO 264</p>
+          <p className="text-muted-foreground font-medium">{config?.institutionName || 'Panel Académico Institucional EPO 264'}</p>
         </div>
         <div className="flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full border border-primary/20">
           <GraduationCap className="h-4 w-4 text-primary" />
@@ -177,12 +183,14 @@ export default function AlumnoPage() {
       </div>
 
       {/* Sistema de Gamificación - Vistazo Premium */}
-      <AchievementShowcase
-        xp={student?.xp || 750}
-        level={student?.level || 3}
-        unlockedBadges={student?.badges || ['reloj_precision', 'buscador_oro']}
-        userName={student?.name?.split(' ')[0]}
-      />
+      {config?.features.badges && (
+        <AchievementShowcase
+          xp={student?.xp || 750}
+          level={student?.level || 3}
+          unlockedBadges={student?.badges || ['reloj_precision', 'buscador_oro']}
+          userName={student?.name?.split(' ')[0]}
+        />
+      )}
 
       {/* Stats Summary */}
       <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
@@ -244,7 +252,7 @@ export default function AlumnoPage() {
       )}
 
       {
-        student && (
+        student && config?.features.attendanceGps && (
           <div className="space-y-6">
             <Card className="bg-gradient-to-br from-primary/5 to-transparent border-primary/20 shadow-lg">
               <CardHeader>

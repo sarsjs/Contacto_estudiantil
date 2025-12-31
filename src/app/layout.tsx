@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { AuthProvider } from '@/context/auth-context';
+import { ConfigProvider } from '@/context/config-context';
 import { AuthGuard } from '@/components/auth-guard';
 import { ThemeProvider } from '@/components/theme-provider';
 
@@ -31,10 +32,12 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <AuthProvider>
-            <AuthGuard>
-              {children}
-              <Toaster />
-            </AuthGuard>
+            <ConfigProvider>
+              <AuthGuard>
+                {children}
+                <Toaster />
+              </AuthGuard>
+            </ConfigProvider>
           </AuthProvider>
         </ThemeProvider>
       </body>

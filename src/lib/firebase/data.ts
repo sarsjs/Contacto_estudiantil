@@ -658,3 +658,57 @@ export const fetchActivityLogs = async (limitCount = 100): Promise<ActivityLog[]
         return [];
     }
 };
+
+/**
+ * App Configuration (White Label Settings)
+ */
+export const DEFAULT_APP_CONFIG: Omit<AppConfig, 'id'> = {
+    appName: "EduChain",
+    institutionName: "Panel Institucional EPO 264",
+    terminology: {
+        orientador: "Orientador",
+        semestre: "Semestre",
+        grado: "Grado",
+        alumno: "Alumno"
+    },
+    geofence: {
+        enabled: true,
+        center: { lat: 19.432608, lng: -99.133209 }, // Default Center (CDMX)
+        radius: 200
+    },
+    features: {
+        badges: true,
+        attendanceGps: true,
+        attendanceQr: true,
+        grades: true
+    },
+    theme: {
+        primaryColor: "#8B1A2B"
+    }
+};
+
+export const fetchAppConfig = async (): Promise<AppConfig> => {
+    try {
+        const querySnapshot = await getDocs(collection(db, "app_settings"));
+        if (querySnapshot.empty) {
+            // Initialize if not exists
+            const docRef = await addDoc(collection(db, "app_settings"), DEFAULT_APP_CONFIG);
+            return { id: docRef.id, ...DEFAULT_APP_CONFIG };
+        }
+        const doc = querySnapshot.docs[0];
+        return { id: doc.id, ...doc.data() } as AppConfig;
+    } catch (error) {
+        console.error("Error fetching app config:", error);
+        return { id: 'default', ...DEFAULT_APP_CONFIG };
+    }
+};
+
+export const updateAppConfig = async (configId: string, updates: Partial<AppConfig>) => {
+    try {
+        const docRef = doc(db, "app_settings", configId);
+        await updateDoc(docRef, updates);
+    } catch (error) {
+        console.error("Error updating app config:", error);
+        throw error;
+    }
+};
