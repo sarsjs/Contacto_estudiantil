@@ -6,6 +6,7 @@ import { useAuth } from '@/context/auth-context';
 import { auth, firebaseConfigErrorMessage } from '@/lib/firebase/client';
 
 const roleRoutes: Record<string, string> = {
+  admin: '/dashboard/admin',
   director: '/dashboard/director',
   orientador: '/dashboard/orientador',
   profesor: '/dashboard/profesor',

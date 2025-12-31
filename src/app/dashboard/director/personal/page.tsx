@@ -27,9 +27,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { useAuth } from '@/context/auth-context';
 import { useToast } from '@/hooks/use-toast';
 import type { User } from '@/lib/types';
-import { fetchUsers, updateUser } from '@/lib/firebase/data';
+import { fetchUsers, updateUser, logActivity } from '@/lib/firebase/data';
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import { IdCard } from '@/components/dashboard/id-card';
 
@@ -49,6 +50,7 @@ export default function PersonalPage() {
   const [searchTerm, setSearchTerm] = React.useState("");
   const [roleFilter, setRoleFilter] = React.useState<'all' | 'orientador' | 'profesor'>('all');
 
+  const { profile: currentUser } = useAuth();
   const { toast } = useToast();
 
   const loadData = React.useCallback(async () => {
@@ -88,6 +90,17 @@ export default function PersonalPage() {
         email: newStaffEmail.trim().toLowerCase(),
       });
 
+      // REGISTRO DE LOG
+      await logActivity({
+        action: 'PERSONAL_CREADO',
+        details: `Se creó la cuenta para ${newStaffName} (${newStaffRole}).`,
+        targetId: newStaffEmail.trim().toLowerCase(),
+        targetType: 'user',
+        createdBy: currentUser?.id || 'system',
+        creatorName: currentUser?.name || 'Administrador',
+        creatorRole: 'director'
+      });
+
       toast({ title: "Personal añadido", description: `Se creó la cuenta para ${newStaffName} y se le envió un correo para establecer su contraseña.` });
       setNewStaffName("");
       setNewStaffEmail("");
@@ -118,6 +131,18 @@ export default function PersonalPage() {
     if (!editingStaff) return;
     try {
       await updateUser(editingStaff.id, { name: editingStaff.name, role: editingStaff.role, email: editingStaff.email });
+
+      // REGISTRO DE LOG
+      await logActivity({
+        action: 'PERSONAL_ACTUALIZADO',
+        details: `Actualización de perfil para ${editingStaff.name} (${editingStaff.role}).`,
+        targetId: editingStaff.id,
+        targetType: 'user',
+        createdBy: currentUser?.id || 'system',
+        creatorName: currentUser?.name || 'Administrador',
+        creatorRole: 'director'
+      });
+
       toast({ title: "Personal actualizado", description: `Los datos de ${editingStaff.name} han sido actualizados.` });
       setEditStaffOpen(false);
       setEditingStaff(null);
@@ -131,7 +156,23 @@ export default function PersonalPage() {
   const handleRemoveStaff = async (staffId: string) => {
     try {
       const deleteUserFn = httpsCallable(functions, 'deleteUser');
+
+      // Obtener el nombre antes de borrar para el log (opcional, pero ayuda)
+      const staffToDelete = staffList.find(s => s.id === staffId);
+
       await deleteUserFn({ uid: staffId });
+
+      // REGISTRO DE LOG
+      await logActivity({
+        action: 'PERSONAL_ELIMINADO',
+        details: `Se eliminó la cuenta de ${staffToDelete?.name || staffId} (${staffToDelete?.role || 'personal'}).`,
+        targetId: staffId,
+        targetType: 'user',
+        createdBy: currentUser?.id || 'system',
+        creatorName: currentUser?.name || 'Administrador',
+        creatorRole: 'director'
+      });
+
       toast({ title: "Personal eliminado", description: "La cuenta se eliminó de Firebase Auth y Firestore." });
       await loadData();
     } catch (error) {

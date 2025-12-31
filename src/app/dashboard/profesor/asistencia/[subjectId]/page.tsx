@@ -9,7 +9,8 @@ import {
   fetchStudentsByGroup,
   fetchAttendanceForDate,
   setAttendanceBatch,
-  generateAttendanceToken
+  generateAttendanceToken,
+  logActivity
 } from '@/lib/firebase/data';
 import type { Subject, Group, Student, Attendance } from '@/lib/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -23,6 +24,7 @@ import { es } from 'date-fns/locale';
 import { ShieldCheck, KeyRound, Timer } from 'lucide-react';
 
 function AttendanceSheet({ students, groupId, subjectId }: { students: Student[], groupId: string, subjectId: string }) {
+  const { profile } = useAuth();
   const [attendance, setAttendance] = React.useState<Record<string, boolean>>({});
   const [isLoading, setIsLoading] = React.useState(true);
   const [isSaving, setIsSaving] = React.useState(false);
@@ -36,6 +38,18 @@ function AttendanceSheet({ students, groupId, subjectId }: { students: Student[]
       const token = await generateAttendanceToken(subjectId, groupId);
       setActiveToken({ code: token.code, expiresAt: Date.now() + 5 * 60 * 1000 });
       setCountdown(300); // 5 minutes
+
+      // REGISTRO DE LOG
+      await logActivity({
+        action: 'ASISTENCIA_TOKEN',
+        details: `Se generó código de asistencia (${token.code}) para el grupo ${groupId}.`,
+        targetId: groupId,
+        targetType: 'group',
+        createdBy: profile?.id || 'system',
+        creatorName: profile?.name || 'Profesor',
+        creatorRole: 'profesor'
+      });
+
       toast({
         title: "Pase de lista iniciado",
         description: "Los alumnos tienen 5 minutos para ingresar el código."
@@ -82,6 +96,19 @@ function AttendanceSheet({ students, groupId, subjectId }: { students: Student[]
 
     try {
       await setAttendanceBatch(records);
+
+      // REGISTRO DE LOG
+      const presentCount = records.filter(r => r.present).length;
+      await logActivity({
+        action: 'ASISTENCIA_GUARDADA',
+        details: `Pase de lista guardado: ${presentCount} alumnos presentes.`,
+        targetId: groupId,
+        targetType: 'group',
+        createdBy: profile?.id || 'system',
+        creatorName: profile?.name || 'Profesor',
+        creatorRole: 'profesor'
+      });
+
       toast({ title: "Asistencia Guardada", description: "El registro de asistencia se ha guardado correctamente." });
     } catch (error) {
       console.error(error);

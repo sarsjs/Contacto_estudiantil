@@ -11,6 +11,7 @@ import {
   fetchGroups,
   fetchSubjects,
   fetchUsers,
+  logActivity,
 } from '@/lib/firebase/data';
 import type { TimetableEntry, Group, Subject, User } from '@/lib/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -55,11 +56,44 @@ export default function DirectorSchedulesPage() {
 
   const handleAdd = async (entry: Omit<TimetableEntry, 'id'>) => {
     await addTimetableEntry(entry);
+
+    // REGISTRO DE LOG
+    const groupName = groups.find(g => g.id === entry.groupId)?.name || entry.groupId;
+    const subjectName = subjects.find(s => s.id === entry.subjectId)?.name || entry.subjectId;
+
+    await logActivity({
+      action: 'HORARIO_CREADO',
+      details: `Se asignó la clase ${subjectName} al grupo ${groupName} (${entry.day}, ${entry.time}).`,
+      targetId: entry.groupId,
+      targetType: 'timetable',
+      createdBy: profile?.id || 'system',
+      creatorName: profile?.name || 'Administrador',
+      creatorRole: 'director'
+    });
+
     await loadData();
   };
 
   const handleDelete = async (entryId: string) => {
+    const entryToDelete = entries.find(e => e.id === entryId);
     await deleteTimetableEntry(entryId);
+
+    // REGISTRO DE LOG
+    if (entryToDelete) {
+      const groupName = groups.find(g => g.id === entryToDelete.groupId)?.name || entryToDelete.groupId;
+      const subjectName = subjects.find(s => s.id === entryToDelete.subjectId)?.name || entryToDelete.subjectId;
+
+      await logActivity({
+        action: 'HORARIO_ELIMINADO',
+        details: `Se eliminó la clase ${subjectName} del grupo ${groupName} (${entryToDelete.day}, ${entryToDelete.time}).`,
+        targetId: entryId,
+        targetType: 'timetable',
+        createdBy: profile?.id || 'system',
+        creatorName: profile?.name || 'Administrador',
+        creatorRole: 'director'
+      });
+    }
+
     await loadData();
   };
 

@@ -8,7 +8,8 @@ import {
   fetchSubjects,
   fetchGradesByStudent,
   fetchUsers,
-  verifyAttendanceToken
+  verifyAttendanceToken,
+  logActivity
 } from '@/lib/firebase/data';
 import type { Student, TimetableEntry, Subject, Grade, Group, User } from '@/lib/types';
 import { StudentSchedule } from '@/components/dashboard/student-schedule';
@@ -83,6 +84,17 @@ export default function AlumnoPage() {
       // 2. Verificar Token Dinámico
       const token = await verifyAttendanceToken(student?.groupId || "", validationCode);
       if (token) {
+        // REGISTRO DE LOG
+        await logActivity({
+          action: 'ASISTENCIA_ALUMNO',
+          details: `El alumno validó su asistencia en el plantel mediante código GPS.`,
+          targetId: student?.id || 'unknown',
+          targetType: 'user',
+          createdBy: user?.id || 'system',
+          creatorName: user?.name || 'Alumno',
+          creatorRole: 'estudiante'
+        });
+
         toast({ title: "Asistencia Confirmada", description: "¡Qué tengas una excelente clase!" });
         setValidationCode("");
         // Podríamos disparar un reload o actualizar el estado de asistencias si tuviéramos uno local

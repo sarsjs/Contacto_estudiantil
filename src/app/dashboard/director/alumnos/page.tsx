@@ -100,6 +100,17 @@ export default function AlumnosPage() {
         matricula: newStudentMatricula.trim() || undefined,
       });
 
+      // REGISTRO DE LOG
+      await logActivity({
+        action: 'ALUMNO_CREADO',
+        details: `Se creó el perfil para el alumno ${newStudentName}. Matrícula: ${newStudentMatricula || 'N/A'}. Grupo: ${groupList.find(g => g.id === newStudentGroupId)?.name || 'Sin grupo'}`,
+        targetId: newStudentEmail.trim().toLowerCase(),
+        targetType: 'user',
+        createdBy: currentUser?.id || 'system',
+        creatorName: currentUser?.name || 'Administrador',
+        creatorRole: 'director'
+      });
+
       await loadData();
       toast({ title: "Alumno Creado", description: `Se ha creado el perfil para ${newStudentName}. Se ha enviado un correo para restablecer la contraseña.` });
       setAddStudentOpen(false);
@@ -212,7 +223,23 @@ export default function AlumnosPage() {
   const handleRemoveStudent = async (studentId: string) => {
     try {
       const deleteUser = httpsCallable(functions, 'deleteUser');
+
+      // Obtener datos antes de borrar
+      const studentToDelete = studentList.find(s => s.id === studentId);
+
       await deleteUser({ uid: studentId });
+
+      // REGISTRO DE LOG
+      await logActivity({
+        action: 'ALUMNO_ELIMINADO',
+        details: `Se eliminó al alumno ${studentToDelete?.name || studentId}. Matrícula: ${studentToDelete?.matricula || 'N/A'}.`,
+        targetId: studentId,
+        targetType: 'user',
+        createdBy: currentUser?.id || 'system',
+        creatorName: currentUser?.name || 'Administrador',
+        creatorRole: 'director'
+      });
+
       toast({ title: "Alumno eliminado", description: "El alumno ha sido eliminado del sistema." });
       await loadData();
     } catch (error) {

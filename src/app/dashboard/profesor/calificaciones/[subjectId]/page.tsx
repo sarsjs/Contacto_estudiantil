@@ -7,8 +7,10 @@ import {
   fetchGroupsBySubject,
   fetchStudentsByGroup,
   fetchGradesBySubjectAndGroup,
-  setGradeBatch
+  setGradeBatch,
+  logActivity
 } from '@/lib/firebase/data';
+import { useAuth } from '@/context/auth-context';
 import type { Subject, Group, Student, Grade } from '@/lib/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from '@/components/ui/button';
@@ -18,6 +20,7 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 
 function GradeSheet({ students, groupId, subjectId, partial }: { students: Student[], groupId: string, subjectId: string, partial: 1 | 2 | 3 }) {
+  const { profile } = useAuth();
   const [grades, setGrades] = React.useState<Record<string, number | string>>({});
   const [isLoading, setIsLoading] = React.useState(true);
   const [isSaving, setIsSaving] = React.useState(false);
@@ -51,6 +54,18 @@ function GradeSheet({ students, groupId, subjectId, partial }: { students: Stude
 
     try {
       await setGradeBatch(recordsToSave);
+
+      // REGISTRO DE LOG
+      await logActivity({
+        action: 'CALIFICACIONES_GUARDADAS',
+        details: `Se registraron calificaciones del ${partial}er parcial para el grupo ${groupId}.`,
+        targetId: subjectId,
+        targetType: 'subject',
+        createdBy: profile?.id || 'system',
+        creatorName: profile?.name || 'Profesor',
+        creatorRole: 'profesor'
+      });
+
       toast({ title: "Calificaciones Guardadas", description: "El registro se ha guardado correctamente." });
     } catch (error) {
       console.error(error);
@@ -62,7 +77,7 @@ function GradeSheet({ students, groupId, subjectId, partial }: { students: Stude
 
   const handleGradeChange = (studentId: string, value: string) => {
     const numValue = value === '' ? '' : Math.max(0, Math.min(10, Number(value)));
-    setGrades(prev => ({...prev, [studentId]: numValue }));
+    setGrades(prev => ({ ...prev, [studentId]: numValue }));
   }
 
   if (isLoading) {
@@ -125,13 +140,13 @@ export default function GradingPage() {
           fetchSubjects(),
           fetchGroupsBySubject(subjectId)
         ]);
-        
+
         const currentSubject = allSubjects.find(s => s.id === subjectId);
         if (!currentSubject) {
           setError("La materia no existe.");
           return;
         }
-        
+
         setSubject(currentSubject);
         setGroups(subjectGroups);
 
@@ -165,7 +180,7 @@ export default function GradingPage() {
     };
     loadStudents();
   }, [selectedGroup]);
-  
+
   if (isLoading) {
     return <p>Cargando...</p>;
   }

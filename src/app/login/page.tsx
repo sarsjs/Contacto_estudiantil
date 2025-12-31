@@ -4,6 +4,8 @@ import * as React from "react";
 import { getAuth, sendPasswordResetEmail } from "firebase/auth";
 import { useAuth } from "@/context/auth-context";
 import { firebaseConfigErrorMessage } from "@/lib/firebase/client";
+import { signInWithEmail } from "@/lib/firebase/auth";
+import { fetchUserByEmail, logActivity } from "@/lib/firebase/data";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -53,6 +55,26 @@ export default function LoginPage() {
       }
 
       await signIn(normalizedEmail, password);
+
+      // REGISTRO DE LOG
+      // Intentamos obtener el perfil para el log
+      try {
+        const userProfile = await fetchUserByEmail(normalizedEmail);
+        if (userProfile) {
+          await logActivity({
+            action: 'LOGIN',
+            details: `Inicio de sesión exitoso.`,
+            targetId: userProfile.id,
+            targetType: 'user',
+            createdBy: userProfile.id,
+            creatorName: userProfile.name,
+            creatorRole: userProfile.role as any
+          });
+        }
+      } catch (logErr) {
+        console.error("Error logging login:", logErr);
+      }
+
       toast({ title: "Inicio de sesión", description: "Bienvenido de nuevo." });
     } catch (error) {
       console.error("Login error", error);

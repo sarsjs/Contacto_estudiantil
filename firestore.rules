@@ -92,6 +92,14 @@ service cloud.firestore {
                     get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'profesor');
     }
 
+    // Activity Logs collection
+    match /activity_logs/{logId} {
+      allow create: if request.auth != null;
+      allow read: if request.auth != null &&
+                  (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'director' ||
+                   get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'orientador');
+    }
+
     // Default rule - restrictive for all other collections
     match /{document=**} {
       allow read, write: if false; // Default: no access

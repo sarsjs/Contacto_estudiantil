@@ -339,4 +339,21 @@ Este es un componente fundamental para el éxito comercial y operativo del proye
 
 **Siguiente Fase:** Desarrollo de la App Móvil usando **Capacitor** o **React Native** para consumir los servicios ya establecidos en este prototipo web.
 
+31/12/2025 15:30 - Bitácora Universal, Rescate Admin y Mantenimiento de Datos.
+
+* **Implementado:** **Bitácora Universal Activa**: Integración de la función `logActivity` en todos los módulos clave. Ahora se registran acciones de Directores (gestión de personal), Orientadores (gestión de alumnos), Profesores (pase de lista y calificaciones), Alumnos (validación de asistencia) y Logins exitosos.
+* **Implementado:** **Sistema de Rescate de Cuenta Admin**: Creación de la página `/test/rescue-admin` para permitir que el propietario del proyecto reclame el rol de "Super Administrador" en Firestore si su perfil no existe, evitando bloqueos por errores de sincronización.
+* **Implementado:** **Herramienta de Mantenimiento de Base de Datos**: Creación de `/test/maintenance` para limpieza segura de Firestore. Permite eliminar colecciones obsoletas (`students`) y basura de pruebas en colecciones activas (IDs tipo `student_...` o `tt-...`).
+* **Corregido:** **Firestore Security Rules**: Se actualizaron las reglas para permitir que todos los usuarios autenticados escriban en la bitácora (`activity_logs`), pero que solo Directores y Orientadores puedan leerla.
+* **Corregido:** **AuthGuard para Admin**: Se añadió la redirección automática al panel de control maestro para usuarios con rol `admin`.
+* **Documentado (Estatus de Colecciones)**:
+  * **CRÍTICAS (NO TOCAR)**:
+    * `users`: Contiene a toda la comunidad escolar (Alumnos, Profesores, Directivos).
+    * `groups` / `subjects` / `timetables`: Estructura académica esencial.
+    * `activity_logs`: Historial legal y de auditoría de todas las acciones.
+    * `securityAlerts`: **VITAL** para el seguimiento GPS y alertas de seguridad de alumnos.
+  * **OBSOLETAS (SE PUEDEN BORRAR)**:
+    * `students`: Colección vieja heredada de versiones previas.
+    * `test_...`: Cualquier registro manual hecho durante el desarrollo inicial.
+
 ---

@@ -32,7 +32,7 @@ import {
 import { useAuth } from '@/context/auth-context';
 import { useToast } from '@/hooks/use-toast';
 import type { User, Group } from '@/lib/types';
-import { fetchUsers, updateUser, fetchGroupsByCounselor, addStudent } from '@/lib/firebase/data';
+import { fetchUsers, updateUser, fetchGroupsByCounselor, addStudent, logActivity } from '@/lib/firebase/data';
 import { IdCard } from '@/components/dashboard/id-card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -112,6 +112,17 @@ export default function OrientadorAlumnosPage() {
                 avatarUrl: `https://api.dicebear.com/6.x/initials/svg?seed=${encodeURIComponent(newStudentName)}`,
             });
 
+            // REGISTRO DE LOG
+            await logActivity({
+                action: 'ALUMNO_CREADO',
+                details: `Inscripción individual: ${newStudentName}. Grupo: ${groupList.find(g => g.id === newStudentGroupId)?.name || newStudentGroupId}`,
+                targetId: newStudentEmail.trim().toLowerCase(),
+                targetType: 'user',
+                createdBy: currentUser?.id || 'system',
+                creatorName: currentUser?.name || 'Orientador',
+                creatorRole: 'orientador'
+            });
+
             await loadData();
             toast({ title: "Alumno Registrado", description: `Se ha creado el perfil para ${newStudentName}.` });
             setAddStudentOpen(false);
@@ -139,6 +150,18 @@ export default function OrientadorAlumnosPage() {
                 groupId: editingStudent.groupId,
                 matricula: editingStudent.matricula
             });
+
+            // REGISTRO DE LOG
+            await logActivity({
+                action: 'ALUMNO_ACTUALIZADO',
+                details: `Edición de perfil: ${editingStudent.name}.`,
+                targetId: editingStudent.id,
+                targetType: 'user',
+                createdBy: currentUser?.id || 'system',
+                creatorName: currentUser?.name || 'Orientador',
+                creatorRole: 'orientador'
+            });
+
             await loadData();
             toast({ title: "Actualizado", description: "Datos guardados correctamente." });
             setEditStudentOpen(false);
@@ -159,6 +182,18 @@ export default function OrientadorAlumnosPage() {
             await Promise.all(batchUpdates);
 
             await loadData();
+
+            // REGISTRO DE LOG
+            await logActivity({
+                action: 'ASIGNACION_MASIVA',
+                details: `Se reasignaron ${selectedStudents.length} alumnos al grupo ${groupList.find(g => g.id === bulkTargetGroup)?.name || bulkTargetGroup}`,
+                targetId: bulkTargetGroup,
+                targetType: 'group',
+                createdBy: currentUser?.id || 'system',
+                creatorName: currentUser?.name || 'Orientador',
+                creatorRole: 'orientador'
+            });
+
             toast({
                 title: "Asignación Masiva Exitosa",
                 description: `Se han movido ${selectedStudents.length} alumnos al grupo seleccionado.`
@@ -248,6 +283,19 @@ export default function OrientadorAlumnosPage() {
 
             setBulkResult({ successCount: count, errors: errs });
             toast({ title: "Proceso terminado", description: `${count} alumnos procesados.` });
+
+            if (count > 0) {
+                await logActivity({
+                    action: 'ALUMNO_IMPORTACION',
+                    details: `Carga masiva: ${count} alumnos registrados mediante CSV.`,
+                    targetId: 'bulk-import',
+                    targetType: 'user',
+                    createdBy: currentUser?.id || 'system',
+                    creatorName: currentUser?.name || 'Orientador',
+                    creatorRole: 'orientador'
+                });
+            }
+
             await loadData();
         } catch (e) {
             toast({ title: "Error al procesar", variant: "destructive" });

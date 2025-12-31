@@ -35,9 +35,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useAuth } from '@/context/auth-context';
 import { useToast } from "@/hooks/use-toast";
 import type { Group, User, Subject } from "@/lib/types";
-import { addGroup, fetchGroups, deleteGroup, fetchUsers, addSubject, fetchSubjects, deleteSubject, updateGroup, updateSubject, updateGroupAbsence } from "@/lib/firebase/data";
+import { addGroup, fetchGroups, deleteGroup, fetchUsers, addSubject, fetchSubjects, deleteSubject, updateGroup, updateSubject, updateGroupAbsence, logActivity } from "@/lib/firebase/data";
 
 export default function EstructuraPage() {
   const [groupList, setGroupList] = React.useState<Group[]>([]);
@@ -72,6 +73,7 @@ export default function EstructuraPage() {
   const [isAbsenceActive, setIsAbsenceActive] = React.useState(false);
   const [absenceMessage, setAbsenceMessage] = React.useState("");
 
+  const { profile: currentUser } = useAuth();
   const { toast } = useToast();
 
   const counselorsList = staffList.filter((u) => u.role === "orientador");
@@ -123,6 +125,18 @@ export default function EstructuraPage() {
         counselorId: newGroupCounselorId,
         semester: Number(newGroupSemester),
       });
+
+      // REGISTRO DE LOG
+      await logActivity({
+        action: 'GRUPO_CREADO',
+        details: `Se creó el grupo ${groupName} para el ciclo ${newGroupCycleId}.`,
+        targetId: groupName,
+        targetType: 'group',
+        createdBy: currentUser?.id || 'system',
+        creatorName: currentUser?.name || 'Administrador',
+        creatorRole: 'director'
+      });
+
       toast({ title: "Grupo creado", description: `El grupo ${groupName} fue creado.` });
       setNewGroupSemester(1);
       setNewGroupIdentifier("A");
@@ -146,6 +160,18 @@ export default function EstructuraPage() {
         counselorId: editingGroup.counselorId,
         semester: Number(editingGroup.semester),
       });
+
+      // REGISTRO DE LOG
+      await logActivity({
+        action: 'GRUPO_ACTUALIZADO',
+        details: `Actualización de datos del grupo ${groupName}.`,
+        targetId: editingGroup.id,
+        targetType: 'group',
+        createdBy: currentUser?.id || 'system',
+        creatorName: currentUser?.name || 'Administrador',
+        creatorRole: 'director'
+      });
+
       toast({ title: "Grupo actualizado", description: `El grupo ${groupName} fue actualizado.` });
       setEditGroupOpen(false);
       setEditingGroup(null);
@@ -158,7 +184,20 @@ export default function EstructuraPage() {
 
   const handleRemoveGroup = async (groupId: string) => {
     try {
+      const groupToDelete = groupList.find(g => g.id === groupId);
       await deleteGroup(groupId);
+
+      // REGISTRO DE LOG
+      await logActivity({
+        action: 'GRUPO_ELIMINADO',
+        details: `Se eliminó el grupo ${groupToDelete?.name || groupId}.`,
+        targetId: groupId,
+        targetType: 'group',
+        createdBy: currentUser?.id || 'system',
+        creatorName: currentUser?.name || 'Administrador',
+        creatorRole: 'director'
+      });
+
       toast({ title: "Grupo eliminado", description: "El grupo ya no aparece en el panel." });
       await loadData();
     } catch (error) {
@@ -176,6 +215,20 @@ export default function EstructuraPage() {
         isActive: isAbsenceActive,
         message: absenceMessage
       });
+
+      // REGISTRO DE LOG
+      await logActivity({
+        action: 'SUPLENCIA_ACTUALIZADA',
+        details: isAbsenceActive
+          ? `Suplencia ACTIVADA para el grupo ${selectedGroupForAbsence.name}. Suplente: ${staffList.find(u => u.id === tempCounselorId)?.name || tempCounselorId}`
+          : `Suplencia DESACTIVADA para el grupo ${selectedGroupForAbsence.name}.`,
+        targetId: selectedGroupForAbsence.id,
+        targetType: 'group',
+        createdBy: currentUser?.id || 'system',
+        creatorName: currentUser?.name || 'Administrador',
+        creatorRole: 'director'
+      });
+
       toast({ title: "Estado de ausencia actualizado", description: isAbsenceActive ? "Suplencia activada." : "Suplencia desactivada." });
       setAbsenceModalOpen(false);
       await loadData();
@@ -204,6 +257,18 @@ export default function EstructuraPage() {
     }
     try {
       await addSubject({ name: newSubjectName, teacherId: newSubjectTeacherId });
+
+      // REGISTRO DE LOG
+      await logActivity({
+        action: 'MATERIA_CREADA',
+        details: `Se creó la materia ${newSubjectName}.`,
+        targetId: newSubjectName,
+        targetType: 'subject',
+        createdBy: currentUser?.id || 'system',
+        creatorName: currentUser?.name || 'Administrador',
+        creatorRole: 'director'
+      });
+
       toast({ title: "Materia creada", description: `La materia ${newSubjectName} fue creada.` });
       setNewSubjectName("");
       setNewSubjectTeacherId("");
@@ -231,7 +296,20 @@ export default function EstructuraPage() {
 
   const handleRemoveSubject = async (subjectId: string) => {
     try {
+      const subjectToDelete = subjectList.find(s => s.id === subjectId);
       await deleteSubject(subjectId);
+
+      // REGISTRO DE LOG
+      await logActivity({
+        action: 'MATERIA_ELIMINADA',
+        details: `Se eliminó la materia ${subjectToDelete?.name || subjectId}.`,
+        targetId: subjectId,
+        targetType: 'subject',
+        createdBy: currentUser?.id || 'system',
+        creatorName: currentUser?.name || 'Administrador',
+        creatorRole: 'director'
+      });
+
       toast({ title: "Materia eliminada", description: "La materia ya no aparece en el panel." });
       await loadData();
     } catch (error) {
