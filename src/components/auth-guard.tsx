@@ -46,8 +46,12 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
       // Usuario autenticado pero el perfil aún está cargando o no existe
       // No hacer nada, esperar a que el contexto termine de buscar el perfil.
     } else {
+      // Rutas públicas que no requieren autenticación
+      const publicRoutes = ['/test', '/validar'];
+      const isPublicRoute = publicRoutes.some(route => pathname.startsWith(route));
+
       // No hay usuario, no está autenticado
-      if (!isAuthPage) {
+      if (!isAuthPage && !isPublicRoute) {
         router.replace('/login');
       }
     }
@@ -76,6 +80,15 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
         <p>Cargando...</p>
       </div>
     );
+  }
+
+  // Lista de rutas públicas que no requieren autenticación
+  const publicRoutes = ['/test', '/validar'];
+  const isPublicRoute = publicRoutes.some(route => pathname.startsWith(route));
+
+  // Si es una ruta pública, renderizar children directamente sin validaciones de auth
+  if (isPublicRoute) {
+    return <>{children}</>;
   }
 
   // Si está autenticado y con perfil, y está en una ruta de dashboard, muestra el contenido

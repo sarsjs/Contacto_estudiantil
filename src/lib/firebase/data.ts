@@ -1,8 +1,8 @@
-import { collection, getDocs, addDoc, doc, deleteDoc, query, where, updateDoc, writeBatch, orderBy, serverTimestamp, getDoc, deleteField } from "firebase/firestore";
+import { collection, getDocs, addDoc, doc, deleteDoc, query, where, updateDoc, writeBatch, orderBy, serverTimestamp, getDoc, deleteField, limit } from "firebase/firestore";
 import { db, storage } from "./client";
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
-import type { User, Group, Subject, TimetableEntry, Attendance, Message, Grade, CalendarEvent, SubstitutionRequest, WorkLog } from "@/lib/types";
+import type { User, Group, Subject, TimetableEntry, Attendance, Message, Grade, CalendarEvent, SubstitutionRequest, WorkLog, ActivityLog } from "@/lib/types";
 
 const fetchData = async <T>(fetchFunction: () => Promise<T[]>, entityName: string): Promise<T[]> => {
     try {
@@ -361,7 +361,7 @@ export const fetchTimetableByTeacher = async (teacherId: string): Promise<Timeta
 // Functions for the unified user model
 export const fetchStudents = async (): Promise<User[]> => {
     const allUsers = await fetchUsers();
-    return allUsers.filter(user => user.role === 'estudiante');
+    return allUsers.filter(user => user.role === 'estudiante' || user.role === 'alumno');
 };
 
 export const fetchStudentsByGroup = async (groupId: string): Promise<User[]> => {
@@ -632,4 +632,29 @@ export const verifyAttendanceToken = async (groupId: string, code: string) => {
     if (now > expiresAt) return null; // Token expired
 
     return tokenDoc;
+};
+
+/**
+ * Registers an activity in the system audit log.
+ */
+export const logActivity = async (activity: Omit<ActivityLog, 'id' | 'timestamp'>) => {
+    try {
+        await addDoc(collection(db, "activity_logs"), {
+            ...activity,
+            timestamp: serverTimestamp()
+        });
+    } catch (error) {
+        console.error("Error logging activity:", error);
+    }
+};
+
+export const fetchActivityLogs = async (limitCount = 100): Promise<ActivityLog[]> => {
+    try {
+        const q = query(collection(db, "activity_logs"), orderBy("timestamp", "desc"), limit(limitCount));
+        const querySnapshot = await getDocs(q);
+        return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as unknown as ActivityLog));
+    } catch (error) {
+        console.error("Error fetching activity logs:", error);
+        return [];
+    }
 };

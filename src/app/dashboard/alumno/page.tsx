@@ -7,9 +7,6 @@ import {
   fetchTimetableByGroup,
   fetchSubjects,
   fetchGradesByStudent,
-  uploadStudentPhoto,
-  deleteStudentPhoto,
-  fetchGroups,
   fetchUsers,
   verifyAttendanceToken
 } from '@/lib/firebase/data';
@@ -36,6 +33,7 @@ import {
   Trophy
 } from 'lucide-react';
 import { StatCard } from '@/components/dashboard/stat-card';
+import { AchievementShowcase } from '@/components/dashboard/achievement-showcase';
 import { toPng } from 'html-to-image';
 import { useToast } from '@/hooks/use-toast';
 
@@ -163,66 +161,7 @@ export default function AlumnoPage() {
     };
   }, [student, grades, subjects]);
 
-  const handleDownloadCard = async () => {
-    if (student) {
-      try {
-        toast({
-          title: "Generando imágenes...",
-          description: "La descarga de ambas caras iniciará en un momento.",
-        });
 
-        // Opciones de configuración para mejor calidad
-        const options = { cacheBust: true, pixelRatio: 3 };
-
-        // 1. Capturar Frente
-        const frontUrl = await toPng(document.getElementById('credential-front') as HTMLElement, options);
-        const linkFront = document.createElement('a');
-        linkFront.download = `EPO264_Credencial_Frente_${student.matricula || 'Alumno'}.png`;
-        linkFront.href = frontUrl;
-        document.body.appendChild(linkFront);
-        linkFront.click();
-        document.body.removeChild(linkFront);
-
-        // Pequeña pausa para evitar bloqueo de popups
-        await new Promise(resolve => setTimeout(resolve, 800));
-
-        // 2. Capturar Reverso
-        const backUrl = await toPng(document.getElementById('credential-back') as HTMLElement, options);
-        const linkBack = document.createElement('a');
-        linkBack.download = `EPO264_Credencial_Reverso_${student.matricula || 'Alumno'}.png`;
-        linkBack.href = backUrl;
-        document.body.appendChild(linkBack);
-        linkBack.click();
-        document.body.removeChild(linkBack);
-
-        toast({
-          title: "Descarga completada",
-          description: "Se han guardado las dos caras de tu credencial.",
-        });
-      } catch (error) {
-        console.error('Error downloading card:', error);
-        toast({
-          title: "Error de descarga",
-          description: "No se pudieron generar las imágenes. Inténtalo de nuevo.",
-          variant: "destructive",
-        });
-      }
-    }
-  };
-
-  const handlePhotoUpdate = async (photoUrl: string) => {
-    if (student) {
-      setStudent({
-        ...student,
-        avatarUrl: photoUrl
-      });
-
-      toast({
-        title: "Foto actualizada",
-        description: "La foto de tu credencial ha sido actualizada.",
-      });
-    }
-  };
 
   return (
     <div className="space-y-6">
@@ -236,6 +175,14 @@ export default function AlumnoPage() {
           <span className="text-xs font-black uppercase text-primary">{group?.name || 'Sin Grupo'}</span>
         </div>
       </div>
+
+      {/* Sistema de Gamificación - Vistazo Premium */}
+      <AchievementShowcase
+        xp={student?.xp || 750}
+        level={student?.level || 3}
+        unlockedBadges={student?.badges || ['reloj_precision', 'buscador_oro']}
+        userName={student?.name?.split(' ')[0]}
+      />
 
       {/* Stats Summary */}
       <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
@@ -338,163 +285,6 @@ export default function AlumnoPage() {
               </CardContent>
             </Card>
 
-            <Card className="border-none shadow-xl overflow-hidden bg-transparent">
-              <CardHeader className="px-0 pt-0">
-                <div className="flex justify-between items-center mb-4">
-                  <div>
-                    <CardTitle className="text-xl font-black uppercase tracking-tighter">Tu Credencial Oficial</CardTitle>
-                    <CardDescription className="text-xs font-medium">Validación Digital EPO 264</CardDescription>
-                  </div>
-                  <Button variant="outline" size="sm" onClick={handleDownloadCard} className="h-8 text-[10px] font-black uppercase tracking-widest bg-background">
-                    <Download className="h-3 w-3 mr-2" />
-                    Descargar
-                  </Button>
-                </div>
-              </CardHeader>
-
-              <CardContent className="p-0 overflow-x-auto pb-6">
-                <div className="flex flex-col xl:flex-row gap-8 justify-center items-center">
-
-                  {/* FRONT SIDE */}
-                  <div id="credential-front" className="w-[325px] h-[205px] bg-white rounded-xl shadow-2xl relative overflow-hidden flex flex-col border border-gray-200 select-none">
-
-                    {/* Official Decoration Background */}
-                    <div className="absolute top-0 right-0 w-[200px] h-[200px] bg-gradient-to-bl from-[#8B1A2B]/10 to-transparent rounded-full -mr-10 -mt-10 z-0" />
-                    <div className="absolute bottom-0 left-0 w-[150px] h-[150px] bg-gradient-to-tr from-gray-200/50 to-transparent rounded-full -ml-10 -mb-10 z-0" />
-
-                    {/* Header Strip with Logos */}
-                    <div className="h-[45px] w-full flex items-center justify-between px-3 pt-2 relative z-10 border-b border-gray-100/50 bg-white/80 backdrop-blur-sm">
-                      <img src="/edomex.png" alt="Edomex" className="h-8 object-contain" />
-                      <div className="flex-1 border-r border-gray-300 mx-2 h-6" />
-                      <img src="/edu.png" alt="Secretaría de Educación" className="h-8 object-contain" />
-                    </div>
-
-                    {/* Body */}
-                    <div className="flex-1 flex p-3 gap-3 relative z-10">
-
-                      {/* Left Column: Photo & Role */}
-                      <div className="w-[85px] flex flex-col gap-1.5 pt-1">
-                        <div className="w-full h-[100px] bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm p-0.5">
-                          <div className="w-full h-full rounded-md overflow-hidden relative bg-gray-50">
-                            {student.avatarUrl ? (
-                              <img src={student.avatarUrl} alt="Foto" className="w-full h-full object-cover" />
-                            ) : (
-                              <div className="w-full h-full flex items-center justify-center text-gray-300"><UserCircle className="h-10 w-10" /></div>
-                            )}
-                          </div>
-                        </div>
-                        <div className="bg-[#8B1A2B] text-white py-0.5 text-center rounded-full shadow-sm">
-                          <p className="text-[6px] font-black uppercase tracking-widest">Estudiante</p>
-                        </div>
-                      </div>
-
-                      {/* Right Column: Info */}
-                      <div className="flex-1 flex flex-col">
-                        {/* School Header */}
-                        <div className="mb-1 relative">
-                          <div className="absolute -right-2 -top-2 opacity-[0.08] pointer-events-none">
-                            <img src="/logo-epo264.png" alt="Watermark" className="h-24 w-24 object-contain grayscale" />
-                          </div>
-
-                          <h3 className="text-[6px] font-bold text-gray-500 uppercase tracking-widest">Educación Media Superior</h3>
-                          <h2 className="text-[11px] font-black text-gray-900 leading-tight uppercase font-serif">Escuela Preparatoria Oficial Núm. 264</h2>
-                          <div className="h-0.5 w-10 bg-[#8B1A2B] mt-0.5 rounded-full" />
-                        </div>
-
-                        {/* Student Data Grid */}
-                        <div className="space-y-1 mt-0.5">
-                          <div>
-                            <p className="text-[5px] text-gray-400 font-bold uppercase mb-[1px]">Nombre del Alumno</p>
-                            <p className="text-[10px] font-black text-gray-800 leading-tight uppercase">{student.name}</p>
-                          </div>
-
-                          <div className="grid grid-cols-2 gap-1">
-                            <div>
-                              <p className="text-[5px] text-gray-400 font-bold uppercase mb-[1px]">Matrícula</p>
-                              <p className="text-[9px] font-mono font-bold text-[#8B1A2B]">{student.matricula || "--------"}</p>
-                            </div>
-                            <div>
-                              <p className="text-[5px] text-gray-400 font-bold uppercase mb-[1px]">Grupo</p>
-                              <p className="text-[9px] font-bold text-gray-800 uppercase bg-gray-100 inline-block px-1.5 rounded-sm">{group?.name || "N/A"}</p>
-                            </div>
-                          </div>
-
-                          <div className="flex justify-between items-end">
-                            <div>
-                              <p className="text-[5px] text-gray-400 font-bold uppercase mb-[1px]">C.U.R.P.</p>
-                              <p className="text-[7px] font-bold text-gray-600 uppercase tracking-tight">{student.curp || "NO REGISTRADA"}</p>
-                            </div>
-                            <img src="/escudomex.png" alt="Escudo Edomex" className="h-8 w-8 object-contain opacity-80" />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Footer Strip */}
-                    <div className="h-4 bg-[#F2F2F2] border-t border-gray-200 w-full flex items-center justify-between px-3">
-                      <span className="text-[4px] font-bold text-gray-400 uppercase tracking-widest">Identificación Oficial Escolar</span>
-                      <span className="text-[5px] font-bold text-[#8B1A2B] uppercase">C.C.T. 15EBH0264W</span>
-                    </div>
-                  </div>
-
-                  {/* BACK SIDE */}
-                  <div id="credential-back" className="w-[325px] h-[205px] bg-white rounded-xl shadow-2xl relative overflow-hidden flex flex-col border border-gray-200 select-none">
-                    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/clean-gray-paper.png')] opacity-50" />
-
-                    <div className="relative p-5 flex gap-5 h-full items-center z-10">
-                      {/* QR Code Section */}
-                      <div className="flex flex-col items-center gap-1">
-                        <div className="w-[90px] h-[90px] bg-white p-1.5 rounded-lg border border-gray-200 shadow-sm relative">
-                          <div className="absolute inset-0 border-[3px] border-[#8B1A2B] rounded-lg opacity-10"></div>
-                          <img
-                            src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${typeof window !== 'undefined' ? window.location.origin : ''}/validacion/${student.id}`}
-                            alt="QR Validación"
-                            className="w-full h-full object-contain"
-                          />
-                        </div>
-                        <span className="text-[5px] font-bold text-gray-400 uppercase tracking-wider">Escanear para Validar</span>
-                      </div>
-
-                      {/* Info & Legal */}
-                      <div className="flex-1 flex flex-col justify-between h-[100px] border-l border-gray-100 pl-4 py-1">
-                        <div>
-                          <div className="flex items-center gap-2 mb-2">
-                            <div className="p-1 bg-[#8B1A2B]/5 rounded-md">
-                              <ShieldCheck className="h-3 w-3 text-[#8B1A2B]" />
-                            </div>
-                            <div>
-                              <h4 className="text-[7px] font-black uppercase text-gray-900 leading-none">Vigencia 2024 - 2025</h4>
-                              <p className="text-[5px] text-gray-400 font-bold uppercase">Ciclo Escolar Actual</p>
-                            </div>
-                          </div>
-                          <p className="text-[5px] text-justify text-gray-500 leading-relaxed font-medium">
-                            Esta credencial es personal e intransferible y acredita al portador como alumno de la <span className="text-[#8B1A2B] font-bold">EPO 264</span>.
-                            En caso de extravío, favor de reportarlo inmediatamente a la dirección escolar.
-                          </p>
-                        </div>
-
-                        <div className="space-y-1 mt-auto">
-                          <div className="flex items-center gap-2">
-                            <div className="h-8 w-8 rounded-full bg-gray-100 flex items-center justify-center border border-gray-200">
-                              <img src="/logo-epo264.png" className="h-5 w-5 object-contain opacity-80" />
-                            </div>
-                            <div className="flex-1">
-                              <div className="h-px w-full bg-gray-300 mb-0.5"></div>
-                              <p className="text-[5px] font-bold text-gray-400 uppercase text-center">Autoridad Escolar</p>
-                            </div>
-                          </div>
-                          <div className="text-right pt-1">
-                            <p className="text-[4px] font-mono text-gray-300">ID: {student.id}</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="mt-auto bg-gradient-to-r from-gray-900 to-[#8B1A2B] h-2 w-full" />
-                  </div>
-
-                </div>
-              </CardContent>
-            </Card>
           </div>
         )
       }

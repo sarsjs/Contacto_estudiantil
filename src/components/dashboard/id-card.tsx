@@ -11,9 +11,12 @@ interface IdCardProps {
   user: User | Student;
   onEdit: (user: User | Student) => void;
   onDelete?: (userId: string) => void;
+  selectable?: boolean;
+  selected?: boolean;
+  onSelect?: (selected: boolean) => void;
 }
 
-export function IdCard({ user, onEdit, onDelete }: IdCardProps) {
+export function IdCard({ user, onEdit, onDelete, selectable, selected, onSelect }: IdCardProps) {
   const isStudent = 'matricula' in user;
   const role = isStudent ? 'Estudiante' : (user as User).role;
 
@@ -28,7 +31,17 @@ export function IdCard({ user, onEdit, onDelete }: IdCardProps) {
   };
 
   return (
-    <Card>
+    <Card className={`relative transition-all duration-200 ${selected ? 'ring-2 ring-primary shadow-lg border-primary/50' : ''}`}>
+      {selectable && (
+        <div className="absolute top-3 left-3 z-10">
+          <input
+            type="checkbox"
+            className="w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer"
+            checked={selected}
+            onChange={(e) => onSelect?.(e.target.checked)}
+          />
+        </div>
+      )}
       <CardContent className="pt-6">
         <div className="flex flex-col items-center text-center">
           <Avatar className="h-20 w-20 mb-4">

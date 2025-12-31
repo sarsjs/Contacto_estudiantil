@@ -178,3 +178,100 @@ export const deleteUser = functions.region('us-central1').https.onCall(async (da
     );
   }
 });
+
+// Función HTTP pública para validar credenciales
+export const validateCredential = functions.region('us-central1').https.onRequest(async (req, res) => {
+  // Habilitar CORS
+  res.set('Access-Control-Allow-Origin', '*');
+
+  if (req.method === 'OPTIONS') {
+    // Send response to OPTIONS requests
+    res.set('Access-Control-Allow-Methods', 'GET');
+    res.set('Access-Control-Allow-Headers', 'Content-Type');
+    res.set('Access-Control-Max-Age', '3600');
+    res.status(204).send('');
+    return;
+  }
+
+  if (req.method !== 'GET') {
+    res.status(405).send('Method Not Allowed');
+    return;
+  }
+
+  const publicId = req.query.public_id as string;
+
+  if (!publicId) {
+    res.status(400).json({ status: "INVALID", message: "Falta el parámetro public_id." });
+    return;
+  }
+
+  try {
+    // Buscar estudiante en la colección 'users' (asumiendo que ahí están los alumnos)
+    const userDoc = await db.collection("users").doc(publicId).get();
+
+    if (!userDoc.exists) {
+      res.status(404).json({ status: "INVALID", message: "La credencial no existe en el sistema." });
+      return;
+    }
+
+    const userData = userDoc.data();
+
+    // Validación de Rol
+    if (userData?.role !== 'estudiante') {
+      res.status(400).json({ status: "INVALID", message: "El identificador no corresponde a un estudiante." });
+      return;
+    }
+
+    // Validación de Estatus (Si no tiene campo status, se asume activo por compatibilidad, o se puede restringir)
+    // Asumimos 'activo' por defecto si no existe campo para evitar bloqueo masivo en demo.
+    const status = userData?.status || 'activo';
+    if (status !== 'activo') {
+      res.json({ status: "INVALID", message: "El estudiante no se encuentra ACTIVO en el ciclo escolar actual." });
+      return;
+    }
+
+    // Validación de Fechas
+    const now = new Date();
+    const validFrom = userData?.valid_from ? new Date(userData.valid_from) : new Date('2024-08-01'); // Default start 
+    const validTo = userData?.valid_to ? new Date(userData.valid_to) : new Date('2025-07-31');     // Default end 
+
+    if (now < validFrom || now > validTo) {
+      res.json({ status: "INVALID", message: "La credencial ha expirado o aún no es vigente." });
+      return;
+    }
+
+    // Obtener datos de la escuela
+    // Si existe schoolId en el usuario se usa, si no, se busca un default o hardcode para la EPO 264
+    let schoolData = {
+      name: "Escuela Preparatoria Oficial Núm. 264",
+      cct: "15EBH0264W",
+      address: "Metepec, Estado de México",
+      logoUrl: "https://contacto-estudiantil.web.app/escudomex.png"
+    };
+
+    if (userData?.schoolId) {
+      const schoolDoc = await db.collection("schools").doc(userData.schoolId).get();
+      if (schoolDoc.exists) {
+        schoolData = { ...schoolData, ...schoolDoc.data() };
+      }
+    }
+
+    // Respuesta VÁLIDA con datos públicos
+    res.json({
+      status: "VALID",
+      student: {
+        name: userData?.name,
+        matricula: userData?.matricula || "S/M",
+        group: userData?.groupId || "Sin Asignar",
+        photoUrl: userData?.avatarUrl || null,
+        grade: userData?.grade || "N/A"
+      },
+      school: schoolData,
+      timestamp: new Date().toISOString()
+    });
+
+  } catch (error) {
+    console.error("Error validando credencial:", error);
+    res.status(500).json({ status: "INVALID", message: "Error interno del servidor de validación." });
+  }
+});

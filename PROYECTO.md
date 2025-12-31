@@ -314,3 +314,29 @@ Requisitos:
 * **Añadido:** Panel de **"Pulso de Asistencia Real"** para Orientadores: Vista en tiempo real de quién está en plantel, quién viene en camino y quién falta por localizar.
 * **Mejorado:** Rediseño del **Dashboard del Orientador**: Ahora alineado con la estética del Director, incluyendo StatCards de métricas clave, alertas en tiempo real y acceso rápido a grupos.
 * **Corregido:** Eliminación de errores de compilación por archivos faltantes y optimización de la navegación lateral.
+
+30/12/2025 20:00 - Integridad del Sistema, Gamificación y Registro de Auditoría.
+
+* **Implementado:** Nuevo **Panel de Integridad del Sistema** para el Director: Detección automática de inconsistencias (alumnos huérfanos, grupos sin orientador, materias sin docente, grupos vacíos).
+* **Implementado:** Sistema de **Alertas Críticas** en el Panel de Notificaciones: Los problemas de integridad ahora disparan avisos directos y accionables para el Director.
+* **Implementado:** **Bitácora de Auditoría (Audit Log)**: Registro detallado de acciones administrativas (altas, bajas, cambios de grupo, asignaciones masivas) visible para el Director.
+* **Implementado:** **Gamificación en el Portal del Alumno**: Introducción de XP, Niveles de Prestigio e **Insignias 3D** (Cerebro de Grafeno, Reloj de Precisión, etc.) para motivar el rendimiento sin estigmatizar.
+* **Implementado:** **Portal de Credencial Dedicado**: Se separó la visualización de la credencial oficial en un apartado especial del menú lateral, permitiendo visualización de doble cara y descarga en alta calidad.
+* **Mejorado:** Detección de **Alumnos Sin Grupo**: Ahora el sistema identifica no solo a los que no tienen `groupId`, sino también a los "huérfanos" cuyo grupo fue eliminado del sistema.
+* **Corregido:** Importación de dependencias críticas (`framer-motion`, `Link`, `Button`) que causaban errores de compilación en las nuevas interfaces.
+
+---
+
+## ⚠️ NOTA CRÍTICA SOBRE DESPLIEGUE MÓVIL (Android/iOS)
+
+**ESTADO ACTUAL:** La infraestructura de EduChain está lista y optimizada para servir como el cerebro (Backend/API) de las aplicaciones móviles. Sin embargo, las aplicaciones nativas para **Android e iOS AÚN NO ESTÁN IMPLEMENTADAS**.
+
+Este es un componente fundamental para el éxito comercial y operativo del proyecto, ya que permitirá:
+
+1. El monitoreo GPS en tiempo real más preciso (Geofencing Nativo).
+2. Notificaciones PUSH instantáneas para padres y alumnos.
+3. El uso fluido de la Credencial NFC/QR en accesos físicos.
+
+**Siguiente Fase:** Desarrollo de la App Móvil usando **Capacitor** o **React Native** para consumir los servicios ya establecidos en este prototipo web.
+
+---

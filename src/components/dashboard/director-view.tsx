@@ -3,8 +3,8 @@
 import * as React from 'react';
 import { School, Users, User as UserIcon, FolderKanban, UserCheck, GraduationCap, AlertTriangle, ShieldCheck, MapPin, Clock } from 'lucide-react';
 import { StatCard } from './stat-card';
-import { fetchUsers, fetchGroups, fetchStudents } from '@/lib/firebase/data';
-import type { Group, User, Student } from '@/lib/types';
+import { fetchUsers, fetchGroups, fetchStudents, fetchSubjects } from '@/lib/firebase/data';
+import type { Group, User, Student, Subject } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
 import { CalendarPanel } from './calendar-panel';
 import { NotificationPanel } from './notification-panel';
@@ -22,16 +22,54 @@ export function DirectorView() {
   const [studentList, setStudentList] = React.useState<Student[]>([]);
   const { toast } = useToast();
 
+  const [integrityAlerts, setIntegrityAlerts] = React.useState<string[]>([]);
+
+  const analyzeIntegrity = React.useCallback((users: User[], groups: Group[], students: Student[], subjects: Subject[]) => {
+    const alerts: string[] = [];
+
+    // 1. Alumnos sin grupo
+    const studentsWithoutGroup = students.filter(s => !s.groupId || s.groupId === 'none' || s.groupId === '');
+    if (studentsWithoutGroup.length > 0) {
+      alerts.push(`🚨 INTEGRIDAD: Hay ${studentsWithoutGroup.length} alumnos sin grupo asignado.`);
+    }
+
+    // 2. Grupos sin orientador
+    const groupsWithoutCounselor = groups.filter(g => !g.counselorId);
+    if (groupsWithoutCounselor.length > 0) {
+      alerts.push(`🚨 INTEGRIDAD: ${groupsWithoutCounselor.length} grupos no tienen orientador.`);
+    }
+
+    // 3. Materias sin profesor
+    const subjectsWithoutTeacher = subjects.filter(s => !s.teacherId);
+    if (subjectsWithoutTeacher.length > 0) {
+      alerts.push(`🚨 INTEGRIDAD: ${subjectsWithoutTeacher.length} materias no tienen profesor.`);
+    }
+
+    // 4. Grupos vacíos
+    const groupsWithStudents = new Set(students.map(s => s.groupId).filter(Boolean));
+    const emptyGroups = groups.filter(g => !groupsWithStudents.has(g.id));
+    if (emptyGroups.length > 0) {
+      alerts.push(`⚠️ AVISO: ${emptyGroups.length} grupo(s) no tienen alumnos inscritos.`);
+    }
+
+    setIntegrityAlerts(alerts);
+  }, []);
+
   const loadData = React.useCallback(async () => {
     try {
-      const [users, groupsData, studentsData] = await Promise.all([
+      const [users, groupsData, studentsData, subjectsData] = await Promise.all([
         fetchUsers(),
         fetchGroups(),
         fetchStudents(),
+        fetchSubjects()
       ]);
+
       setStaffList(users);
       setGroupList(groupsData);
       setStudentList(studentsData);
+
+      // Analizar integridad para notificaciones sintéticas
+      analyzeIntegrity(users, groupsData, studentsData, subjectsData);
     } catch (error) {
       console.error('Error loading Firebase data', error);
       toast({
@@ -40,7 +78,7 @@ export function DirectorView() {
         variant: 'destructive',
       });
     }
-  }, [toast]);
+  }, [toast, analyzeIntegrity]);
 
   React.useEffect(() => {
     loadData();
@@ -68,6 +106,7 @@ export function DirectorView() {
     const isCounselorMissing = counselor?.gpsStatus === 'outside' || counselor?.gpsStatus === 'unknown';
     return isCounselorMissing && !hasSubstitute;
   });
+
 
 
   if (staffList.length === 0 && groupList.length === 0) {
@@ -184,7 +223,7 @@ export function DirectorView() {
           <WorkAttendanceTable className="flex-1" />
         </div>
         <div className="xl:col-span-4 flex">
-          <NotificationPanel className="flex-1" />
+          <NotificationPanel className="flex-1" integrityAlerts={integrityAlerts} />
         </div>
       </div>
 

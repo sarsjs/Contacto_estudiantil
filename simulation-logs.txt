@@ -1,0 +1,1133 @@
+2:02:33 p.m. | Estudiante | Consultar Boleta | SUCCESS | 187ms | ID: 256817 revisó 0 materias
+2:02:34 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:02:35 p.m. | Sistema    | Integridad      | WARNING | 103ms | Usuario Director no encontrado (¿Seed corrido?)
+2:02:31 p.m. | Profesor   | Pasar Lista     | SUCCESS | 108ms | Grupo Grado 2 - 1: 1 alumnos cargados
+2:02:37 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:02:38 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:02:39 p.m. | Sistema    | Integridad      | WARNING | 93ms | Usuario Director no encontrado (¿Seed corrido?)
+2:02:40 p.m. | Sistema    | CRASH           | ERROR   | 7917ms | Unexpected token '<', "<!DOCTYPE "... is not valid JSON
+2:02:40 p.m. | Sistema    | CRASH           | ERROR   | 5531ms | Unexpected token '<', "<!DOCTYPE "... is not valid JSON
+2:02:40 p.m. | Profesor   | Pasar Lista     | SUCCESS | 101ms | Grupo Grado 2 - 1: 1 alumnos cargados
+2:02:40 p.m. | Sistema    | CRASH           | ERROR   | 4201ms | Unexpected token '<', "<!DOCTYPE "... is not valid JSON
+2:02:40 p.m. | Sistema    | CRASH           | ERROR   | 1862ms | Unexpected token '<', "<!DOCTYPE "... is not valid JSON
+2:02:41 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:02:42 p.m. | Red        | Conexión        | ERROR   | 73ms | Error 404: Endpoint no encontrado (Simulado)
+2:02:43 p.m. | Sistema    | CRASH           | ERROR   | 74ms | Unexpected token '<', "<!DOCTYPE "... is not valid JSON
+2:02:43 p.m. | Sistema    | CRASH           | ERROR   | 74ms | Unexpected token '<', "<!DOCTYPE "... is not valid JSON
+2:02:44 p.m. | Sistema    | Integridad      | WARNING | 85ms | Usuario Director no encontrado (¿Seed corrido?)
+2:02:45 p.m. | Sistema    | CRASH           | ERROR   | 62ms | Unexpected token '<', "<!DOCTYPE "... is not valid JSON
+2:02:46 p.m. | Profesor   | Pasar Lista     | SUCCESS | 100ms | Grupo Grado 1 - 2: 1 alumnos cargados
+2:02:47 p.m. | Sistema    | CRASH           | ERROR   | 60ms | Unexpected token '<', "<!DOCTYPE "... is not valid JSON
+2:02:47 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:02:48 p.m. | Estudiante | Consultar Boleta | SUCCESS | 121ms | ID: 253086 revisó 1 materias
+2:02:49 p.m. | Profesor   | Pasar Lista     | SUCCESS | 100ms | Grupo Grado 1 - 2: 1 alumnos cargados
+2:02:50 p.m. | Profesor   | Pasar Lista     | SUCCESS | 116ms | Grupo Grado 2 - 1: 1 alumnos cargados
+2:02:51 p.m. | Estudiante | Consultar Boleta | SUCCESS | 119ms | ID: 253086 revisó 1 materias
+2:02:51 p.m. | Estudiante | Consultar Boleta | SUCCESS | 104ms | ID: 256817 revisó 0 materias
+2:02:52 p.m. | Estudiante | Consultar Boleta | SUCCESS | 103ms | ID: 256817 revisó 0 materias
+2:02:53 p.m. | Estudiante | Consultar Boleta | SUCCESS | 166ms | ID: 256817 revisó 0 materias
+2:02:54 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:02:55 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:02:55 p.m. | Estudiante | Consultar Boleta | SUCCESS | 117ms | ID: 256817 revisó 0 materias
+2:02:56 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:02:57 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:07:06 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:07:06 p.m. | Profesor   | Pasar Lista     | SUCCESS | 115ms | Grupo Grado 1 - 2: 1 alumnos cargados
+2:07:09 p.m. | Estudiante | Consultar Boleta | SUCCESS | 104ms | ID: 256817 revisó 0 materias
+2:07:09 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:07:10 p.m. | Estudiante | Consultar Boleta | SUCCESS | 106ms | ID: 253086 revisó 1 materias
+2:07:11 p.m. | Profesor   | Pasar Lista     | SUCCESS | 113ms | Grupo Grado 1 - 1: 1 alumnos cargados
+2:07:08 p.m. | Profesor   | Pasar Lista     | SUCCESS | 100ms | Grupo Grado 2 - 1: 1 alumnos cargados
+2:07:12 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:07:13 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:07:14 p.m. | Estudiante | Consultar Boleta | SUCCESS | 119ms | ID: 257950 revisó 0 materias
+2:07:15 p.m. | Público    | Escaneo QR      | ERROR   | 7994ms | Fallo validación: William Sandoval R.
+2:07:15 p.m. | Profesor   | Pasar Lista     | SUCCESS | 106ms | Grupo Grado 1 - 2: 1 alumnos cargados
+2:07:15 p.m. | Público    | Escaneo QR      | ERROR   | 2825ms | Fallo validación: Samara Sanchez Lopez
+2:07:16 p.m. | Profesor   | Pasar Lista     | SUCCESS | 101ms | Grupo Grado 1 - 1: 1 alumnos cargados
+2:07:17 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:07:18 p.m. | Estudiante | Consultar Boleta | SUCCESS | 103ms | ID: 253086 revisó 1 materias
+2:07:19 p.m. | Sistema    | Integridad      | WARNING | 104ms | Usuario Director no encontrado (¿Seed corrido?)
+2:07:21 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:07:22 p.m. | Profesor   | Pasar Lista     | SUCCESS | 108ms | Grupo Grado 1 - 1: 1 alumnos cargados
+2:07:22 p.m. | Red        | Conexión        | ERROR   | 4991ms | Error 404: Endpoint no encontrado (Simulado)
+2:07:22 p.m. | Estudiante | Consultar Boleta | SUCCESS | 118ms | ID: 253086 revisó 1 materias
+2:07:22 p.m. | Público    | Escaneo QR      | ERROR   | 2664ms | Fallo validación: William Sandoval R.
+2:07:23 p.m. | Público    | Escaneo QR      | ERROR   | 132ms | Fallo validación: Samara Sanchez Lopez
+2:07:24 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:07:25 p.m. | Profesor   | Pasar Lista     | SUCCESS | 116ms | Grupo Grado 1 - 2: 1 alumnos cargados
+2:07:26 p.m. | Público    | Escaneo QR      | ERROR   | 158ms | Fallo validación: Samara Sanchez Lopez
+2:07:26 p.m. | Estudiante | Consultar Boleta | SUCCESS | 106ms | ID: 253086 revisó 1 materias
+2:07:27 p.m. | Sistema    | Integridad      | WARNING | 110ms | Usuario Director no encontrado (¿Seed corrido?)
+2:07:28 p.m. | Profesor   | Pasar Lista     | SUCCESS | 117ms | Grupo Grado 1 - 1: 1 alumnos cargados
+2:07:29 p.m. | Sistema    | Integridad      | WARNING | 110ms | Usuario Director no encontrado (¿Seed corrido?)
+2:07:29 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:07:30 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:07:31 p.m. | Estudiante | Consultar Boleta | SUCCESS | 181ms | ID: 256817 revisó 0 materias
+2:07:32 p.m. | Red        | Conexión        | ERROR   | 66ms | Error 404: Endpoint no encontrado (Simulado)
+2:07:33 p.m. | Profesor   | Pasar Lista     | SUCCESS | 110ms | Grupo Grado 1 - 1: 1 alumnos cargados
+2:07:33 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:07:34 p.m. | Público    | Escaneo QR      | ERROR   | 119ms | Fallo validación: William Sandoval R.
+2:07:35 p.m. | Sistema    | Integridad      | WARNING | 114ms | Usuario Director no encontrado (¿Seed corrido?)
+2:07:36 p.m. | Profesor   | Pasar Lista     | SUCCESS | 115ms | Grupo Grado 1 - 2: 1 alumnos cargados
+2:07:37 p.m. | Profesor   | Pasar Lista     | SUCCESS | 112ms | Grupo Grado 1 - 1: 1 alumnos cargados
+2:07:38 p.m. | Sistema    | Integridad      | WARNING | 153ms | Usuario Director no encontrado (¿Seed corrido?)
+2:07:38 p.m. | Público    | Escaneo QR      | ERROR   | 154ms | Fallo validación: William Sandoval R.
+2:07:39 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:07:40 p.m. | Profesor   | Pasar Lista     | SUCCESS | 115ms | Grupo Grado 1 - 2: 1 alumnos cargados
+2:07:41 p.m. | Estudiante | Consultar Boleta | SUCCESS | 117ms | ID: 257950 revisó 0 materias
+2:07:42 p.m. | Estudiante | Consultar Boleta | SUCCESS | 87ms | ID: 257950 revisó 0 materias
+2:07:42 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:07:43 p.m. | Público    | Escaneo QR      | ERROR   | 130ms | Fallo validación: Samara Sanchez Lopez
+2:07:44 p.m. | Público    | Escaneo QR      | ERROR   | 130ms | Fallo validación: Samara Sanchez Lopez
+2:07:45 p.m. | Sistema    | Integridad      | WARNING | 99ms | Usuario Director no encontrado (¿Seed corrido?)
+2:07:46 p.m. | Profesor   | Pasar Lista     | SUCCESS | 100ms | Grupo Grado 1 - 2: 1 alumnos cargados
+2:07:46 p.m. | Estudiante | Consultar Boleta | SUCCESS | 115ms | ID: 256817 revisó 0 materias
+2:07:47 p.m. | Profesor   | Pasar Lista     | SUCCESS | 114ms | Grupo Grado 1 - 2: 1 alumnos cargados
+2:07:48 p.m. | Profesor   | Pasar Lista     | SUCCESS | 121ms | Grupo Grado 2 - 1: 1 alumnos cargados
+2:07:49 p.m. | Profesor   | Pasar Lista     | SUCCESS | 114ms | Grupo Grado 1 - 1: 1 alumnos cargados
+2:07:49 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:07:50 p.m. | Profesor   | Pasar Lista     | SUCCESS | 108ms | Grupo Grado 1 - 2: 1 alumnos cargados
+2:07:51 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:07:52 p.m. | Sistema    | Integridad      | WARNING | 112ms | Usuario Director no encontrado (¿Seed corrido?)
+2:07:53 p.m. | Sistema    | Integridad      | WARNING | 101ms | Usuario Director no encontrado (¿Seed corrido?)
+2:07:54 p.m. | Estudiante | Consultar Boleta | SUCCESS | 117ms | ID: 253086 revisó 1 materias
+2:07:54 p.m. | Público    | Escaneo QR      | ERROR   | 136ms | Fallo validación: Samara Sanchez Lopez
+2:07:55 p.m. | Público    | Escaneo QR      | ERROR   | 124ms | Fallo validación: William Sandoval R.
+2:07:56 p.m. | Sistema    | Integridad      | WARNING | 119ms | Usuario Director no encontrado (¿Seed corrido?)
+2:07:57 p.m. | Red        | Conexión        | ERROR   | 56ms | Error 404: Endpoint no encontrado (Simulado)
+2:07:57 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:07:58 p.m. | Estudiante | Consultar Boleta | SUCCESS | 77ms | ID: 256817 revisó 0 materias
+2:07:59 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:08:00 p.m. | Sistema    | Integridad      | WARNING | 101ms | Usuario Director no encontrado (¿Seed corrido?)
+2:08:01 p.m. | Profesor   | Pasar Lista     | SUCCESS | 110ms | Grupo Grado 1 - 1: 1 alumnos cargados
+2:08:02 p.m. | Público    | Escaneo QR      | ERROR   | 141ms | Fallo validación: Bryan Refugio Sanchez Vidal
+2:08:02 p.m. | Sistema    | Integridad      | WARNING | 94ms | Usuario Director no encontrado (¿Seed corrido?)
+2:08:03 p.m. | Profesor   | Pasar Lista     | SUCCESS | 114ms | Grupo Grado 1 - 2: 1 alumnos cargados
+2:08:04 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:08:05 p.m. | Sistema    | Integridad      | WARNING | 104ms | Usuario Director no encontrado (¿Seed corrido?)
+2:08:06 p.m. | Sistema    | Integridad      | WARNING | 96ms | Usuario Director no encontrado (¿Seed corrido?)
+2:08:06 p.m. | Profesor   | Pasar Lista     | SUCCESS | 102ms | Grupo Grado 1 - 1: 1 alumnos cargados
+2:08:07 p.m. | Profesor   | Pasar Lista     | SUCCESS | 103ms | Grupo Grado 1 - 2: 1 alumnos cargados
+2:08:08 p.m. | Público    | Escaneo QR      | ERROR   | 138ms | Fallo validación: Bryan Refugio Sanchez Vidal
+2:08:09 p.m. | Estudiante | Consultar Boleta | SUCCESS | 108ms | ID: 257950 revisó 0 materias
+2:08:10 p.m. | Sistema    | Integridad      | WARNING | 102ms | Usuario Director no encontrado (¿Seed corrido?)
+2:08:10 p.m. | Público    | Escaneo QR      | ERROR   | 147ms | Fallo validación: Samara Sanchez Lopez
+2:08:11 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:08:12 p.m. | Público    | Escaneo QR      | ERROR   | 158ms | Fallo validación: Samara Sanchez Lopez
+2:08:13 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:08:14 p.m. | Estudiante | Consultar Boleta | SUCCESS | 113ms | ID: 256817 revisó 0 materias
+2:08:14 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:08:15 p.m. | Estudiante | Consultar Boleta | SUCCESS | 108ms | ID: 257950 revisó 0 materias
+2:08:16 p.m. | Estudiante | Consultar Boleta | SUCCESS | 101ms | ID: 257950 revisó 0 materias
+2:08:17 p.m. | Público    | Escaneo QR      | ERROR   | 145ms | Fallo validación: Bryan Refugio Sanchez Vidal
+2:08:18 p.m. | Sistema    | Integridad      | WARNING | 92ms | Usuario Director no encontrado (¿Seed corrido?)
+2:08:19 p.m. | Público    | Escaneo QR      | ERROR   | 313ms | Fallo validación: Samara Sanchez Lopez
+2:08:20 p.m. | Público    | Escaneo QR      | ERROR   | 527ms | Fallo validación: Samara Sanchez Lopez
+2:08:20 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:08:21 p.m. | Público    | Escaneo QR      | ERROR   | 125ms | Fallo validación: William Sandoval R.
+2:08:22 p.m. | Sistema    | Integridad      | WARNING | 102ms | Usuario Director no encontrado (¿Seed corrido?)
+2:08:24 p.m. | Público    | Escaneo QR      | ERROR   | 1427ms | Fallo validación: Samara Sanchez Lopez
+2:29:59 p.m. | Estudiante | Consultar Boleta | SUCCESS | 122ms | ID: 202461024 revisó 5 materias
+2:29:58 p.m. | Profesor   | Pasar Lista     | SUCCESS | 113ms | Grupo GRADO 5 - GRUPO 1: 31 alumnos cargados
+2:30:00 p.m. | Profesor   | Pasar Lista     | SUCCESS | 115ms | Grupo GRADO 2 - GRUPO 2: 31 alumnos cargados
+2:30:00 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:30:01 p.m. | Estudiante | Consultar Boleta | SUCCESS | 122ms | ID: 202432005 revisó 5 materias
+2:30:02 p.m. | Estudiante | Consultar Boleta | SUCCESS | 90ms | ID: 202461008 revisó 5 materias
+2:30:03 p.m. | Profesor   | Pasar Lista     | SUCCESS | 100ms | Grupo GRADO 2 - GRUPO 2: 31 alumnos cargados
+2:30:04 p.m. | Director   | Panel Admin     | SUCCESS | 122ms | Sesión verificada activamente
+2:30:05 p.m. | Profesor   | Pasar Lista     | SUCCESS | 101ms | Grupo GRADO 5 - GRUPO 1: 31 alumnos cargados
+2:30:06 p.m. | Director   | Panel Admin     | SUCCESS | 105ms | Sesión verificada activamente
+2:30:07 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:30:07 p.m. | Público    | Escaneo QR      | ERROR   | 2873ms | Fallo validación: Valentina Gonzalez
+2:30:08 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:30:09 p.m. | Estudiante | Consultar Boleta | SUCCESS | 121ms | ID: 202421019 revisó 5 materias
+2:30:09 p.m. | Director   | Panel Admin     | SUCCESS | 101ms | Sesión verificada activamente
+2:30:10 p.m. | Estudiante | Consultar Boleta | SUCCESS | 108ms | ID: 202451007 revisó 5 materias
+2:30:11 p.m. | Estudiante | Consultar Boleta | SUCCESS | 123ms | ID: 202441014 revisó 5 materias
+2:30:12 p.m. | Director   | Panel Admin     | SUCCESS | 103ms | Sesión verificada activamente
+2:30:13 p.m. | Público    | Escaneo QR      | ERROR   | 124ms | Fallo validación: Sofia Perez
+2:30:13 p.m. | Profesor   | Pasar Lista     | SUCCESS | 101ms | Grupo GRADO 1 - GRUPO 1: 28 alumnos cargados
+2:30:14 p.m. | Profesor   | Pasar Lista     | SUCCESS | 112ms | Grupo Grado 2 - 1: 1 alumnos cargados
+2:30:15 p.m. | Profesor   | Pasar Lista     | SUCCESS | 101ms | Grupo GRADO 1 - GRUPO 2: 28 alumnos cargados
+2:30:16 p.m. | Estudiante | Consultar Boleta | SUCCESS | 106ms | ID: 202462026 revisó 5 materias
+2:30:16 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:30:17 p.m. | Estudiante | Consultar Boleta | SUCCESS | 122ms | ID: 202442005 revisó 5 materias
+2:30:18 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:30:19 p.m. | Profesor   | Pasar Lista     | SUCCESS | 117ms | Grupo GRADO 6 - GRUPO 1: 30 alumnos cargados
+2:30:20 p.m. | Profesor   | Pasar Lista     | SUCCESS | 114ms | Grupo Grado 1 - 1: 1 alumnos cargados
+2:30:20 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:30:21 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:30:22 p.m. | Estudiante | Consultar Boleta | SUCCESS | 124ms | ID: 202461007 revisó 5 materias
+2:30:23 p.m. | Estudiante | Consultar Boleta | SUCCESS | 107ms | ID: 202442017 revisó 5 materias
+2:30:24 p.m. | Profesor   | Pasar Lista     | SUCCESS | 116ms | Grupo GRADO 3 - GRUPO 1: 35 alumnos cargados
+2:30:25 p.m. | Director   | Panel Admin     | SUCCESS | 87ms | Sesión verificada activamente
+2:30:25 p.m. | Profesor   | Pasar Lista     | SUCCESS | 116ms | Grupo GRADO 5 - GRUPO 1: 31 alumnos cargados
+2:30:26 p.m. | Público    | Escaneo QR      | ERROR   | 131ms | Fallo validación: Isabella Martinez
+2:30:27 p.m. | Público    | Escaneo QR      | ERROR   | 158ms | Fallo validación: Sebastian Lopez
+2:30:28 p.m. | Estudiante | Consultar Boleta | SUCCESS | 107ms | ID: 202442026 revisó 5 materias
+2:30:28 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:30:29 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:30:30 p.m. | Profesor   | Pasar Lista     | SUCCESS | 116ms | Grupo GRADO 4 - GRUPO 1: 33 alumnos cargados
+2:30:31 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:30:32 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:30:33 p.m. | Director   | Panel Admin     | SUCCESS | 102ms | Sesión verificada activamente
+2:30:33 p.m. | Público    | Escaneo QR      | ERROR   | 119ms | Fallo validación: Santiago Ramirez
+2:30:34 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:30:35 p.m. | Director   | Panel Admin     | SUCCESS | 86ms | Sesión verificada activamente
+2:30:36 p.m. | Profesor   | Pasar Lista     | SUCCESS | 116ms | Grupo Grado 2 - 1: 1 alumnos cargados
+2:30:37 p.m. | Director   | Panel Admin     | SUCCESS | 85ms | Sesión verificada activamente
+2:30:37 p.m. | Profesor   | Pasar Lista     | SUCCESS | 116ms | Grupo GRADO 4 - GRUPO 2: 28 alumnos cargados
+2:30:38 p.m. | Estudiante | Consultar Boleta | SUCCESS | 190ms | ID: 202432028 revisó 5 materias
+2:30:39 p.m. | Público    | Escaneo QR      | ERROR   | 129ms | Fallo validación: Mateo Rodriguez
+2:30:40 p.m. | Estudiante | Consultar Boleta | SUCCESS | 103ms | ID: 202461024 revisó 5 materias
+2:30:41 p.m. | Estudiante | Consultar Boleta | SUCCESS | 123ms | ID: 202431004 revisó 5 materias
+2:30:41 p.m. | Estudiante | Consultar Boleta | SUCCESS | 189ms | ID: 202411019 revisó 5 materias
+2:30:42 p.m. | Estudiante | Consultar Boleta | SUCCESS | 102ms | ID: 202432021 revisó 5 materias
+2:30:43 p.m. | Director   | Panel Admin     | SUCCESS | 103ms | Sesión verificada activamente
+2:30:44 p.m. | Director   | Panel Admin     | SUCCESS | 99ms | Sesión verificada activamente
+2:30:45 p.m. | Estudiante | Consultar Boleta | SUCCESS | 124ms | ID: 202452019 revisó 5 materias
+2:30:45 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:30:46 p.m. | Público    | Escaneo QR      | ERROR   | 148ms | Fallo validación: Santiago Ramirez
+2:30:47 p.m. | Profesor   | Pasar Lista     | SUCCESS | 117ms | Grupo GRADO 2 - GRUPO 1: 28 alumnos cargados
+2:30:48 p.m. | Profesor   | Pasar Lista     | SUCCESS | 101ms | Grupo Grado 1 - 2: 1 alumnos cargados
+2:30:48 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:30:49 p.m. | Estudiante | Consultar Boleta | SUCCESS | 123ms | ID: 202421018 revisó 5 materias
+2:30:50 p.m. | Profesor   | Pasar Lista     | SUCCESS | 109ms | Grupo Grado 1 - 2: 1 alumnos cargados
+2:30:51 p.m. | Profesor   | Pasar Lista     | SUCCESS | 116ms | Grupo GRADO 1 - GRUPO 1: 28 alumnos cargados
+2:30:53 p.m. | Estudiante | Consultar Boleta | SUCCESS | 101ms | ID: 202422003 revisó 5 materias
+2:30:53 p.m. | Estudiante | Consultar Boleta | SUCCESS | 104ms | ID: 202452022 revisó 5 materias
+2:30:54 p.m. | Director   | Panel Admin     | SUCCESS | 97ms | Sesión verificada activamente
+2:30:55 p.m. | Estudiante | Consultar Boleta | SUCCESS | 104ms | ID: 202422018 revisó 5 materias
+2:30:55 p.m. | Red        | Conexión        | ERROR   | 3566ms | Error 404: Endpoint no encontrado (Simulado)
+2:30:56 p.m. | Director   | Panel Admin     | SUCCESS | 102ms | Sesión verificada activamente
+2:30:57 p.m. | Público    | Escaneo QR      | ERROR   | 1010ms | Fallo validación: Santiago Gonzalez
+2:30:58 p.m. | Público    | Escaneo QR      | ERROR   | 231ms | Fallo validación: Sofia Ramirez
+2:30:58 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:30:59 p.m. | Profesor   | Pasar Lista     | SUCCESS | 101ms | Grupo GRADO 3 - GRUPO 1: 35 alumnos cargados
+2:31:00 p.m. | Red        | Conexión        | ERROR   | 90ms | Error 404: Endpoint no encontrado (Simulado)
+2:31:01 p.m. | Red        | Conexión        | ERROR   | 40ms | Error 404: Endpoint no encontrado (Simulado)
+2:31:01 p.m. | Director   | Panel Admin     | SUCCESS | 86ms | Sesión verificada activamente
+2:31:02 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:31:03 p.m. | Estudiante | Consultar Boleta | SUCCESS | 107ms | ID: 202462027 revisó 5 materias
+2:31:04 p.m. | Público    | Escaneo QR      | ERROR   | 135ms | Fallo validación: Mateo Lopez
+2:31:04 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:31:05 p.m. | Estudiante | Consultar Boleta | SUCCESS | 114ms | ID: 202452001 revisó 5 materias
+2:31:06 p.m. | Público    | Escaneo QR      | ERROR   | 132ms | Fallo validación: Emiliano Garcia
+2:31:07 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:31:08 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:31:09 p.m. | Director   | Panel Admin     | SUCCESS | 123ms | Sesión verificada activamente
+2:31:09 p.m. | Profesor   | Pasar Lista     | SUCCESS | 113ms | Grupo GRADO 1 - GRUPO 1: 28 alumnos cargados
+2:31:10 p.m. | Profesor   | Pasar Lista     | SUCCESS | 103ms | Grupo Grado 1 - 2: 1 alumnos cargados
+2:31:11 p.m. | Profesor   | Pasar Lista     | SUCCESS | 104ms | Grupo GRADO 1 - GRUPO 1: 28 alumnos cargados
+2:31:12 p.m. | Estudiante | Consultar Boleta | SUCCESS | 111ms | ID: 202451005 revisó 5 materias
+2:31:13 p.m. | Estudiante | Consultar Boleta | SUCCESS | 110ms | ID: 202411022 revisó 5 materias
+2:31:13 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:31:14 p.m. | Profesor   | Pasar Lista     | SUCCESS | 105ms | Grupo GRADO 2 - GRUPO 1: 28 alumnos cargados
+2:31:15 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:31:16 p.m. | Profesor   | Pasar Lista     | SUCCESS | 105ms | Grupo GRADO 2 - GRUPO 2: 31 alumnos cargados
+2:31:17 p.m. | Estudiante | Consultar Boleta | SUCCESS | 112ms | ID: 202461027 revisó 5 materias
+2:31:17 p.m. | Profesor   | Pasar Lista     | SUCCESS | 114ms | Grupo GRADO 2 - GRUPO 1: 28 alumnos cargados
+2:31:18 p.m. | Estudiante | Consultar Boleta | SUCCESS | 104ms | ID: 202462031 revisó 5 materias
+2:31:19 p.m. | Público    | Escaneo QR      | ERROR   | 162ms | Fallo validación: Sofia Rodriguez
+2:31:20 p.m. | Estudiante | Consultar Boleta | SUCCESS | 111ms | ID: 202441021 revisó 5 materias
+2:31:21 p.m. | Profesor   | Pasar Lista     | SUCCESS | 101ms | Grupo GRADO 2 - GRUPO 2: 31 alumnos cargados
+2:31:21 p.m. | Estudiante | Consultar Boleta | SUCCESS | 121ms | ID: 202461015 revisó 5 materias
+2:31:22 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:31:23 p.m. | Director   | Panel Admin     | SUCCESS | 114ms | Sesión verificada activamente
+2:31:24 p.m. | Profesor   | Pasar Lista     | SUCCESS | 108ms | Grupo GRADO 3 - GRUPO 1: 35 alumnos cargados
+2:31:25 p.m. | Público    | Escaneo QR      | ERROR   | 130ms | Fallo validación: Mateo Garcia
+2:31:25 p.m. | Estudiante | Consultar Boleta | SUCCESS | 144ms | ID: 202412003 revisó 5 materias
+2:31:26 p.m. | Público    | Escaneo QR      | ERROR   | 129ms | Fallo validación: Leonardo Lopez
+2:31:27 p.m. | Profesor   | Pasar Lista     | SUCCESS | 110ms | Grupo GRADO 2 - GRUPO 1: 28 alumnos cargados
+2:31:28 p.m. | Red        | Conexión        | ERROR   | 95ms | Error 404: Endpoint no encontrado (Simulado)
+2:31:29 p.m. | Director   | Panel Admin     | SUCCESS | 111ms | Sesión verificada activamente
+2:31:29 p.m. | Estudiante | Consultar Boleta | SUCCESS | 112ms | ID: 202421019 revisó 5 materias
+2:31:30 p.m. | Red        | Conexión        | ERROR   | 50ms | Error 404: Endpoint no encontrado (Simulado)
+2:31:31 p.m. | Público    | Escaneo QR      | ERROR   | 202ms | Fallo validación: Mateo Sanchez
+2:31:32 p.m. | Público    | Escaneo QR      | ERROR   | 114ms | Fallo validación: Emiliano Ramirez
+2:31:33 p.m. | Director   | Panel Admin     | SUCCESS | 111ms | Sesión verificada activamente
+2:31:33 p.m. | Estudiante | Consultar Boleta | SUCCESS | 118ms | ID: 202442011 revisó 5 materias
+2:31:34 p.m. | Público    | Escaneo QR      | ERROR   | 150ms | Fallo validación: Valentina Rodriguez
+2:31:35 p.m. | Estudiante | Consultar Boleta | SUCCESS | 120ms | ID: 202452006 revisó 5 materias
+2:31:36 p.m. | Público    | Escaneo QR      | ERROR   | 135ms | Fallo validación: Sebastian Gonzalez
+2:31:37 p.m. | Público    | Escaneo QR      | ERROR   | 119ms | Fallo validación: Emiliano Sanchez
+2:31:37 p.m. | Público    | Escaneo QR      | ERROR   | 119ms | Fallo validación: Sebastian Gonzalez
+2:31:38 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:31:39 p.m. | Profesor   | Pasar Lista     | SUCCESS | 112ms | Grupo GRADO 2 - GRUPO 1: 28 alumnos cargados
+2:31:40 p.m. | Profesor   | Pasar Lista     | SUCCESS | 110ms | Grupo GRADO 5 - GRUPO 1: 31 alumnos cargados
+2:31:41 p.m. | Director   | Panel Admin     | SUCCESS | 81ms | Sesión verificada activamente
+2:31:41 p.m. | Público    | Escaneo QR      | ERROR   | 125ms | Fallo validación: Mateo Cruz
+2:31:42 p.m. | Profesor   | Pasar Lista     | SUCCESS | 112ms | Grupo GRADO 5 - GRUPO 2: 28 alumnos cargados
+2:31:43 p.m. | Estudiante | Consultar Boleta | SUCCESS | 104ms | ID: 202422010 revisó 5 materias
+2:31:44 p.m. | Estudiante | Consultar Boleta | SUCCESS | 155ms | ID: 202431028 revisó 5 materias
+2:31:45 p.m. | Estudiante | Consultar Boleta | SUCCESS | 122ms | ID: 202431033 revisó 5 materias
+2:31:45 p.m. | Público    | Escaneo QR      | ERROR   | 144ms | Fallo validación: Santiago Cruz
+2:31:46 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:31:47 p.m. | Público    | Escaneo QR      | ERROR   | 135ms | Fallo validación: Valentina Perez
+2:31:48 p.m. | Profesor   | Pasar Lista     | SUCCESS | 101ms | Grupo GRADO 4 - GRUPO 2: 28 alumnos cargados
+2:31:49 p.m. | Profesor   | Pasar Lista     | SUCCESS | 101ms | Grupo GRADO 3 - GRUPO 2: 35 alumnos cargados
+2:31:49 p.m. | Profesor   | Pasar Lista     | SUCCESS | 106ms | Grupo GRADO 3 - GRUPO 1: 35 alumnos cargados
+2:31:50 p.m. | Director   | Panel Admin     | SUCCESS | 111ms | Sesión verificada activamente
+2:31:51 p.m. | Profesor   | Pasar Lista     | SUCCESS | 115ms | Grupo GRADO 6 - GRUPO 2: 34 alumnos cargados
+2:31:52 p.m. | Director   | Panel Admin     | SUCCESS | 101ms | Sesión verificada activamente
+2:31:53 p.m. | Público    | Escaneo QR      | ERROR   | 139ms | Fallo validación: Valentina Cruz
+2:31:54 p.m. | Profesor   | Pasar Lista     | SUCCESS | 110ms | Grupo GRADO 6 - GRUPO 1: 30 alumnos cargados
+2:31:55 p.m. | Profesor   | Pasar Lista     | SUCCESS | 101ms | Grupo Grado 2 - 1: 1 alumnos cargados
+2:31:56 p.m. | Público    | Escaneo QR      | ERROR   | 2375ms | Fallo validación: Mateo Garcia
+2:31:57 p.m. | Director   | Panel Admin     | SUCCESS | 89ms | Sesión verificada activamente
+2:31:57 p.m. | Público    | Escaneo QR      | ERROR   | 917ms | Fallo validación: Sofia Garcia
+2:31:57 p.m. | Profesor   | Pasar Lista     | SUCCESS | 108ms | Grupo GRADO 6 - GRUPO 1: 30 alumnos cargados
+2:31:58 p.m. | Director   | Panel Admin     | SUCCESS | 97ms | Sesión verificada activamente
+2:31:59 p.m. | Estudiante | Consultar Boleta | SUCCESS | 104ms | ID: 202461024 revisó 5 materias
+2:32:00 p.m. | Sistema    | Heartbeat       | SUCCESS | 1ms | Servicios estables
+2:32:01 p.m. | Público    | Escaneo QR      | ERROR   | 141ms | Fallo validación: Mateo Gonzalez
+2:32:01 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:32:02 p.m. | Profesor   | Pasar Lista     | SUCCESS | 109ms | Grupo GRADO 1 - GRUPO 1: 28 alumnos cargados
+2:32:03 p.m. | Estudiante | Consultar Boleta | SUCCESS | 118ms | ID: 202441004 revisó 5 materias
+2:32:04 p.m. | Director   | Panel Admin     | SUCCESS | 103ms | Sesión verificada activamente
+2:32:05 p.m. | Público    | Escaneo QR      | ERROR   | 142ms | Fallo validación: Sebastian Gonzalez
+2:32:05 p.m. | Estudiante | Consultar Boleta | SUCCESS | 115ms | ID: 202422001 revisó 5 materias
+2:32:06 p.m. | Estudiante | Consultar Boleta | SUCCESS | 117ms | ID: 202411016 revisó 5 materias
+2:32:07 p.m. | Director   | Panel Admin     | SUCCESS | 108ms | Sesión verificada activamente
+2:32:08 p.m. | Director   | Panel Admin     | SUCCESS | 104ms | Sesión verificada activamente
+2:32:08 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:32:09 p.m. | Público    | Escaneo QR      | ERROR   | 200ms | Fallo validación: Leonardo Gonzalez
+2:32:10 p.m. | Público    | Escaneo QR      | ERROR   | 123ms | Fallo validación: Emiliano Cruz
+2:32:11 p.m. | Público    | Escaneo QR      | ERROR   | 130ms | Fallo validación: Mariana Lopez
+2:32:12 p.m. | Público    | Escaneo QR      | ERROR   | 142ms | Fallo validación: Sebastian Rodriguez
+2:32:13 p.m. | Público    | Escaneo QR      | ERROR   | 139ms | Fallo validación: Mariana Martinez
+2:32:13 p.m. | Profesor   | Pasar Lista     | SUCCESS | 113ms | Grupo GRADO 1 - GRUPO 1: 28 alumnos cargados
+2:32:14 p.m. | Profesor   | Pasar Lista     | SUCCESS | 104ms | Grupo GRADO 1 - GRUPO 1: 28 alumnos cargados
+2:32:15 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:32:16 p.m. | Estudiante | Consultar Boleta | SUCCESS | 143ms | ID: 202411002 revisó 5 materias
+2:32:16 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:32:17 p.m. | Estudiante | Consultar Boleta | SUCCESS | 119ms | ID: 202441001 revisó 5 materias
+2:32:18 p.m. | Red        | Conexión        | ERROR   | 41ms | Error 404: Endpoint no encontrado (Simulado)
+2:32:19 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:32:20 p.m. | Profesor   | Pasar Lista     | SUCCESS | 106ms | Grupo GRADO 6 - GRUPO 2: 34 alumnos cargados
+2:32:21 p.m. | Red        | Conexión        | ERROR   | 84ms | Error 404: Endpoint no encontrado (Simulado)
+2:32:21 p.m. | Público    | Escaneo QR      | ERROR   | 120ms | Fallo validación: Sebastian Rodriguez
+2:32:22 p.m. | Público    | Escaneo QR      | ERROR   | 119ms | Fallo validación: Valentina Cruz
+2:32:23 p.m. | Estudiante | Consultar Boleta | SUCCESS | 123ms | ID: 202422011 revisó 5 materias
+2:32:24 p.m. | Público    | Escaneo QR      | ERROR   | 163ms | Fallo validación: Valentina Gonzalez
+2:32:25 p.m. | Profesor   | Pasar Lista     | SUCCESS | 108ms | Grupo GRADO 6 - GRUPO 1: 30 alumnos cargados
+2:32:25 p.m. | Director   | Panel Admin     | SUCCESS | 89ms | Sesión verificada activamente
+2:32:26 p.m. | Público    | Escaneo QR      | ERROR   | 142ms | Fallo validación: Mariana Ramirez
+2:32:27 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:32:28 p.m. | Estudiante | Consultar Boleta | SUCCESS | 112ms | ID: 202442022 revisó 5 materias
+2:32:29 p.m. | Director   | Panel Admin     | SUCCESS | 95ms | Sesión verificada activamente
+2:32:29 p.m. | Estudiante | Consultar Boleta | SUCCESS | 179ms | ID: 253086 revisó 1 materias
+2:32:30 p.m. | Público    | Escaneo QR      | ERROR   | 128ms | Fallo validación: Santiago Perez
+2:32:31 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:32:32 p.m. | Estudiante | Consultar Boleta | SUCCESS | 114ms | ID: 202421005 revisó 5 materias
+2:32:32 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:32:33 p.m. | Director   | Panel Admin     | SUCCESS | 94ms | Sesión verificada activamente
+2:32:34 p.m. | Estudiante | Consultar Boleta | SUCCESS | 115ms | ID: 202451017 revisó 5 materias
+2:32:35 p.m. | Profesor   | Pasar Lista     | SUCCESS | 110ms | Grupo Grado 1 - 2: 1 alumnos cargados
+2:32:36 p.m. | Profesor   | Pasar Lista     | SUCCESS | 110ms | Grupo GRADO 6 - GRUPO 2: 34 alumnos cargados
+2:32:37 p.m. | Público    | Escaneo QR      | ERROR   | 136ms | Fallo validación: Sebastian Martinez
+2:32:37 p.m. | Público    | Escaneo QR      | ERROR   | 171ms | Fallo validación: Isabella Gonzalez
+2:32:38 p.m. | Estudiante | Consultar Boleta | SUCCESS | 112ms | ID: 202442013 revisó 5 materias
+2:32:39 p.m. | Director   | Panel Admin     | SUCCESS | 80ms | Sesión verificada activamente
+2:32:40 p.m. | Profesor   | Pasar Lista     | SUCCESS | 112ms | Grupo GRADO 5 - GRUPO 1: 31 alumnos cargados
+2:32:41 p.m. | Estudiante | Consultar Boleta | SUCCESS | 152ms | ID: 202421018 revisó 5 materias
+2:32:41 p.m. | Director   | Panel Admin     | SUCCESS | 112ms | Sesión verificada activamente
+2:32:42 p.m. | Público    | Escaneo QR      | ERROR   | 153ms | Fallo validación: Emiliano Martinez
+2:32:43 p.m. | Público    | Escaneo QR      | ERROR   | 126ms | Fallo validación: Sebastian Gonzalez
+2:32:44 p.m. | Estudiante | Consultar Boleta | SUCCESS | 119ms | ID: 202451003 revisó 5 materias
+2:32:45 p.m. | Estudiante | Consultar Boleta | SUCCESS | 105ms | ID: 202441028 revisó 5 materias
+2:32:45 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:32:46 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:32:47 p.m. | Profesor   | Pasar Lista     | SUCCESS | 103ms | Grupo GRADO 5 - GRUPO 2: 28 alumnos cargados
+2:32:48 p.m. | Estudiante | Consultar Boleta | SUCCESS | 121ms | ID: 202442008 revisó 5 materias
+2:32:49 p.m. | Estudiante | Consultar Boleta | SUCCESS | 108ms | ID: 202432006 revisó 5 materias
+2:32:49 p.m. | Estudiante | Consultar Boleta | SUCCESS | 104ms | ID: 202451002 revisó 5 materias
+2:32:50 p.m. | Público    | Escaneo QR      | ERROR   | 124ms | Fallo validación: Isabella Sanchez
+2:32:51 p.m. | Director   | Panel Admin     | SUCCESS | 101ms | Sesión verificada activamente
+2:32:52 p.m. | Estudiante | Consultar Boleta | SUCCESS | 106ms | ID: 202421005 revisó 5 materias
+2:32:53 p.m. | Director   | Panel Admin     | SUCCESS | 83ms | Sesión verificada activamente
+2:32:53 p.m. | Director   | Panel Admin     | SUCCESS | 108ms | Sesión verificada activamente
+2:32:54 p.m. | Estudiante | Consultar Boleta | SUCCESS | 115ms | ID: 202431009 revisó 5 materias
+2:32:55 p.m. | Público    | Escaneo QR      | ERROR   | 123ms | Fallo validación: Sofia Sanchez
+2:32:56 p.m. | Profesor   | Pasar Lista     | SUCCESS | 116ms | Grupo Grado 1 - 1: 1 alumnos cargados
+2:32:57 p.m. | Público    | Escaneo QR      | ERROR   | 140ms | Fallo validación: Emiliano Hernandez
+2:32:57 p.m. | Profesor   | Pasar Lista     | SUCCESS | 107ms | Grupo GRADO 6 - GRUPO 1: 30 alumnos cargados
+2:32:58 p.m. | Público    | Escaneo QR      | ERROR   | 121ms | Fallo validación: Camila Garcia
+2:32:59 p.m. | Profesor   | Pasar Lista     | SUCCESS | 101ms | Grupo Grado 1 - 1: 1 alumnos cargados
+2:33:00 p.m. | Director   | Panel Admin     | SUCCESS | 102ms | Sesión verificada activamente
+2:33:01 p.m. | Profesor   | Pasar Lista     | SUCCESS | 116ms | Grupo Grado 1 - 1: 1 alumnos cargados
+2:33:01 p.m. | Profesor   | Pasar Lista     | SUCCESS | 108ms | Grupo GRADO 3 - GRUPO 2: 35 alumnos cargados
+2:33:02 p.m. | Estudiante | Consultar Boleta | SUCCESS | 129ms | ID: 202451010 revisó 5 materias
+2:33:03 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:33:04 p.m. | Director   | Panel Admin     | SUCCESS | 114ms | Sesión verificada activamente
+2:33:05 p.m. | Estudiante | Consultar Boleta | SUCCESS | 122ms | ID: 202441027 revisó 5 materias
+2:33:05 p.m. | Público    | Escaneo QR      | ERROR   | 126ms | Fallo validación: Sofia Perez
+2:33:06 p.m. | Estudiante | Consultar Boleta | SUCCESS | 115ms | ID: 202431006 revisó 5 materias
+2:33:07 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:33:08 p.m. | Público    | Escaneo QR      | ERROR   | 125ms | Fallo validación: Sofia Garcia
+2:33:08 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:33:10 p.m. | Director   | Panel Admin     | SUCCESS | 513ms | Sesión verificada activamente
+2:33:10 p.m. | Público    | Escaneo QR      | ERROR   | 186ms | Fallo validación: Santiago Lopez
+2:33:11 p.m. | Público    | Escaneo QR      | ERROR   | 141ms | Fallo validación: Sofia Cruz
+2:33:12 p.m. | Público    | Escaneo QR      | ERROR   | 126ms | Fallo validación: Emiliano Martinez
+2:33:13 p.m. | Público    | Escaneo QR      | ERROR   | 143ms | Fallo validación: Leonardo Cruz
+2:33:13 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:33:14 p.m. | Profesor   | Pasar Lista     | SUCCESS | 103ms | Grupo GRADO 4 - GRUPO 2: 28 alumnos cargados
+2:33:15 p.m. | Estudiante | Consultar Boleta | SUCCESS | 109ms | ID: 202421009 revisó 5 materias
+2:33:16 p.m. | Estudiante | Consultar Boleta | SUCCESS | 108ms | ID: 202452022 revisó 5 materias
+2:33:17 p.m. | Estudiante | Consultar Boleta | SUCCESS | 175ms | ID: 202442027 revisó 5 materias
+2:33:17 p.m. | Profesor   | Pasar Lista     | SUCCESS | 111ms | Grupo GRADO 4 - GRUPO 2: 28 alumnos cargados
+2:33:18 p.m. | Director   | Panel Admin     | SUCCESS | 85ms | Sesión verificada activamente
+2:33:19 p.m. | Profesor   | Pasar Lista     | SUCCESS | 105ms | Grupo GRADO 5 - GRUPO 2: 28 alumnos cargados
+2:33:20 p.m. | Estudiante | Consultar Boleta | SUCCESS | 110ms | ID: 202462019 revisó 5 materias
+2:33:21 p.m. | Profesor   | Pasar Lista     | SUCCESS | 105ms | Grupo GRADO 3 - GRUPO 2: 35 alumnos cargados
+2:33:21 p.m. | Público    | Escaneo QR      | ERROR   | 126ms | Fallo validación: Isabella Garcia
+2:33:22 p.m. | Público    | Escaneo QR      | ERROR   | 113ms | Fallo validación: Mateo Hernandez
+2:33:23 p.m. | Director   | Panel Admin     | SUCCESS | 130ms | Sesión verificada activamente
+2:33:24 p.m. | Profesor   | Pasar Lista     | SUCCESS | 107ms | Grupo GRADO 1 - GRUPO 1: 28 alumnos cargados
+2:33:25 p.m. | Estudiante | Consultar Boleta | SUCCESS | 111ms | ID: 202412008 revisó 5 materias
+2:33:25 p.m. | Público    | Escaneo QR      | ERROR   | 130ms | Fallo validación: Sofia Sanchez
+2:33:26 p.m. | Profesor   | Pasar Lista     | SUCCESS | 104ms | Grupo Grado 1 - 2: 1 alumnos cargados
+2:33:27 p.m. | Profesor   | Pasar Lista     | SUCCESS | 115ms | Grupo Grado 1 - 1: 1 alumnos cargados
+2:33:28 p.m. | Director   | Panel Admin     | SUCCESS | 93ms | Sesión verificada activamente
+2:33:29 p.m. | Director   | Panel Admin     | SUCCESS | 109ms | Sesión verificada activamente
+2:33:29 p.m. | Estudiante | Consultar Boleta | SUCCESS | 95ms | ID: 202462009 revisó 5 materias
+2:33:30 p.m. | Red        | Conexión        | ERROR   | 52ms | Error 404: Endpoint no encontrado (Simulado)
+2:33:31 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:33:32 p.m. | Profesor   | Pasar Lista     | SUCCESS | 109ms | Grupo GRADO 6 - GRUPO 2: 34 alumnos cargados
+2:33:33 p.m. | Estudiante | Consultar Boleta | SUCCESS | 114ms | ID: 202411015 revisó 5 materias
+2:33:33 p.m. | Director   | Panel Admin     | SUCCESS | 89ms | Sesión verificada activamente
+2:33:34 p.m. | Director   | Panel Admin     | SUCCESS | 85ms | Sesión verificada activamente
+2:33:35 p.m. | Estudiante | Consultar Boleta | SUCCESS | 95ms | ID: 202431004 revisó 5 materias
+2:33:36 p.m. | Director   | Panel Admin     | SUCCESS | 112ms | Sesión verificada activamente
+2:33:37 p.m. | Director   | Panel Admin     | SUCCESS | 126ms | Sesión verificada activamente
+2:33:37 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:33:38 p.m. | Director   | Panel Admin     | SUCCESS | 85ms | Sesión verificada activamente
+2:33:39 p.m. | Director   | Panel Admin     | SUCCESS | 92ms | Sesión verificada activamente
+2:33:40 p.m. | Red        | Conexión        | ERROR   | 53ms | Error 404: Endpoint no encontrado (Simulado)
+2:33:41 p.m. | Estudiante | Consultar Boleta | SUCCESS | 97ms | ID: 202462011 revisó 5 materias
+2:33:41 p.m. | Público    | Escaneo QR      | ERROR   | 138ms | Fallo validación: Emiliano Sanchez
+2:33:42 p.m. | Director   | Panel Admin     | SUCCESS | 112ms | Sesión verificada activamente
+2:33:43 p.m. | Estudiante | Consultar Boleta | SUCCESS | 101ms | ID: 202411012 revisó 5 materias
+2:33:44 p.m. | Director   | Panel Admin     | SUCCESS | 113ms | Sesión verificada activamente
+2:33:44 p.m. | Sistema    | Heartbeat       | SUCCESS | 1ms | Servicios estables
+2:33:45 p.m. | Estudiante | Consultar Boleta | SUCCESS | 101ms | ID: 202432017 revisó 5 materias
+2:33:46 p.m. | Director   | Panel Admin     | SUCCESS | 113ms | Sesión verificada activamente
+2:33:47 p.m. | Director   | Panel Admin     | SUCCESS | 115ms | Sesión verificada activamente
+2:33:48 p.m. | Director   | Panel Admin     | SUCCESS | 140ms | Sesión verificada activamente
+2:33:49 p.m. | Director   | Panel Admin     | SUCCESS | 102ms | Sesión verificada activamente
+2:33:49 p.m. | Público    | Escaneo QR      | ERROR   | 143ms | Fallo validación: Emiliano Rodriguez
+2:33:50 p.m. | Estudiante | Consultar Boleta | SUCCESS | 120ms | ID: 202421026 revisó 5 materias
+2:33:51 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:33:52 p.m. | Director   | Panel Admin     | SUCCESS | 84ms | Sesión verificada activamente
+2:33:53 p.m. | Profesor   | Pasar Lista     | SUCCESS | 116ms | Grupo GRADO 2 - GRUPO 1: 28 alumnos cargados
+2:33:53 p.m. | Estudiante | Consultar Boleta | SUCCESS | 134ms | ID: 202411013 revisó 5 materias
+2:33:54 p.m. | Público    | Escaneo QR      | ERROR   | 127ms | Fallo validación: Sebastian Lopez
+2:33:55 p.m. | Red        | Conexión        | ERROR   | 58ms | Error 404: Endpoint no encontrado (Simulado)
+2:33:56 p.m. | Director   | Panel Admin     | SUCCESS | 102ms | Sesión verificada activamente
+2:33:57 p.m. | Profesor   | Pasar Lista     | SUCCESS | 102ms | Grupo GRADO 3 - GRUPO 1: 35 alumnos cargados
+2:33:57 p.m. | Estudiante | Consultar Boleta | SUCCESS | 128ms | ID: 202412002 revisó 5 materias
+2:33:58 p.m. | Director   | Panel Admin     | SUCCESS | 97ms | Sesión verificada activamente
+2:33:59 p.m. | Estudiante | Consultar Boleta | SUCCESS | 104ms | ID: 202422026 revisó 5 materias
+2:34:00 p.m. | Director   | Panel Admin     | SUCCESS | 118ms | Sesión verificada activamente
+2:34:01 p.m. | Público    | Escaneo QR      | ERROR   | 121ms | Fallo validación: Santiago Martinez
+2:34:01 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:34:02 p.m. | Director   | Panel Admin     | SUCCESS | 79ms | Sesión verificada activamente
+2:34:03 p.m. | Estudiante | Consultar Boleta | SUCCESS | 105ms | ID: 202451023 revisó 5 materias
+2:34:04 p.m. | Director   | Panel Admin     | SUCCESS | 118ms | Sesión verificada activamente
+2:34:05 p.m. | Profesor   | Pasar Lista     | SUCCESS | 101ms | Grupo Grado 1 - 2: 1 alumnos cargados
+2:34:05 p.m. | Estudiante | Consultar Boleta | SUCCESS | 105ms | ID: 202442025 revisó 5 materias
+2:34:06 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:34:07 p.m. | Red        | Conexión        | ERROR   | 40ms | Error 404: Endpoint no encontrado (Simulado)
+2:34:08 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:34:09 p.m. | Profesor   | Pasar Lista     | SUCCESS | 102ms | Grupo GRADO 6 - GRUPO 2: 34 alumnos cargados
+2:34:09 p.m. | Público    | Escaneo QR      | ERROR   | 145ms | Fallo validación: Sebastian Gonzalez
+2:34:10 p.m. | Público    | Escaneo QR      | ERROR   | 131ms | Fallo validación: Valentina Lopez
+2:34:11 p.m. | Profesor   | Pasar Lista     | SUCCESS | 101ms | Grupo GRADO 4 - GRUPO 1: 33 alumnos cargados
+2:34:12 p.m. | Director   | Panel Admin     | SUCCESS | 103ms | Sesión verificada activamente
+2:34:13 p.m. | Profesor   | Pasar Lista     | SUCCESS | 104ms | Grupo GRADO 5 - GRUPO 2: 28 alumnos cargados
+2:34:13 p.m. | Estudiante | Consultar Boleta | SUCCESS | 90ms | ID: 202462022 revisó 5 materias
+2:34:14 p.m. | Público    | Escaneo QR      | ERROR   | 113ms | Fallo validación: Mateo Perez
+2:34:15 p.m. | Profesor   | Pasar Lista     | SUCCESS | 103ms | Grupo GRADO 2 - GRUPO 2: 31 alumnos cargados
+2:34:16 p.m. | Estudiante | Consultar Boleta | SUCCESS | 106ms | ID: 202422009 revisó 5 materias
+2:34:17 p.m. | Público    | Escaneo QR      | ERROR   | 143ms | Fallo validación: Camila Cruz
+2:34:17 p.m. | Director   | Panel Admin     | SUCCESS | 89ms | Sesión verificada activamente
+2:34:18 p.m. | Estudiante | Consultar Boleta | SUCCESS | 107ms | ID: 202442006 revisó 5 materias
+2:34:19 p.m. | Público    | Escaneo QR      | ERROR   | 109ms | Fallo validación: Mateo Garcia
+2:34:20 p.m. | Director   | Panel Admin     | SUCCESS | 89ms | Sesión verificada activamente
+2:34:20 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:34:21 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:34:22 p.m. | Público    | Escaneo QR      | ERROR   | 139ms | Fallo validación: Isabella Hernandez
+2:34:23 p.m. | Red        | Conexión        | ERROR   | 44ms | Error 404: Endpoint no encontrado (Simulado)
+2:34:24 p.m. | Estudiante | Consultar Boleta | SUCCESS | 108ms | ID: 202461009 revisó 5 materias
+2:34:25 p.m. | Estudiante | Consultar Boleta | SUCCESS | 106ms | ID: 202422029 revisó 5 materias
+2:34:25 p.m. | Público    | Escaneo QR      | ERROR   | 198ms | Fallo validación: Isabella Hernandez
+2:34:26 p.m. | Profesor   | Pasar Lista     | SUCCESS | 105ms | Grupo GRADO 3 - GRUPO 2: 35 alumnos cargados
+2:34:27 p.m. | Profesor   | Pasar Lista     | SUCCESS | 107ms | Grupo GRADO 6 - GRUPO 1: 30 alumnos cargados
+2:34:28 p.m. | Red        | Conexión        | ERROR   | 62ms | Error 404: Endpoint no encontrado (Simulado)
+2:34:29 p.m. | Profesor   | Pasar Lista     | SUCCESS | 107ms | Grupo GRADO 6 - GRUPO 2: 34 alumnos cargados
+2:34:29 p.m. | Profesor   | Pasar Lista     | SUCCESS | 115ms | Grupo GRADO 5 - GRUPO 1: 31 alumnos cargados
+2:34:30 p.m. | Estudiante | Consultar Boleta | SUCCESS | 141ms | ID: 202461001 revisó 5 materias
+2:34:31 p.m. | Red        | Conexión        | ERROR   | 65ms | Error 404: Endpoint no encontrado (Simulado)
+2:34:32 p.m. | Estudiante | Consultar Boleta | SUCCESS | 111ms | ID: 202421015 revisó 5 materias
+2:34:33 p.m. | Estudiante | Consultar Boleta | SUCCESS | 113ms | ID: 202411023 revisó 5 materias
+2:34:33 p.m. | Público    | Escaneo QR      | ERROR   | 140ms | Fallo validación: Valentina Martinez
+2:34:34 p.m. | Director   | Panel Admin     | SUCCESS | 156ms | Sesión verificada activamente
+2:34:35 p.m. | Estudiante | Consultar Boleta | SUCCESS | 115ms | ID: 202442021 revisó 5 materias
+2:34:36 p.m. | Director   | Panel Admin     | SUCCESS | 94ms | Sesión verificada activamente
+2:34:36 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:34:37 p.m. | Estudiante | Consultar Boleta | SUCCESS | 114ms | ID: 202441022 revisó 5 materias
+2:34:38 p.m. | Estudiante | Consultar Boleta | SUCCESS | 114ms | ID: 202422027 revisó 5 materias
+2:34:39 p.m. | Estudiante | Consultar Boleta | SUCCESS | 106ms | ID: 202442001 revisó 5 materias
+2:34:40 p.m. | Público    | Escaneo QR      | ERROR   | 127ms | Fallo validación: Isabella Perez
+2:34:40 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:34:41 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:34:42 p.m. | Director   | Panel Admin     | SUCCESS | 111ms | Sesión verificada activamente
+2:34:43 p.m. | Profesor   | Pasar Lista     | SUCCESS | 110ms | Grupo GRADO 5 - GRUPO 2: 28 alumnos cargados
+2:34:44 p.m. | Estudiante | Consultar Boleta | SUCCESS | 99ms | ID: 202421009 revisó 5 materias
+2:34:45 p.m. | Director   | Panel Admin     | SUCCESS | 96ms | Sesión verificada activamente
+2:34:45 p.m. | Profesor   | Pasar Lista     | SUCCESS | 116ms | Grupo Grado 1 - 2: 1 alumnos cargados
+2:34:46 p.m. | Estudiante | Consultar Boleta | SUCCESS | 117ms | ID: 202421016 revisó 5 materias
+2:34:47 p.m. | Público    | Escaneo QR      | ERROR   | 127ms | Fallo validación: Mateo Lopez
+2:34:48 p.m. | Director   | Panel Admin     | SUCCESS | 81ms | Sesión verificada activamente
+2:34:48 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:34:49 p.m. | Director   | Panel Admin     | SUCCESS | 97ms | Sesión verificada activamente
+2:34:50 p.m. | Público    | Escaneo QR      | ERROR   | 155ms | Fallo validación: Mateo Lopez
+2:34:51 p.m. | Director   | Panel Admin     | SUCCESS | 98ms | Sesión verificada activamente
+2:34:52 p.m. | Profesor   | Pasar Lista     | SUCCESS | 103ms | Grupo GRADO 6 - GRUPO 2: 34 alumnos cargados
+2:34:53 p.m. | Director   | Panel Admin     | SUCCESS | 99ms | Sesión verificada activamente
+2:34:53 p.m. | Estudiante | Consultar Boleta | SUCCESS | 124ms | ID: 202432003 revisó 5 materias
+2:34:54 p.m. | Estudiante | Consultar Boleta | SUCCESS | 118ms | ID: 202422027 revisó 5 materias
+2:34:55 p.m. | Profesor   | Pasar Lista     | SUCCESS | 112ms | Grupo GRADO 6 - GRUPO 1: 30 alumnos cargados
+2:34:56 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:34:57 p.m. | Público    | Escaneo QR      | ERROR   | 140ms | Fallo validación: Mateo Martinez
+2:34:57 p.m. | Público    | Escaneo QR      | ERROR   | 127ms | Fallo validación: Sofia Garcia
+2:34:58 p.m. | Profesor   | Pasar Lista     | SUCCESS | 115ms | Grupo GRADO 3 - GRUPO 2: 35 alumnos cargados
+2:34:59 p.m. | Estudiante | Consultar Boleta | SUCCESS | 154ms | ID: 202411007 revisó 5 materias
+2:35:00 p.m. | Director   | Panel Admin     | SUCCESS | 85ms | Sesión verificada activamente
+2:35:01 p.m. | Estudiante | Consultar Boleta | SUCCESS | 103ms | ID: 256817 revisó 0 materias
+2:35:01 p.m. | Estudiante | Consultar Boleta | SUCCESS | 112ms | ID: 202431007 revisó 5 materias
+2:35:02 p.m. | Director   | Panel Admin     | SUCCESS | 94ms | Sesión verificada activamente
+2:35:03 p.m. | Profesor   | Pasar Lista     | SUCCESS | 101ms | Grupo Grado 1 - 2: 1 alumnos cargados
+2:35:04 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:35:05 p.m. | Público    | Escaneo QR      | ERROR   | 127ms | Fallo validación: Santiago Hernandez
+2:35:05 p.m. | Estudiante | Consultar Boleta | SUCCESS | 105ms | ID: 202432030 revisó 5 materias
+2:35:06 p.m. | Estudiante | Consultar Boleta | SUCCESS | 115ms | ID: 202462023 revisó 5 materias
+2:35:07 p.m. | Público    | Escaneo QR      | ERROR   | 124ms | Fallo validación: Santiago Hernandez
+2:35:08 p.m. | Estudiante | Consultar Boleta | SUCCESS | 139ms | ID: 202422015 revisó 5 materias
+2:35:09 p.m. | Director   | Panel Admin     | SUCCESS | 102ms | Sesión verificada activamente
+2:35:09 p.m. | Público    | Escaneo QR      | ERROR   | 161ms | Fallo validación: Mateo Martinez
+2:35:10 p.m. | Director   | Panel Admin     | SUCCESS | 93ms | Sesión verificada activamente
+2:35:11 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:35:12 p.m. | Profesor   | Pasar Lista     | SUCCESS | 101ms | Grupo GRADO 3 - GRUPO 2: 35 alumnos cargados
+2:35:13 p.m. | Estudiante | Consultar Boleta | SUCCESS | 122ms | ID: 202432019 revisó 5 materias
+2:35:13 p.m. | Público    | Escaneo QR      | ERROR   | 141ms | Fallo validación: Leonardo Lopez
+2:35:14 p.m. | Estudiante | Consultar Boleta | SUCCESS | 114ms | ID: 202461029 revisó 5 materias
+2:35:15 p.m. | Profesor   | Pasar Lista     | SUCCESS | 103ms | Grupo GRADO 6 - GRUPO 2: 34 alumnos cargados
+2:35:16 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:35:16 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:35:17 p.m. | Director   | Panel Admin     | SUCCESS | 89ms | Sesión verificada activamente
+2:35:18 p.m. | Público    | Escaneo QR      | ERROR   | 110ms | Fallo validación: Valentina Ramirez
+2:35:19 p.m. | Director   | Panel Admin     | SUCCESS | 89ms | Sesión verificada activamente
+2:35:20 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:35:21 p.m. | Profesor   | Pasar Lista     | SUCCESS | 105ms | Grupo GRADO 3 - GRUPO 1: 35 alumnos cargados
+2:35:21 p.m. | Estudiante | Consultar Boleta | SUCCESS | 156ms | ID: 202431007 revisó 5 materias
+2:35:22 p.m. | Estudiante | Consultar Boleta | SUCCESS | 224ms | ID: 202421012 revisó 5 materias
+2:35:23 p.m. | Público    | Escaneo QR      | ERROR   | 126ms | Fallo validación: Isabella Sanchez
+2:35:24 p.m. | Profesor   | Pasar Lista     | SUCCESS | 105ms | Grupo GRADO 5 - GRUPO 1: 31 alumnos cargados
+2:35:24 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:35:25 p.m. | Director   | Panel Admin     | SUCCESS | 107ms | Sesión verificada activamente
+2:35:26 p.m. | Profesor   | Pasar Lista     | SUCCESS | 103ms | Grupo GRADO 3 - GRUPO 1: 35 alumnos cargados
+2:35:27 p.m. | Público    | Escaneo QR      | ERROR   | 119ms | Fallo validación: Sofia Lopez
+2:35:28 p.m. | Profesor   | Pasar Lista     | SUCCESS | 106ms | Grupo GRADO 3 - GRUPO 1: 35 alumnos cargados
+2:35:29 p.m. | Profesor   | Pasar Lista     | SUCCESS | 106ms | Grupo GRADO 4 - GRUPO 1: 33 alumnos cargados
+2:35:29 p.m. | Estudiante | Consultar Boleta | SUCCESS | 111ms | ID: 202421021 revisó 5 materias
+2:35:30 p.m. | Profesor   | Pasar Lista     | SUCCESS | 106ms | Grupo Grado 2 - 1: 1 alumnos cargados
+2:35:31 p.m. | Estudiante | Consultar Boleta | SUCCESS | 113ms | ID: 202411021 revisó 5 materias
+2:35:32 p.m. | Público    | Escaneo QR      | ERROR   | 147ms | Fallo validación: Santiago Perez
+2:35:33 p.m. | Profesor   | Pasar Lista     | SUCCESS | 108ms | Grupo GRADO 2 - GRUPO 2: 31 alumnos cargados
+2:35:33 p.m. | Profesor   | Pasar Lista     | SUCCESS | 107ms | Grupo GRADO 3 - GRUPO 1: 35 alumnos cargados
+2:35:34 p.m. | Estudiante | Consultar Boleta | SUCCESS | 111ms | ID: 202412025 revisó 5 materias
+2:35:35 p.m. | Director   | Panel Admin     | SUCCESS | 76ms | Sesión verificada activamente
+2:35:36 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:35:37 p.m. | Red        | Conexión        | ERROR   | 70ms | Error 404: Endpoint no encontrado (Simulado)
+2:35:37 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:35:38 p.m. | Profesor   | Pasar Lista     | SUCCESS | 107ms | Grupo GRADO 6 - GRUPO 1: 30 alumnos cargados
+2:35:39 p.m. | Público    | Escaneo QR      | ERROR   | 129ms | Fallo validación: Mateo Rodriguez
+2:35:40 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:35:41 p.m. | Estudiante | Consultar Boleta | SUCCESS | 148ms | ID: 202461021 revisó 5 materias
+2:35:41 p.m. | Público    | Escaneo QR      | ERROR   | 122ms | Fallo validación: Santiago Rodriguez
+2:35:42 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:35:43 p.m. | Estudiante | Consultar Boleta | SUCCESS | 114ms | ID: 202412010 revisó 5 materias
+2:35:44 p.m. | Estudiante | Consultar Boleta | SUCCESS | 118ms | ID: 202431003 revisó 5 materias
+2:35:45 p.m. | Profesor   | Pasar Lista     | SUCCESS | 110ms | Grupo GRADO 4 - GRUPO 2: 28 alumnos cargados
+2:35:45 p.m. | Público    | Escaneo QR      | ERROR   | 124ms | Fallo validación: Leonardo Lopez
+2:35:46 p.m. | Profesor   | Pasar Lista     | SUCCESS | 111ms | Grupo Grado 1 - 1: 1 alumnos cargados
+2:35:47 p.m. | Público    | Escaneo QR      | ERROR   | 151ms | Fallo validación: Mariana Perez
+2:35:48 p.m. | Público    | Escaneo QR      | ERROR   | 137ms | Fallo validación: Mateo Martinez
+2:35:49 p.m. | Profesor   | Pasar Lista     | SUCCESS | 113ms | Grupo GRADO 2 - GRUPO 1: 28 alumnos cargados
+2:35:49 p.m. | Profesor   | Pasar Lista     | SUCCESS | 116ms | Grupo Grado 1 - 2: 1 alumnos cargados
+2:35:50 p.m. | Profesor   | Pasar Lista     | SUCCESS | 112ms | Grupo GRADO 5 - GRUPO 1: 31 alumnos cargados
+2:35:51 p.m. | Público    | Escaneo QR      | ERROR   | 138ms | Fallo validación: Isabella Hernandez
+2:35:52 p.m. | Estudiante | Consultar Boleta | SUCCESS | 138ms | ID: 202431030 revisó 5 materias
+2:35:52 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:35:53 p.m. | Profesor   | Pasar Lista     | SUCCESS | 115ms | Grupo GRADO 6 - GRUPO 2: 34 alumnos cargados
+2:35:54 p.m. | Director   | Panel Admin     | SUCCESS | 99ms | Sesión verificada activamente
+2:35:55 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:35:56 p.m. | Estudiante | Consultar Boleta | SUCCESS | 124ms | ID: 202461023 revisó 5 materias
+2:35:57 p.m. | Director   | Panel Admin     | SUCCESS | 104ms | Sesión verificada activamente
+2:35:57 p.m. | Público    | Escaneo QR      | ERROR   | 127ms | Fallo validación: Valentina Ramirez
+2:35:58 p.m. | Profesor   | Pasar Lista     | SUCCESS | 113ms | Grupo GRADO 4 - GRUPO 1: 33 alumnos cargados
+2:35:59 p.m. | Red        | Conexión        | ERROR   | 72ms | Error 404: Endpoint no encontrado (Simulado)
+2:36:00 p.m. | Profesor   | Pasar Lista     | SUCCESS | 101ms | Grupo GRADO 4 - GRUPO 1: 33 alumnos cargados
+2:36:01 p.m. | Director   | Panel Admin     | SUCCESS | 104ms | Sesión verificada activamente
+2:36:01 p.m. | Profesor   | Pasar Lista     | SUCCESS | 107ms | Grupo GRADO 5 - GRUPO 2: 28 alumnos cargados
+2:36:02 p.m. | Profesor   | Pasar Lista     | SUCCESS | 108ms | Grupo GRADO 4 - GRUPO 2: 28 alumnos cargados
+2:36:03 p.m. | Profesor   | Pasar Lista     | SUCCESS | 116ms | Grupo GRADO 5 - GRUPO 1: 31 alumnos cargados
+2:36:04 p.m. | Estudiante | Consultar Boleta | SUCCESS | 138ms | ID: 202452005 revisó 5 materias
+2:36:05 p.m. | Público    | Escaneo QR      | ERROR   | 119ms | Fallo validación: Isabella Lopez
+2:36:05 p.m. | Director   | Panel Admin     | SUCCESS | 101ms | Sesión verificada activamente
+2:36:06 p.m. | Director   | Panel Admin     | SUCCESS | 112ms | Sesión verificada activamente
+2:36:07 p.m. | Red        | Conexión        | ERROR   | 56ms | Error 404: Endpoint no encontrado (Simulado)
+2:36:08 p.m. | Director   | Panel Admin     | SUCCESS | 135ms | Sesión verificada activamente
+2:36:09 p.m. | Público    | Escaneo QR      | ERROR   | 127ms | Fallo validación: Mateo Cruz
+2:36:09 p.m. | Estudiante | Consultar Boleta | SUCCESS | 121ms | ID: 202461029 revisó 5 materias
+2:36:10 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:36:11 p.m. | Director   | Panel Admin     | SUCCESS | 85ms | Sesión verificada activamente
+2:36:12 p.m. | Profesor   | Pasar Lista     | SUCCESS | 101ms | Grupo GRADO 5 - GRUPO 2: 28 alumnos cargados
+2:36:12 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:36:13 p.m. | Público    | Escaneo QR      | ERROR   | 118ms | Fallo validación: Sofia Cruz
+2:36:14 p.m. | Público    | Escaneo QR      | ERROR   | 133ms | Fallo validación: Mateo Ramirez
+2:36:15 p.m. | Director   | Panel Admin     | SUCCESS | 106ms | Sesión verificada activamente
+2:36:16 p.m. | Público    | Escaneo QR      | ERROR   | 142ms | Fallo validación: Sofia Garcia
+2:36:17 p.m. | Director   | Panel Admin     | SUCCESS | 103ms | Sesión verificada activamente
+2:36:17 p.m. | Público    | Escaneo QR      | ERROR   | 123ms | Fallo validación: Mateo Ramirez
+2:36:18 p.m. | Profesor   | Pasar Lista     | SUCCESS | 109ms | Grupo Grado 1 - 1: 1 alumnos cargados
+2:36:19 p.m. | Director   | Panel Admin     | SUCCESS | 105ms | Sesión verificada activamente
+2:36:20 p.m. | Director   | Panel Admin     | SUCCESS | 106ms | Sesión verificada activamente
+2:36:21 p.m. | Estudiante | Consultar Boleta | SUCCESS | 110ms | ID: 202441015 revisó 5 materias
+2:36:21 p.m. | Público    | Escaneo QR      | ERROR   | 124ms | Fallo validación: Isabella Sanchez
+2:36:22 p.m. | Director   | Panel Admin     | SUCCESS | 104ms | Sesión verificada activamente
+2:36:23 p.m. | Red        | Conexión        | ERROR   | 61ms | Error 404: Endpoint no encontrado (Simulado)
+2:36:24 p.m. | Estudiante | Consultar Boleta | SUCCESS | 108ms | ID: 202442001 revisó 5 materias
+2:36:24 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:36:25 p.m. | Estudiante | Consultar Boleta | SUCCESS | 121ms | ID: 202432000 revisó 5 materias
+2:36:26 p.m. | Director   | Panel Admin     | SUCCESS | 121ms | Sesión verificada activamente
+2:36:27 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:36:28 p.m. | Director   | Panel Admin     | SUCCESS | 107ms | Sesión verificada activamente
+2:36:29 p.m. | Director   | Panel Admin     | SUCCESS | 107ms | Sesión verificada activamente
+2:36:29 p.m. | Profesor   | Pasar Lista     | SUCCESS | 111ms | Grupo GRADO 3 - GRUPO 1: 35 alumnos cargados
+2:36:30 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:36:31 p.m. | Público    | Escaneo QR      | ERROR   | 129ms | Fallo validación: Leonardo Gonzalez
+2:36:32 p.m. | Estudiante | Consultar Boleta | SUCCESS | 220ms | ID: 202452019 revisó 5 materias
+2:36:33 p.m. | Profesor   | Pasar Lista     | SUCCESS | 107ms | Grupo GRADO 5 - GRUPO 1: 31 alumnos cargados
+2:36:33 p.m. | Estudiante | Consultar Boleta | SUCCESS | 121ms | ID: 202422017 revisó 5 materias
+2:36:34 p.m. | Profesor   | Pasar Lista     | SUCCESS | 108ms | Grupo Grado 2 - 1: 1 alumnos cargados
+2:36:35 p.m. | Profesor   | Pasar Lista     | SUCCESS | 107ms | Grupo GRADO 1 - GRUPO 1: 28 alumnos cargados
+2:36:36 p.m. | Director   | Panel Admin     | SUCCESS | 91ms | Sesión verificada activamente
+2:36:37 p.m. | Director   | Panel Admin     | SUCCESS | 89ms | Sesión verificada activamente
+2:36:37 p.m. | Estudiante | Consultar Boleta | SUCCESS | 120ms | ID: 202412024 revisó 5 materias
+2:36:38 p.m. | Profesor   | Pasar Lista     | SUCCESS | 110ms | Grupo GRADO 4 - GRUPO 1: 33 alumnos cargados
+2:36:39 p.m. | Público    | Escaneo QR      | ERROR   | 130ms | Fallo validación: Mateo Gonzalez
+2:36:40 p.m. | Director   | Panel Admin     | SUCCESS | 110ms | Sesión verificada activamente
+2:36:41 p.m. | Profesor   | Pasar Lista     | SUCCESS | 108ms | Grupo GRADO 3 - GRUPO 1: 35 alumnos cargados
+2:36:41 p.m. | Estudiante | Consultar Boleta | SUCCESS | 120ms | ID: 202421017 revisó 5 materias
+2:36:42 p.m. | Profesor   | Pasar Lista     | SUCCESS | 110ms | Grupo GRADO 4 - GRUPO 1: 33 alumnos cargados
+2:36:43 p.m. | Público    | Escaneo QR      | ERROR   | 134ms | Fallo validación: Emiliano Gonzalez
+2:36:44 p.m. | Público    | Escaneo QR      | ERROR   | 136ms | Fallo validación: Sofia Hernandez
+2:36:45 p.m. | Profesor   | Pasar Lista     | SUCCESS | 111ms | Grupo GRADO 1 - GRUPO 2: 28 alumnos cargados
+2:36:45 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:36:46 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:36:47 p.m. | Estudiante | Consultar Boleta | SUCCESS | 114ms | ID: 202422001 revisó 5 materias
+2:36:48 p.m. | Público    | Escaneo QR      | ERROR   | 136ms | Fallo validación: Camila Gonzalez
+2:36:49 p.m. | Público    | Escaneo QR      | ERROR   | 117ms | Fallo validación: Leonardo Perez
+2:36:49 p.m. | Estudiante | Consultar Boleta | SUCCESS | 98ms | ID: 202431020 revisó 5 materias
+2:36:50 p.m. | Público    | Escaneo QR      | ERROR   | 147ms | Fallo validación: Mateo Garcia
+2:36:51 p.m. | Estudiante | Consultar Boleta | SUCCESS | 132ms | ID: 202421024 revisó 5 materias
+2:36:52 p.m. | Público    | Escaneo QR      | ERROR   | 141ms | Fallo validación: Mariana Martinez
+2:36:52 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:36:53 p.m. | Público    | Escaneo QR      | ERROR   | 128ms | Fallo validación: Valentina Ramirez
+2:36:54 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:36:55 p.m. | Público    | Escaneo QR      | ERROR   | 106ms | Fallo validación: Isabella Hernandez
+2:36:56 p.m. | Red        | Conexión        | ERROR   | 71ms | Error 404: Endpoint no encontrado (Simulado)
+2:36:57 p.m. | Estudiante | Consultar Boleta | SUCCESS | 152ms | ID: 202431033 revisó 5 materias
+2:36:57 p.m. | Estudiante | Consultar Boleta | SUCCESS | 104ms | ID: 202422024 revisó 5 materias
+2:36:58 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:36:59 p.m. | Estudiante | Consultar Boleta | SUCCESS | 104ms | ID: 202462018 revisó 5 materias
+2:37:00 p.m. | Profesor   | Pasar Lista     | SUCCESS | 102ms | Grupo GRADO 2 - GRUPO 1: 28 alumnos cargados
+2:37:01 p.m. | Director   | Panel Admin     | SUCCESS | 104ms | Sesión verificada activamente
+2:37:01 p.m. | Profesor   | Pasar Lista     | SUCCESS | 115ms | Grupo GRADO 4 - GRUPO 1: 33 alumnos cargados
+2:37:02 p.m. | Público    | Escaneo QR      | ERROR   | 132ms | Fallo validación: Leonardo Rodriguez
+2:37:03 p.m. | Estudiante | Consultar Boleta | SUCCESS | 138ms | ID: 202421023 revisó 5 materias
+2:37:04 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:37:05 p.m. | Profesor   | Pasar Lista     | SUCCESS | 116ms | Grupo GRADO 1 - GRUPO 1: 28 alumnos cargados
+2:37:05 p.m. | Público    | Escaneo QR      | ERROR   | 121ms | Fallo validación: Isabella Sanchez
+2:37:06 p.m. | Público    | Escaneo QR      | ERROR   | 116ms | Fallo validación: Valentina Ramirez
+2:37:07 p.m. | Profesor   | Pasar Lista     | SUCCESS | 114ms | Grupo GRADO 3 - GRUPO 2: 35 alumnos cargados
+2:37:08 p.m. | Red        | Conexión        | ERROR   | 87ms | Error 404: Endpoint no encontrado (Simulado)
+2:37:09 p.m. | Estudiante | Consultar Boleta | SUCCESS | 106ms | ID: 202431008 revisó 5 materias
+2:37:09 p.m. | Estudiante | Consultar Boleta | SUCCESS | 112ms | ID: 202461027 revisó 5 materias
+2:37:10 p.m. | Público    | Escaneo QR      | ERROR   | 131ms | Fallo validación: Emiliano Sanchez
+2:37:11 p.m. | Estudiante | Consultar Boleta | SUCCESS | 121ms | ID: 202442008 revisó 5 materias
+2:37:12 p.m. | Profesor   | Pasar Lista     | SUCCESS | 117ms | Grupo GRADO 5 - GRUPO 1: 31 alumnos cargados
+2:37:13 p.m. | Estudiante | Consultar Boleta | SUCCESS | 106ms | ID: 202432012 revisó 5 materias
+2:37:13 p.m. | Profesor   | Pasar Lista     | SUCCESS | 107ms | Grupo GRADO 6 - GRUPO 1: 30 alumnos cargados
+2:37:14 p.m. | Público    | Escaneo QR      | ERROR   | 112ms | Fallo validación: Mateo Lopez
+2:37:15 p.m. | Director   | Panel Admin     | SUCCESS | 105ms | Sesión verificada activamente
+2:37:16 p.m. | Profesor   | Pasar Lista     | SUCCESS | 101ms | Grupo Grado 2 - 1: 1 alumnos cargados
+2:37:17 p.m. | Profesor   | Pasar Lista     | SUCCESS | 103ms | Grupo GRADO 5 - GRUPO 1: 31 alumnos cargados
+2:37:17 p.m. | Público    | Escaneo QR      | ERROR   | 134ms | Fallo validación: Mariana Sanchez
+2:37:18 p.m. | Estudiante | Consultar Boleta | SUCCESS | 110ms | ID: 202422028 revisó 5 materias
+2:37:19 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:37:20 p.m. | Red        | Conexión        | ERROR   | 42ms | Error 404: Endpoint no encontrado (Simulado)
+2:37:21 p.m. | Profesor   | Pasar Lista     | SUCCESS | 103ms | Grupo GRADO 2 - GRUPO 2: 31 alumnos cargados
+2:37:21 p.m. | Profesor   | Pasar Lista     | SUCCESS | 112ms | Grupo GRADO 2 - GRUPO 1: 28 alumnos cargados
+2:37:22 p.m. | Público    | Escaneo QR      | ERROR   | 134ms | Fallo validación: Camila Rodriguez
+2:37:23 p.m. | Profesor   | Pasar Lista     | SUCCESS | 101ms | Grupo GRADO 3 - GRUPO 1: 35 alumnos cargados
+2:37:24 p.m. | Público    | Escaneo QR      | ERROR   | 130ms | Fallo validación: Mariana Gonzalez
+2:37:25 p.m. | Estudiante | Consultar Boleta | SUCCESS | 139ms | ID: 202442010 revisó 5 materias
+2:37:25 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:37:26 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:37:27 p.m. | Director   | Panel Admin     | SUCCESS | 106ms | Sesión verificada activamente
+2:37:28 p.m. | Estudiante | Consultar Boleta | SUCCESS | 126ms | ID: 202462009 revisó 5 materias
+2:37:28 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:37:29 p.m. | Profesor   | Pasar Lista     | SUCCESS | 104ms | Grupo GRADO 1 - GRUPO 1: 28 alumnos cargados
+2:37:30 p.m. | Público    | Escaneo QR      | ERROR   | 126ms | Fallo validación: Mateo Martinez
+2:37:31 p.m. | Estudiante | Consultar Boleta | SUCCESS | 109ms | ID: 202422029 revisó 5 materias
+2:37:32 p.m. | Público    | Escaneo QR      | ERROR   | 146ms | Fallo validación: Sofia Rodriguez
+2:37:33 p.m. | Profesor   | Pasar Lista     | SUCCESS | 106ms | Grupo GRADO 4 - GRUPO 2: 28 alumnos cargados
+2:37:33 p.m. | Profesor   | Pasar Lista     | SUCCESS | 106ms | Grupo GRADO 2 - GRUPO 2: 31 alumnos cargados
+2:37:34 p.m. | Público    | Escaneo QR      | ERROR   | 129ms | Fallo validación: Emiliano Sanchez
+2:37:35 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:37:36 p.m. | Público    | Escaneo QR      | ERROR   | 125ms | Fallo validación: Leonardo Lopez
+2:37:37 p.m. | Estudiante | Consultar Boleta | SUCCESS | 128ms | ID: 202412001 revisó 5 materias
+2:37:37 p.m. | Estudiante | Consultar Boleta | SUCCESS | 110ms | ID: 202452018 revisó 5 materias
+2:37:38 p.m. | Estudiante | Consultar Boleta | SUCCESS | 110ms | ID: 202442016 revisó 5 materias
+2:37:39 p.m. | Profesor   | Pasar Lista     | SUCCESS | 109ms | Grupo GRADO 2 - GRUPO 1: 28 alumnos cargados
+2:37:40 p.m. | Público    | Escaneo QR      | ERROR   | 121ms | Fallo validación: Sebastian Ramirez
+2:37:41 p.m. | Público    | Escaneo QR      | ERROR   | 125ms | Fallo validación: Camila Cruz
+2:37:41 p.m. | Director   | Panel Admin     | SUCCESS | 90ms | Sesión verificada activamente
+2:37:42 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:37:43 p.m. | Público    | Escaneo QR      | ERROR   | 130ms | Fallo validación: Leonardo Lopez
+2:37:44 p.m. | Estudiante | Consultar Boleta | SUCCESS | 220ms | ID: 202411023 revisó 5 materias
+2:37:45 p.m. | Estudiante | Consultar Boleta | SUCCESS | 97ms | ID: 202412019 revisó 5 materias
+2:37:45 p.m. | Estudiante | Consultar Boleta | SUCCESS | 97ms | ID: 202451024 revisó 5 materias
+2:37:46 p.m. | Director   | Panel Admin     | SUCCESS | 81ms | Sesión verificada activamente
+2:37:47 p.m. | Director   | Panel Admin     | SUCCESS | 95ms | Sesión verificada activamente
+2:37:48 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:37:49 p.m. | Director   | Panel Admin     | SUCCESS | 95ms | Sesión verificada activamente
+2:37:49 p.m. | Estudiante | Consultar Boleta | SUCCESS | 138ms | ID: 202422008 revisó 5 materias
+2:37:50 p.m. | Profesor   | Pasar Lista     | SUCCESS | 110ms | Grupo GRADO 6 - GRUPO 2: 34 alumnos cargados
+2:37:51 p.m. | Estudiante | Consultar Boleta | SUCCESS | 98ms | ID: 202432003 revisó 5 materias
+2:37:52 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:37:53 p.m. | Estudiante | Consultar Boleta | SUCCESS | 118ms | ID: 202441003 revisó 5 materias
+2:37:53 p.m. | Red        | Conexión        | ERROR   | 68ms | Error 404: Endpoint no encontrado (Simulado)
+2:37:54 p.m. | Profesor   | Pasar Lista     | SUCCESS | 111ms | Grupo GRADO 1 - GRUPO 2: 28 alumnos cargados
+2:37:55 p.m. | Público    | Escaneo QR      | ERROR   | 123ms | Fallo validación: Camila Ramirez
+2:37:56 p.m. | Público    | Escaneo QR      | ERROR   | 136ms | Fallo validación: Mariana Martinez
+2:37:57 p.m. | Director   | Panel Admin     | SUCCESS | 98ms | Sesión verificada activamente
+2:37:57 p.m. | Profesor   | Pasar Lista     | SUCCESS | 116ms | Grupo GRADO 2 - GRUPO 2: 31 alumnos cargados
+2:37:58 p.m. | Estudiante | Consultar Boleta | SUCCESS | 120ms | ID: 202412009 revisó 5 materias
+2:37:59 p.m. | Director   | Panel Admin     | SUCCESS | 99ms | Sesión verificada activamente
+2:38:00 p.m. | Público    | Escaneo QR      | ERROR   | 123ms | Fallo validación: Isabella Sanchez
+2:38:00 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:38:01 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:38:02 p.m. | Público    | Escaneo QR      | ERROR   | 136ms | Fallo validación: Emiliano Martinez
+2:38:03 p.m. | Profesor   | Pasar Lista     | SUCCESS | 102ms | Grupo GRADO 3 - GRUPO 2: 35 alumnos cargados
+2:38:04 p.m. | Estudiante | Consultar Boleta | SUCCESS | 123ms | ID: 202412025 revisó 5 materias
+2:38:05 p.m. | Estudiante | Consultar Boleta | SUCCESS | 104ms | ID: 202441003 revisó 5 materias
+2:38:05 p.m. | Público    | Escaneo QR      | ERROR   | 138ms | Fallo validación: Bryan Refugio Sanchez Vidal
+2:38:06 p.m. | Director   | Panel Admin     | SUCCESS | 93ms | Sesión verificada activamente
+2:38:07 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:38:08 p.m. | Director   | Panel Admin     | SUCCESS | 110ms | Sesión verificada activamente
+2:38:09 p.m. | Estudiante | Consultar Boleta | SUCCESS | 106ms | ID: 202452010 revisó 5 materias
+2:38:09 p.m. | Estudiante | Consultar Boleta | SUCCESS | 121ms | ID: 202431019 revisó 5 materias
+2:38:10 p.m. | Profesor   | Pasar Lista     | SUCCESS | 109ms | Grupo GRADO 5 - GRUPO 1: 31 alumnos cargados
+2:38:11 p.m. | Público    | Escaneo QR      | ERROR   | 124ms | Fallo validación: Mariana Lopez
+2:38:12 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:38:13 p.m. | Estudiante | Consultar Boleta | SUCCESS | 102ms | ID: 202461021 revisó 5 materias
+2:38:13 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:38:14 p.m. | Estudiante | Consultar Boleta | SUCCESS | 111ms | ID: 202462026 revisó 5 materias
+2:38:15 p.m. | Director   | Panel Admin     | SUCCESS | 85ms | Sesión verificada activamente
+2:38:16 p.m. | Director   | Panel Admin     | SUCCESS | 102ms | Sesión verificada activamente
+2:38:16 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:38:17 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:38:18 p.m. | Público    | Escaneo QR      | ERROR   | 128ms | Fallo validación: Valentina Hernandez
+2:38:19 p.m. | Profesor   | Pasar Lista     | SUCCESS | 102ms | Grupo Grado 1 - 1: 1 alumnos cargados
+2:38:20 p.m. | Red        | Conexión        | ERROR   | 71ms | Error 404: Endpoint no encontrado (Simulado)
+2:38:21 p.m. | Director   | Panel Admin     | SUCCESS | 87ms | Sesión verificada activamente
+2:38:21 p.m. | Director   | Panel Admin     | SUCCESS | 118ms | Sesión verificada activamente
+2:38:22 p.m. | Estudiante | Consultar Boleta | SUCCESS | 113ms | ID: 202452018 revisó 5 materias
+2:38:23 p.m. | Profesor   | Pasar Lista     | SUCCESS | 103ms | Grupo GRADO 5 - GRUPO 2: 28 alumnos cargados
+2:38:24 p.m. | Público    | Escaneo QR      | ERROR   | 139ms | Fallo validación: Sebastian Rodriguez
+2:38:25 p.m. | Director   | Panel Admin     | SUCCESS | 110ms | Sesión verificada activamente
+2:38:25 p.m. | Público    | Escaneo QR      | ERROR   | 124ms | Fallo validación: Santiago Rodriguez
+2:38:26 p.m. | Director   | Panel Admin     | SUCCESS | 104ms | Sesión verificada activamente
+2:38:27 p.m. | Profesor   | Pasar Lista     | SUCCESS | 104ms | Grupo GRADO 4 - GRUPO 2: 28 alumnos cargados
+2:38:28 p.m. | Profesor   | Pasar Lista     | SUCCESS | 104ms | Grupo GRADO 1 - GRUPO 2: 28 alumnos cargados
+2:38:29 p.m. | Estudiante | Consultar Boleta | SUCCESS | 109ms | ID: 202422028 revisó 5 materias
+2:38:29 p.m. | Estudiante | Consultar Boleta | SUCCESS | 124ms | ID: 202411002 revisó 5 materias
+2:38:30 p.m. | Director   | Panel Admin     | SUCCESS | 107ms | Sesión verificada activamente
+2:38:31 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:38:32 p.m. | Profesor   | Pasar Lista     | SUCCESS | 105ms | Grupo GRADO 2 - GRUPO 2: 31 alumnos cargados
+2:38:33 p.m. | Director   | Panel Admin     | SUCCESS | 91ms | Sesión verificada activamente
+2:38:33 p.m. | Público    | Escaneo QR      | ERROR   | 127ms | Fallo validación: Emiliano Lopez
+2:38:34 p.m. | Director   | Panel Admin     | SUCCESS | 110ms | Sesión verificada activamente
+2:38:35 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:38:36 p.m. | Profesor   | Pasar Lista     | SUCCESS | 106ms | Grupo GRADO 6 - GRUPO 1: 30 alumnos cargados
+2:38:37 p.m. | Profesor   | Pasar Lista     | SUCCESS | 101ms | Grupo GRADO 1 - GRUPO 2: 28 alumnos cargados
+2:38:37 p.m. | Director   | Panel Admin     | SUCCESS | 92ms | Sesión verificada activamente
+2:38:38 p.m. | Director   | Panel Admin     | SUCCESS | 108ms | Sesión verificada activamente
+2:38:39 p.m. | Profesor   | Pasar Lista     | SUCCESS | 108ms | Grupo GRADO 3 - GRUPO 2: 35 alumnos cargados
+2:38:40 p.m. | Público    | Escaneo QR      | ERROR   | 112ms | Fallo validación: Mariana Gonzalez
+2:38:41 p.m. | Estudiante | Consultar Boleta | SUCCESS | 113ms | ID: 202441029 revisó 5 materias
+2:38:41 p.m. | Estudiante | Consultar Boleta | SUCCESS | 119ms | ID: 202442005 revisó 5 materias
+2:38:42 p.m. | Profesor   | Pasar Lista     | SUCCESS | 106ms | Grupo GRADO 5 - GRUPO 2: 28 alumnos cargados
+2:38:43 p.m. | Público    | Escaneo QR      | ERROR   | 131ms | Fallo validación: Mariana Hernandez
+2:38:44 p.m. | Profesor   | Pasar Lista     | SUCCESS | 109ms | Grupo GRADO 4 - GRUPO 2: 28 alumnos cargados
+2:38:45 p.m. | Director   | Panel Admin     | SUCCESS | 94ms | Sesión verificada activamente
+2:38:45 p.m. | Público    | Escaneo QR      | ERROR   | 134ms | Fallo validación: Camila Cruz
+2:38:46 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:38:47 p.m. | Estudiante | Consultar Boleta | SUCCESS | 114ms | ID: 202441013 revisó 5 materias
+2:38:48 p.m. | Profesor   | Pasar Lista     | SUCCESS | 110ms | Grupo GRADO 4 - GRUPO 2: 28 alumnos cargados
+2:38:49 p.m. | Profesor   | Pasar Lista     | SUCCESS | 109ms | Grupo GRADO 5 - GRUPO 1: 31 alumnos cargados
+2:38:49 p.m. | Profesor   | Pasar Lista     | SUCCESS | 108ms | Grupo GRADO 1 - GRUPO 2: 28 alumnos cargados
+2:38:50 p.m. | Estudiante | Consultar Boleta | SUCCESS | 112ms | ID: 202431031 revisó 5 materias
+2:38:51 p.m. | Público    | Escaneo QR      | ERROR   | 119ms | Fallo validación: Camila Gonzalez
+2:38:52 p.m. | Director   | Panel Admin     | SUCCESS | 92ms | Sesión verificada activamente
+2:38:53 p.m. | Profesor   | Pasar Lista     | SUCCESS | 110ms | Grupo GRADO 1 - GRUPO 1: 28 alumnos cargados
+2:38:53 p.m. | Público    | Escaneo QR      | ERROR   | 138ms | Fallo validación: Camila Perez
+2:38:54 p.m. | Profesor   | Pasar Lista     | SUCCESS | 111ms | Grupo GRADO 4 - GRUPO 2: 28 alumnos cargados
+2:38:55 p.m. | Profesor   | Pasar Lista     | SUCCESS | 100ms | Grupo GRADO 2 - GRUPO 2: 31 alumnos cargados
+2:38:56 p.m. | Público    | Escaneo QR      | ERROR   | 138ms | Fallo validación: Emiliano Rodriguez
+2:38:57 p.m. | Público    | Escaneo QR      | ERROR   | 135ms | Fallo validación: Sofia Rodriguez
+2:38:57 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:38:58 p.m. | Público    | Escaneo QR      | ERROR   | 116ms | Fallo validación: Emiliano Martinez
+2:38:59 p.m. | Director   | Panel Admin     | SUCCESS | 114ms | Sesión verificada activamente
+2:39:00 p.m. | Público    | Escaneo QR      | ERROR   | 119ms | Fallo validación: Sebastian Sanchez
+2:39:01 p.m. | Público    | Escaneo QR      | ERROR   | 134ms | Fallo validación: Mariana Perez
+2:39:01 p.m. | Público    | Escaneo QR      | ERROR   | 159ms | Fallo validación: Camila Rodriguez
+2:39:02 p.m. | Director   | Panel Admin     | SUCCESS | 114ms | Sesión verificada activamente
+2:39:03 p.m. | Director   | Panel Admin     | SUCCESS | 86ms | Sesión verificada activamente
+2:39:04 p.m. | Profesor   | Pasar Lista     | SUCCESS | 103ms | Grupo GRADO 5 - GRUPO 2: 28 alumnos cargados
+2:39:05 p.m. | Estudiante | Consultar Boleta | SUCCESS | 106ms | ID: 202412023 revisó 5 materias
+2:39:05 p.m. | Profesor   | Pasar Lista     | SUCCESS | 113ms | Grupo GRADO 4 - GRUPO 1: 33 alumnos cargados
+2:39:06 p.m. | Profesor   | Pasar Lista     | SUCCESS | 107ms | Grupo GRADO 6 - GRUPO 2: 34 alumnos cargados
+2:39:07 p.m. | Director   | Panel Admin     | SUCCESS | 103ms | Sesión verificada activamente
+2:39:08 p.m. | Público    | Escaneo QR      | ERROR   | 113ms | Fallo validación: Sofia Rodriguez
+2:39:08 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:39:09 p.m. | Estudiante | Consultar Boleta | SUCCESS | 103ms | ID: 202412009 revisó 5 materias
+2:39:10 p.m. | Director   | Panel Admin     | SUCCESS | 92ms | Sesión verificada activamente
+2:39:11 p.m. | Profesor   | Pasar Lista     | SUCCESS | 103ms | Grupo GRADO 3 - GRUPO 2: 35 alumnos cargados
+2:39:12 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:39:12 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:39:13 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:39:14 p.m. | Profesor   | Pasar Lista     | SUCCESS | 109ms | Grupo GRADO 5 - GRUPO 2: 28 alumnos cargados
+2:39:15 p.m. | Estudiante | Consultar Boleta | SUCCESS | 139ms | ID: 202451019 revisó 5 materias
+2:39:16 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:39:17 p.m. | Director   | Panel Admin     | SUCCESS | 103ms | Sesión verificada activamente
+2:39:17 p.m. | Director   | Panel Admin     | SUCCESS | 68ms | Sesión verificada activamente
+2:39:18 p.m. | Público    | Escaneo QR      | ERROR   | 133ms | Fallo validación: Santiago Cruz
+2:39:19 p.m. | Público    | Escaneo QR      | ERROR   | 141ms | Fallo validación: Sebastian Perez
+2:39:20 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:39:21 p.m. | Director   | Panel Admin     | SUCCESS | 87ms | Sesión verificada activamente
+2:39:21 p.m. | Estudiante | Consultar Boleta | SUCCESS | 112ms | ID: 202462020 revisó 5 materias
+2:39:22 p.m. | Director   | Panel Admin     | SUCCESS | 94ms | Sesión verificada activamente
+2:39:23 p.m. | Director   | Panel Admin     | SUCCESS | 84ms | Sesión verificada activamente
+2:39:24 p.m. | Profesor   | Pasar Lista     | SUCCESS | 104ms | Grupo GRADO 5 - GRUPO 2: 28 alumnos cargados
+2:39:24 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:39:25 p.m. | Profesor   | Pasar Lista     | SUCCESS | 105ms | Grupo Grado 1 - 1: 1 alumnos cargados
+2:39:26 p.m. | Estudiante | Consultar Boleta | SUCCESS | 106ms | ID: 202461017 revisó 5 materias
+2:39:27 p.m. | Estudiante | Consultar Boleta | SUCCESS | 124ms | ID: 202431034 revisó 5 materias
+2:39:28 p.m. | Director   | Panel Admin     | SUCCESS | 89ms | Sesión verificada activamente
+2:39:29 p.m. | Estudiante | Consultar Boleta | SUCCESS | 108ms | ID: 202432003 revisó 5 materias
+2:39:29 p.m. | Red        | Conexión        | ERROR   | 58ms | Error 404: Endpoint no encontrado (Simulado)
+2:39:30 p.m. | Director   | Panel Admin     | SUCCESS | 105ms | Sesión verificada activamente
+2:39:31 p.m. | Público    | Escaneo QR      | ERROR   | 127ms | Fallo validación: Mariana Garcia
+2:39:32 p.m. | Profesor   | Pasar Lista     | SUCCESS | 106ms | Grupo GRADO 3 - GRUPO 1: 35 alumnos cargados
+2:39:33 p.m. | Red        | Conexión        | ERROR   | 62ms | Error 404: Endpoint no encontrado (Simulado)
+2:39:33 p.m. | Público    | Escaneo QR      | ERROR   | 128ms | Fallo validación: Mateo Cruz
+2:39:34 p.m. | Público    | Escaneo QR      | ERROR   | 124ms | Fallo validación: Emiliano Perez
+2:39:35 p.m. | Profesor   | Pasar Lista     | SUCCESS | 106ms | Grupo GRADO 5 - GRUPO 1: 31 alumnos cargados
+2:39:36 p.m. | Profesor   | Pasar Lista     | SUCCESS | 106ms | Grupo GRADO 5 - GRUPO 2: 28 alumnos cargados
+2:39:37 p.m. | Director   | Panel Admin     | SUCCESS | 90ms | Sesión verificada activamente
+2:39:37 p.m. | Profesor   | Pasar Lista     | SUCCESS | 105ms | Grupo GRADO 6 - GRUPO 1: 30 alumnos cargados
+2:39:38 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:39:39 p.m. | Director   | Panel Admin     | SUCCESS | 91ms | Sesión verificada activamente
+2:39:40 p.m. | Estudiante | Consultar Boleta | SUCCESS | 110ms | ID: 202412015 revisó 5 materias
+2:39:41 p.m. | Estudiante | Consultar Boleta | SUCCESS | 91ms | ID: 202431012 revisó 5 materias
+2:39:41 p.m. | Estudiante | Consultar Boleta | SUCCESS | 116ms | ID: 202462025 revisó 5 materias
+2:39:42 p.m. | Profesor   | Pasar Lista     | SUCCESS | 106ms | Grupo GRADO 6 - GRUPO 2: 34 alumnos cargados
+2:39:43 p.m. | Estudiante | Consultar Boleta | SUCCESS | 112ms | ID: 202452023 revisó 5 materias
+2:39:44 p.m. | Estudiante | Consultar Boleta | SUCCESS | 113ms | ID: 202462015 revisó 5 materias
+2:39:45 p.m. | Profesor   | Pasar Lista     | SUCCESS | 108ms | Grupo GRADO 2 - GRUPO 1: 28 alumnos cargados
+2:39:45 p.m. | Estudiante | Consultar Boleta | SUCCESS | 91ms | ID: 202442011 revisó 5 materias
+2:39:46 p.m. | Público    | Escaneo QR      | ERROR   | 117ms | Fallo validación: Leonardo Martinez
+2:39:47 p.m. | Director   | Panel Admin     | SUCCESS | 109ms | Sesión verificada activamente
+2:39:48 p.m. | Director   | Panel Admin     | SUCCESS | 94ms | Sesión verificada activamente
+2:39:49 p.m. | Público    | Escaneo QR      | ERROR   | 126ms | Fallo validación: Valentina Gonzalez
+2:39:49 p.m. | Director   | Panel Admin     | SUCCESS | 93ms | Sesión verificada activamente
+2:39:50 p.m. | Director   | Panel Admin     | SUCCESS | 84ms | Sesión verificada activamente
+2:39:51 p.m. | Director   | Panel Admin     | SUCCESS | 94ms | Sesión verificada activamente
+2:39:52 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:39:52 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:39:53 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:39:54 p.m. | Estudiante | Consultar Boleta | SUCCESS | 115ms | ID: 202411026 revisó 5 materias
+2:39:55 p.m. | Público    | Escaneo QR      | ERROR   | 121ms | Fallo validación: Mateo Garcia
+2:39:56 p.m. | Red        | Conexión        | ERROR   | 52ms | Error 404: Endpoint no encontrado (Simulado)
+2:39:57 p.m. | Estudiante | Consultar Boleta | SUCCESS | 218ms | ID: 202411014 revisó 5 materias
+2:39:57 p.m. | Profesor   | Pasar Lista     | SUCCESS | 116ms | Grupo GRADO 4 - GRUPO 2: 28 alumnos cargados
+2:39:58 p.m. | Estudiante | Consultar Boleta | SUCCESS | 113ms | ID: 202461021 revisó 5 materias
+2:39:59 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:40:00 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:40:01 p.m. | Estudiante | Consultar Boleta | SUCCESS | 134ms | ID: 202452006 revisó 5 materias
+2:40:01 p.m. | Público    | Escaneo QR      | ERROR   | 185ms | Fallo validación: Valentina Hernandez
+2:40:02 p.m. | Director   | Panel Admin     | SUCCESS | 113ms | Sesión verificada activamente
+2:40:03 p.m. | Público    | Escaneo QR      | ERROR   | 138ms | Fallo validación: Leonardo Cruz
+2:40:04 p.m. | Estudiante | Consultar Boleta | SUCCESS | 120ms | ID: 202442016 revisó 5 materias
+2:40:05 p.m. | Estudiante | Consultar Boleta | SUCCESS | 85ms | ID: 202461025 revisó 5 materias
+2:40:05 p.m. | Público    | Escaneo QR      | ERROR   | 140ms | Fallo validación: Emiliano Martinez
+2:40:06 p.m. | Público    | Escaneo QR      | ERROR   | 137ms | Fallo validación: Leonardo Perez
+2:40:07 p.m. | Profesor   | Pasar Lista     | SUCCESS | 112ms | Grupo GRADO 4 - GRUPO 2: 28 alumnos cargados
+2:40:08 p.m. | Público    | Escaneo QR      | ERROR   | 110ms | Fallo validación: Sebastian Hernandez
+2:40:09 p.m. | Estudiante | Consultar Boleta | SUCCESS | 104ms | ID: 202412010 revisó 5 materias
+2:40:09 p.m. | Profesor   | Pasar Lista     | SUCCESS | 105ms | Grupo GRADO 1 - GRUPO 2: 28 alumnos cargados
+2:40:10 p.m. | Director   | Panel Admin     | SUCCESS | 110ms | Sesión verificada activamente
+2:40:11 p.m. | Profesor   | Pasar Lista     | SUCCESS | 115ms | Grupo GRADO 2 - GRUPO 2: 31 alumnos cargados
+2:40:12 p.m. | Público    | Escaneo QR      | ERROR   | 135ms | Fallo validación: Santiago Martinez
+2:40:13 p.m. | Público    | Escaneo QR      | ERROR   | 123ms | Fallo validación: Sebastian Sanchez
+2:40:13 p.m. | Profesor   | Pasar Lista     | SUCCESS | 108ms | Grupo Grado 1 - 1: 1 alumnos cargados
+2:40:14 p.m. | Público    | Escaneo QR      | ERROR   | 129ms | Fallo validación: Valentina Hernandez
+2:40:15 p.m. | Público    | Escaneo QR      | ERROR   | 139ms | Fallo validación: Santiago Sanchez
+2:40:16 p.m. | Profesor   | Pasar Lista     | SUCCESS | 117ms | Grupo GRADO 5 - GRUPO 2: 28 alumnos cargados
+2:40:17 p.m. | Público    | Escaneo QR      | ERROR   | 140ms | Fallo validación: Emiliano Sanchez
+2:40:17 p.m. | Director   | Panel Admin     | SUCCESS | 110ms | Sesión verificada activamente
+2:40:18 p.m. | Director   | Panel Admin     | SUCCESS | 92ms | Sesión verificada activamente
+2:40:19 p.m. | Estudiante | Consultar Boleta | SUCCESS | 123ms | ID: 202432018 revisó 5 materias
+2:40:20 p.m. | Estudiante | Consultar Boleta | SUCCESS | 103ms | ID: 202442027 revisó 5 materias
+2:40:21 p.m. | Director   | Panel Admin     | SUCCESS | 136ms | Sesión verificada activamente
+2:40:21 p.m. | Director   | Panel Admin     | SUCCESS | 110ms | Sesión verificada activamente
+2:40:22 p.m. | Red        | Conexión        | ERROR   | 62ms | Error 404: Endpoint no encontrado (Simulado)
+2:40:23 p.m. | Estudiante | Consultar Boleta | SUCCESS | 121ms | ID: 202411011 revisó 5 materias
+2:40:24 p.m. | Profesor   | Pasar Lista     | SUCCESS | 102ms | Grupo GRADO 5 - GRUPO 1: 31 alumnos cargados
+2:40:25 p.m. | Director   | Panel Admin     | SUCCESS | 136ms | Sesión verificada activamente
+2:40:25 p.m. | Estudiante | Consultar Boleta | SUCCESS | 113ms | ID: 256817 revisó 0 materias
+2:40:26 p.m. | Público    | Escaneo QR      | ERROR   | 127ms | Fallo validación: Sofia Martinez
+2:40:27 p.m. | Director   | Panel Admin     | SUCCESS | 118ms | Sesión verificada activamente
+2:40:28 p.m. | Profesor   | Pasar Lista     | SUCCESS | 104ms | Grupo GRADO 5 - GRUPO 2: 28 alumnos cargados
+2:40:29 p.m. | Estudiante | Consultar Boleta | SUCCESS | 109ms | ID: 202462033 revisó 5 materias
+2:40:29 p.m. | Público    | Escaneo QR      | ERROR   | 128ms | Fallo validación: Camila Lopez
+2:40:30 p.m. | Público    | Escaneo QR      | ERROR   | 137ms | Fallo validación: Camila Lopez
+2:40:31 p.m. | Director   | Panel Admin     | SUCCESS | 89ms | Sesión verificada activamente
+2:40:32 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:40:33 p.m. | Público    | Escaneo QR      | ERROR   | 123ms | Fallo validación: Mateo Garcia
+2:40:33 p.m. | Público    | Escaneo QR      | ERROR   | 136ms | Fallo validación: Valentina Sanchez
+2:40:34 p.m. | Estudiante | Consultar Boleta | SUCCESS | 109ms | ID: 202422020 revisó 5 materias
+2:40:35 p.m. | Director   | Panel Admin     | SUCCESS | 90ms | Sesión verificada activamente
+2:40:36 p.m. | Público    | Escaneo QR      | ERROR   | 127ms | Fallo validación: Isabella Sanchez
+2:40:37 p.m. | Público    | Escaneo QR      | ERROR   | 122ms | Fallo validación: Leonardo Rodriguez
+2:40:37 p.m. | Público    | Escaneo QR      | ERROR   | 120ms | Fallo validación: Mariana Perez
+2:40:38 p.m. | Público    | Escaneo QR      | ERROR   | 109ms | Fallo validación: Mateo Garcia
+2:40:39 p.m. | Red        | Conexión        | ERROR   | 61ms | Error 404: Endpoint no encontrado (Simulado)
+2:40:40 p.m. | Público    | Escaneo QR      | ERROR   | 160ms | Fallo validación: Mariana Lopez
+2:40:41 p.m. | Director   | Panel Admin     | SUCCESS | 91ms | Sesión verificada activamente
+2:40:41 p.m. | Director   | Panel Admin     | SUCCESS | 87ms | Sesión verificada activamente
+2:40:42 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:40:43 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:40:44 p.m. | Profesor   | Pasar Lista     | SUCCESS | 110ms | Grupo GRADO 3 - GRUPO 2: 35 alumnos cargados
+2:40:45 p.m. | Público    | Escaneo QR      | ERROR   | 130ms | Fallo validación: Valentina Sanchez
+2:40:45 p.m. | Director   | Panel Admin     | SUCCESS | 117ms | Sesión verificada activamente
+2:40:46 p.m. | Profesor   | Pasar Lista     | SUCCESS | 108ms | Grupo GRADO 2 - GRUPO 2: 31 alumnos cargados
+2:40:47 p.m. | Profesor   | Pasar Lista     | SUCCESS | 108ms | Grupo GRADO 5 - GRUPO 2: 28 alumnos cargados
+2:40:48 p.m. | Red        | Conexión        | ERROR   | 65ms | Error 404: Endpoint no encontrado (Simulado)
+2:40:49 p.m. | Director   | Panel Admin     | SUCCESS | 143ms | Sesión verificada activamente
+2:40:49 p.m. | Profesor   | Pasar Lista     | SUCCESS | 115ms | Grupo GRADO 2 - GRUPO 2: 31 alumnos cargados
+2:40:50 p.m. | Público    | Escaneo QR      | ERROR   | 114ms | Fallo validación: Mateo Martinez
+2:40:51 p.m. | Director   | Panel Admin     | SUCCESS | 111ms | Sesión verificada activamente
+2:40:52 p.m. | Director   | Panel Admin     | SUCCESS | 103ms | Sesión verificada activamente
+2:40:53 p.m. | Director   | Panel Admin     | SUCCESS | 94ms | Sesión verificada activamente
+2:40:53 p.m. | Director   | Panel Admin     | SUCCESS | 95ms | Sesión verificada activamente
+2:40:54 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:40:55 p.m. | Director   | Panel Admin     | SUCCESS | 95ms | Sesión verificada activamente
+2:40:56 p.m. | Profesor   | Pasar Lista     | SUCCESS | 110ms | Grupo GRADO 2 - GRUPO 2: 31 alumnos cargados
+2:40:57 p.m. | Profesor   | Pasar Lista     | SUCCESS | 112ms | Grupo GRADO 3 - GRUPO 2: 35 alumnos cargados
+2:40:57 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:40:58 p.m. | Público    | Escaneo QR      | ERROR   | 117ms | Fallo validación: Leonardo Garcia
+2:40:59 p.m. | Profesor   | Pasar Lista     | SUCCESS | 111ms | Grupo GRADO 4 - GRUPO 2: 28 alumnos cargados
+2:41:00 p.m. | Red        | Conexión        | ERROR   | 69ms | Error 404: Endpoint no encontrado (Simulado)
+2:41:01 p.m. | Estudiante | Consultar Boleta | SUCCESS | 166ms | ID: 202422002 revisó 5 materias
+2:41:01 p.m. | Director   | Panel Admin     | SUCCESS | 118ms | Sesión verificada activamente
+2:41:02 p.m. | Estudiante | Consultar Boleta | SUCCESS | 117ms | ID: 202422012 revisó 5 materias
+2:41:03 p.m. | Estudiante | Consultar Boleta | SUCCESS | 103ms | ID: 202431017 revisó 5 materias
+2:41:04 p.m. | Profesor   | Pasar Lista     | SUCCESS | 112ms | Grupo GRADO 1 - GRUPO 2: 28 alumnos cargados
+2:41:05 p.m. | Director   | Panel Admin     | SUCCESS | 98ms | Sesión verificada activamente
+2:41:05 p.m. | Público    | Escaneo QR      | ERROR   | 142ms | Fallo validación: Sebastian Perez
+2:41:06 p.m. | Público    | Escaneo QR      | ERROR   | 118ms | Fallo validación: Leonardo Garcia
+2:41:07 p.m. | Director   | Panel Admin     | SUCCESS | 113ms | Sesión verificada activamente
+2:41:08 p.m. | Red        | Conexión        | ERROR   | 68ms | Error 404: Endpoint no encontrado (Simulado)
+2:41:09 p.m. | Director   | Panel Admin     | SUCCESS | 87ms | Sesión verificada activamente
+2:41:09 p.m. | Director   | Panel Admin     | SUCCESS | 100ms | Sesión verificada activamente
+2:41:10 p.m. | Director   | Panel Admin     | SUCCESS | 113ms | Sesión verificada activamente
+2:41:11 p.m. | Estudiante | Consultar Boleta | SUCCESS | 105ms | ID: 202442007 revisó 5 materias
+2:41:12 p.m. | Director   | Panel Admin     | SUCCESS | 103ms | Sesión verificada activamente
+2:41:13 p.m. | Público    | Escaneo QR      | ERROR   | 173ms | Fallo validación: Sofia Perez
+2:41:13 p.m. | Red        | Conexión        | ERROR   | 73ms | Error 404: Endpoint no encontrado (Simulado)
+2:41:14 p.m. | Estudiante | Consultar Boleta | SUCCESS | 113ms | ID: 202442017 revisó 5 materias
+2:41:15 p.m. | Público    | Escaneo QR      | ERROR   | 186ms | Fallo validación: Emiliano Martinez
+2:41:16 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:41:17 p.m. | Estudiante | Consultar Boleta | SUCCESS | 103ms | ID: 202441029 revisó 5 materias
+2:41:17 p.m. | Público    | Escaneo QR      | ERROR   | 124ms | Fallo validación: Emiliano Perez
+2:41:18 p.m. | Profesor   | Pasar Lista     | SUCCESS | 108ms | Grupo GRADO 3 - GRUPO 2: 35 alumnos cargados
+2:41:19 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:41:20 p.m. | Profesor   | Pasar Lista     | SUCCESS | 101ms | Grupo GRADO 3 - GRUPO 1: 35 alumnos cargados
+2:41:21 p.m. | Estudiante | Consultar Boleta | SUCCESS | 187ms | ID: 202432018 revisó 5 materias
+2:41:21 p.m. | Profesor   | Pasar Lista     | SUCCESS | 108ms | Grupo Grado 1 - 2: 1 alumnos cargados
+2:41:22 p.m. | Profesor   | Pasar Lista     | SUCCESS | 109ms | Grupo GRADO 3 - GRUPO 1: 35 alumnos cargados
+2:41:23 p.m. | Sistema    | Heartbeat       | SUCCESS | 1ms | Servicios estables
+2:41:24 p.m. | Director   | Panel Admin     | SUCCESS | 85ms | Sesión verificada activamente
+2:41:24 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:41:25 p.m. | Estudiante | Consultar Boleta | SUCCESS | 120ms | ID: 202432015 revisó 5 materias
+2:41:26 p.m. | Público    | Escaneo QR      | ERROR   | 156ms | Fallo validación: Mateo Lopez
+2:41:27 p.m. | Público    | Escaneo QR      | ERROR   | 139ms | Fallo validación: Sofia Lopez
+2:41:28 p.m. | Director   | Panel Admin     | SUCCESS | 104ms | Sesión verificada activamente
+2:41:29 p.m. | Estudiante | Consultar Boleta | SUCCESS | 107ms | ID: 202441027 revisó 5 materias
+2:41:29 p.m. | Director   | Panel Admin     | SUCCESS | 102ms | Sesión verificada activamente
+2:41:30 p.m. | Estudiante | Consultar Boleta | SUCCESS | 115ms | ID: 202431017 revisó 5 materias
+2:41:31 p.m. | Director   | Panel Admin     | SUCCESS | 88ms | Sesión verificada activamente
+2:41:32 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:41:33 p.m. | Director   | Panel Admin     | SUCCESS | 105ms | Sesión verificada activamente
+2:41:33 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:41:34 p.m. | Estudiante | Consultar Boleta | SUCCESS | 141ms | ID: 202431018 revisó 5 materias
+2:41:35 p.m. | Público    | Escaneo QR      | ERROR   | 127ms | Fallo validación: Santiago Ramirez
+2:41:36 p.m. | Director   | Panel Admin     | SUCCESS | 106ms | Sesión verificada activamente
+2:41:37 p.m. | Director   | Panel Admin     | SUCCESS | 121ms | Sesión verificada activamente
+2:41:37 p.m. | Público    | Escaneo QR      | ERROR   | 143ms | Fallo validación: Emiliano Cruz
+2:41:38 p.m. | Público    | Escaneo QR      | ERROR   | 126ms | Fallo validación: Emiliano Perez
+2:41:39 p.m. | Público    | Escaneo QR      | ERROR   | 123ms | Fallo validación: Leonardo Martinez
+2:41:40 p.m. | Público    | Escaneo QR      | ERROR   | 136ms | Fallo validación: Sofia Perez
+2:41:41 p.m. | Público    | Escaneo QR      | ERROR   | 129ms | Fallo validación: Emiliano Rodriguez
+2:41:41 p.m. | Estudiante | Consultar Boleta | SUCCESS | 143ms | ID: 202461026 revisó 5 materias
+2:41:42 p.m. | Director   | Panel Admin     | SUCCESS | 109ms | Sesión verificada activamente
+2:41:43 p.m. | Director   | Panel Admin     | SUCCESS | 108ms | Sesión verificada activamente
+2:41:44 p.m. | Director   | Panel Admin     | SUCCESS | 92ms | Sesión verificada activamente
+2:41:45 p.m. | Estudiante | Consultar Boleta | SUCCESS | 111ms | ID: 202422029 revisó 5 materias
+2:41:45 p.m. | Estudiante | Consultar Boleta | SUCCESS | 121ms | ID: 202432031 revisó 5 materias
+2:41:46 p.m. | Público    | Escaneo QR      | ERROR   | 128ms | Fallo validación: Camila Cruz
+2:41:47 p.m. | Público    | Escaneo QR      | ERROR   | 130ms | Fallo validación: Santiago Hernandez
+2:41:48 p.m. | Director   | Panel Admin     | SUCCESS | 108ms | Sesión verificada activamente
+2:41:49 p.m. | Director   | Panel Admin     | SUCCESS | 123ms | Sesión verificada activamente
+2:41:49 p.m. | Público    | Escaneo QR      | ERROR   | 135ms | Fallo validación: Sebastian Hernandez
+2:41:50 p.m. | Profesor   | Pasar Lista     | SUCCESS | 107ms | Grupo GRADO 6 - GRUPO 1: 30 alumnos cargados
+2:41:51 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:41:52 p.m. | Director   | Panel Admin     | SUCCESS | 94ms | Sesión verificada activamente
+2:41:53 p.m. | Profesor   | Pasar Lista     | SUCCESS | 109ms | Grupo Grado 2 - 1: 1 alumnos cargados
+2:41:53 p.m. | Director   | Panel Admin     | SUCCESS | 75ms | Sesión verificada activamente
+2:41:54 p.m. | Director   | Panel Admin     | SUCCESS | 111ms | Sesión verificada activamente
+2:41:55 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:41:56 p.m. | Director   | Panel Admin     | SUCCESS | 85ms | Sesión verificada activamente
+2:41:57 p.m. | Público    | Escaneo QR      | ERROR   | 115ms | Fallo validación: Emiliano Sanchez
+2:41:57 p.m. | Estudiante | Consultar Boleta | SUCCESS | 118ms | ID: 202452023 revisó 5 materias
+2:41:58 p.m. | Director   | Panel Admin     | SUCCESS | 88ms | Sesión verificada activamente
+2:41:59 p.m. | Profesor   | Pasar Lista     | SUCCESS | 111ms | Grupo GRADO 2 - GRUPO 2: 31 alumnos cargados
+2:42:00 p.m. | Director   | Panel Admin     | SUCCESS | 96ms | Sesión verificada activamente
+2:42:01 p.m. | Público    | Escaneo QR      | ERROR   | 136ms | Fallo validación: Sofia Ramirez
+2:42:01 p.m. | Estudiante | Consultar Boleta | SUCCESS | 163ms | ID: 202431030 revisó 5 materias
+2:42:02 p.m. | Red        | Conexión        | ERROR   | 70ms | Error 404: Endpoint no encontrado (Simulado)
+2:42:03 p.m. | Director   | Panel Admin     | SUCCESS | 97ms | Sesión verificada activamente
+2:42:04 p.m. | Público    | Escaneo QR      | ERROR   | 138ms | Fallo validación: Mateo Ramirez
+2:42:05 p.m. | Profesor   | Pasar Lista     | SUCCESS | 112ms | Grupo GRADO 6 - GRUPO 1: 30 alumnos cargados
+2:42:05 p.m. | Estudiante | Consultar Boleta | SUCCESS | 119ms | ID: 202462013 revisó 5 materias
+2:42:06 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:42:07 p.m. | Público    | Escaneo QR      | ERROR   | 139ms | Fallo validación: Isabella Rodriguez
+2:42:08 p.m. | Red        | Conexión        | ERROR   | 56ms | Error 404: Endpoint no encontrado (Simulado)
+2:42:09 p.m. | Público    | Escaneo QR      | ERROR   | 136ms | Fallo validación: Isabella Cruz
+2:42:09 p.m. | Director   | Panel Admin     | SUCCESS | 94ms | Sesión verificada activamente
+2:42:10 p.m. | Estudiante | Consultar Boleta | SUCCESS | 120ms | ID: 202411018 revisó 5 materias
+2:42:11 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:42:12 p.m. | Director   | Panel Admin     | SUCCESS | 102ms | Sesión verificada activamente
+2:42:13 p.m. | Estudiante | Consultar Boleta | SUCCESS | 105ms | ID: 202431018 revisó 5 materias
+2:42:13 p.m. | Estudiante | Consultar Boleta | SUCCESS | 100ms | ID: 202421003 revisó 5 materias
+2:42:14 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:42:15 p.m. | Director   | Panel Admin     | SUCCESS | 86ms | Sesión verificada activamente
+2:42:16 p.m. | Profesor   | Pasar Lista     | SUCCESS | 101ms | Grupo GRADO 3 - GRUPO 2: 35 alumnos cargados
+2:42:17 p.m. | Profesor   | Pasar Lista     | SUCCESS | 114ms | Grupo GRADO 2 - GRUPO 2: 31 alumnos cargados
+2:42:17 p.m. | Estudiante | Consultar Boleta | SUCCESS | 123ms | ID: 202432011 revisó 5 materias
+2:42:18 p.m. | Profesor   | Pasar Lista     | SUCCESS | 108ms | Grupo GRADO 1 - GRUPO 2: 28 alumnos cargados
+2:42:19 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:42:20 p.m. | Público    | Escaneo QR      | ERROR   | 123ms | Fallo validación: Sofia Cruz
+2:42:21 p.m. | Público    | Escaneo QR      | ERROR   | 128ms | Fallo validación: Sebastian Ramirez
+2:42:21 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:42:22 p.m. | Público    | Escaneo QR      | ERROR   | 113ms | Fallo validación: Santiago Cruz
+2:42:23 p.m. | Estudiante | Consultar Boleta | SUCCESS | 155ms | ID: 202422016 revisó 5 materias
+2:42:24 p.m. | Profesor   | Pasar Lista     | SUCCESS | 101ms | Grupo GRADO 3 - GRUPO 2: 35 alumnos cargados
+2:42:25 p.m. | Público    | Escaneo QR      | ERROR   | 125ms | Fallo validación: Sofia Cruz
+2:42:25 p.m. | Profesor   | Pasar Lista     | SUCCESS | 108ms | Grupo GRADO 5 - GRUPO 1: 31 alumnos cargados
+2:42:26 p.m. | Estudiante | Consultar Boleta | SUCCESS | 113ms | ID: 202461023 revisó 5 materias
+2:42:27 p.m. | Público    | Escaneo QR      | ERROR   | 139ms | Fallo validación: Leonardo Sanchez
+2:42:28 p.m. | Director   | Panel Admin     | SUCCESS | 87ms | Sesión verificada activamente
+2:42:29 p.m. | Director   | Panel Admin     | SUCCESS | 119ms | Sesión verificada activamente
+2:42:29 p.m. | Público    | Escaneo QR      | ERROR   | 138ms | Fallo validación: Leonardo Sanchez
+2:42:30 p.m. | Director   | Panel Admin     | SUCCESS | 143ms | Sesión verificada activamente
+2:42:31 p.m. | Profesor   | Pasar Lista     | SUCCESS | 105ms | Grupo GRADO 4 - GRUPO 1: 33 alumnos cargados
+2:42:32 p.m. | Profesor   | Pasar Lista     | SUCCESS | 102ms | Grupo GRADO 3 - GRUPO 1: 35 alumnos cargados
+2:42:33 p.m. | Público    | Escaneo QR      | ERROR   | 142ms | Fallo validación: Isabella Hernandez
+2:42:33 p.m. | Profesor   | Pasar Lista     | SUCCESS | 110ms | Grupo GRADO 5 - GRUPO 1: 31 alumnos cargados
+2:42:34 p.m. | Público    | Escaneo QR      | ERROR   | 131ms | Fallo validación: Camila Sanchez
+2:42:35 p.m. | Estudiante | Consultar Boleta | SUCCESS | 142ms | ID: 202422000 revisó 5 materias
+2:42:36 p.m. | Estudiante | Consultar Boleta | SUCCESS | 110ms | ID: 202411009 revisó 5 materias
+2:42:36 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:42:37 p.m. | Director   | Panel Admin     | SUCCESS | 88ms | Sesión verificada activamente
+2:42:38 p.m. | Público    | Escaneo QR      | ERROR   | 123ms | Fallo validación: Santiago Martinez
+2:42:39 p.m. | Público    | Escaneo QR      | ERROR   | 127ms | Fallo validación: Santiago Martinez
+2:42:40 p.m. | Profesor   | Pasar Lista     | SUCCESS | 102ms | Grupo GRADO 4 - GRUPO 2: 28 alumnos cargados
+2:42:41 p.m. | Profesor   | Pasar Lista     | SUCCESS | 105ms | Grupo GRADO 6 - GRUPO 2: 34 alumnos cargados
+2:42:41 p.m. | Profesor   | Pasar Lista     | SUCCESS | 113ms | Grupo GRADO 3 - GRUPO 2: 35 alumnos cargados
+2:42:42 p.m. | Director   | Panel Admin     | SUCCESS | 122ms | Sesión verificada activamente
+2:42:43 p.m. | Profesor   | Pasar Lista     | SUCCESS | 106ms | Grupo GRADO 5 - GRUPO 1: 31 alumnos cargados
+2:42:44 p.m. | Profesor   | Pasar Lista     | SUCCESS | 106ms | Grupo GRADO 4 - GRUPO 1: 33 alumnos cargados
+2:42:45 p.m. | Estudiante | Consultar Boleta | SUCCESS | 109ms | ID: 202422016 revisó 5 materias
+2:42:45 p.m. | Profesor   | Pasar Lista     | SUCCESS | 114ms | Grupo GRADO 5 - GRUPO 1: 31 alumnos cargados
+2:42:46 p.m. | Público    | Escaneo QR      | ERROR   | 128ms | Fallo validación: Sebastian Garcia
+2:42:47 p.m. | Público    | Escaneo QR      | ERROR   | 129ms | Fallo validación: Camila Ramirez
+2:42:48 p.m. | Público    | Escaneo QR      | ERROR   | 145ms | Fallo validación: Santiago Garcia
+2:42:49 p.m. | Red        | Conexión        | ERROR   | 81ms | Error 404: Endpoint no encontrado (Simulado)
+2:42:49 p.m. | Profesor   | Pasar Lista     | SUCCESS | 115ms | Grupo Grado 2 - 1: 1 alumnos cargados
+2:42:50 p.m. | Estudiante | Consultar Boleta | SUCCESS | 110ms | ID: 202442022 revisó 5 materias
+2:42:51 p.m. | Profesor   | Pasar Lista     | SUCCESS | 108ms | Grupo Grado 1 - 2: 1 alumnos cargados
+2:42:52 p.m. | Público    | Escaneo QR      | ERROR   | 139ms | Fallo validación: Mateo Perez
+2:42:53 p.m. | Estudiante | Consultar Boleta | SUCCESS | 97ms | ID: 202421020 revisó 5 materias
+2:42:53 p.m. | Director   | Panel Admin     | SUCCESS | 90ms | Sesión verificada activamente
+2:42:54 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:42:55 p.m. | Estudiante | Consultar Boleta | SUCCESS | 111ms | ID: 202441029 revisó 5 materias
+2:42:56 p.m. | Público    | Escaneo QR      | ERROR   | 135ms | Fallo validación: Mariana Hernandez
+2:42:57 p.m. | Estudiante | Consultar Boleta | SUCCESS | 118ms | ID: 202451025 revisó 5 materias
+2:42:57 p.m. | Profesor   | Pasar Lista     | SUCCESS | 116ms | Grupo GRADO 6 - GRUPO 2: 34 alumnos cargados
+2:42:58 p.m. | Director   | Panel Admin     | SUCCESS | 87ms | Sesión verificada activamente
+2:42:59 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:43:00 p.m. | Estudiante | Consultar Boleta | SUCCESS | 222ms | ID: 202431002 revisó 5 materias
+2:43:01 p.m. | Profesor   | Pasar Lista     | SUCCESS | 101ms | Grupo GRADO 2 - GRUPO 2: 31 alumnos cargados
+2:43:01 p.m. | Público    | Escaneo QR      | ERROR   | 139ms | Fallo validación: Leonardo Garcia
+2:43:02 p.m. | Profesor   | Pasar Lista     | SUCCESS | 111ms | Grupo GRADO 6 - GRUPO 1: 30 alumnos cargados
+2:43:03 p.m. | Profesor   | Pasar Lista     | SUCCESS | 110ms | Grupo Grado 1 - 2: 1 alumnos cargados
+2:43:04 p.m. | Estudiante | Consultar Boleta | SUCCESS | 98ms | ID: 202431033 revisó 5 materias
+2:43:05 p.m. | Director   | Panel Admin     | SUCCESS | 96ms | Sesión verificada activamente
+2:43:05 p.m. | Público    | Escaneo QR      | ERROR   | 126ms | Fallo validación: Isabella Perez
+2:43:06 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:43:07 p.m. | Director   | Panel Admin     | SUCCESS | 113ms | Sesión verificada activamente
+2:43:08 p.m. | Público    | Escaneo QR      | ERROR   | 124ms | Fallo validación: Isabella Martinez
+2:43:08 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:43:09 p.m. | Profesor   | Pasar Lista     | SUCCESS | 113ms | Grupo GRADO 5 - GRUPO 2: 28 alumnos cargados
+2:43:10 p.m. | Público    | Escaneo QR      | ERROR   | 118ms | Fallo validación: Santiago Gonzalez
+2:43:11 p.m. | Profesor   | Pasar Lista     | SUCCESS | 113ms | Grupo GRADO 6 - GRUPO 2: 34 alumnos cargados
+2:43:12 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:43:13 p.m. | Estudiante | Consultar Boleta | SUCCESS | 139ms | ID: 202411001 revisó 5 materias
+2:43:13 p.m. | Profesor   | Pasar Lista     | SUCCESS | 113ms | Grupo GRADO 1 - GRUPO 2: 28 alumnos cargados
+2:43:14 p.m. | Estudiante | Consultar Boleta | SUCCESS | 117ms | ID: 202452013 revisó 5 materias
+2:43:15 p.m. | Público    | Escaneo QR      | ERROR   | 141ms | Fallo validación: Sebastian Garcia
+2:43:16 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:43:17 p.m. | Profesor   | Pasar Lista     | SUCCESS | 102ms | Grupo GRADO 1 - GRUPO 2: 28 alumnos cargados
+2:43:17 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables
+2:43:18 p.m. | Director   | Panel Admin     | SUCCESS | 94ms | Sesión verificada activamente
+2:43:19 p.m. | Director   | Panel Admin     | SUCCESS | 204ms | Sesión verificada activamente
+2:43:20 p.m. | Sistema    | Heartbeat       | SUCCESS | 0ms | Servicios estables

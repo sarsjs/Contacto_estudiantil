@@ -47,6 +47,7 @@ export default function PersonalPage() {
   const [newStaffRole, setNewStaffRole] = React.useState<UserRole>("orientador");
   const [newStaffEmail, setNewStaffEmail] = React.useState("");
   const [searchTerm, setSearchTerm] = React.useState("");
+  const [roleFilter, setRoleFilter] = React.useState<'all' | 'orientador' | 'profesor'>('all');
 
   const { toast } = useToast();
 
@@ -144,7 +145,16 @@ export default function PersonalPage() {
     setEditStaffOpen(true);
   }
 
-  const filteredStaff = staffList.filter(user => user.name.toLowerCase().includes(searchTerm.toLowerCase()));
+  // Aplicar filtros de búsqueda y rol
+  const filteredStaff = staffList.filter(user => {
+    const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesRole = roleFilter === 'all' || user.role === roleFilter;
+    return matchesSearch && matchesRole;
+  });
+
+  // Contar por rol para mostrar en los chips
+  const orientadoresCount = staffList.filter(u => u.role === 'orientador').length;
+  const profesoresCount = staffList.filter(u => u.role === 'profesor').length;
 
   return (
     <div className="space-y-6">
@@ -180,6 +190,37 @@ export default function PersonalPage() {
             </Dialog>
           </div>
 
+          {/* Filtros de Rol - Chips Elegantes */}
+          <div className="flex gap-2 mb-6 pb-4 border-b">
+            <button
+              onClick={() => setRoleFilter('all')}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${roleFilter === 'all'
+                ? 'bg-[#8B1A2B] text-white shadow-md scale-105'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+            >
+              Todos <span className="ml-1.5 opacity-75">({staffList.length})</span>
+            </button>
+            <button
+              onClick={() => setRoleFilter('orientador')}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${roleFilter === 'orientador'
+                ? 'bg-green-600 text-white shadow-md scale-105'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+            >
+              Orientadores <span className="ml-1.5 opacity-75">({orientadoresCount})</span>
+            </button>
+            <button
+              onClick={() => setRoleFilter('profesor')}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${roleFilter === 'profesor'
+                ? 'bg-blue-600 text-white shadow-md scale-105'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+            >
+              Profesores <span className="ml-1.5 opacity-75">({profesoresCount})</span>
+            </button>
+          </div>
+
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {filteredStaff.map(user => (
               <IdCard
@@ -207,6 +248,6 @@ export default function PersonalPage() {
           <DialogFooter className="mt-4"><Button onClick={handleUpdateStaff} disabled={dataLoading}>Actualizar</Button></DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
+    </div >
   );
 }

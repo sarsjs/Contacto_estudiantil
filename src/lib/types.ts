@@ -13,6 +13,9 @@ export interface User {
     avatarUrl?: string;
     gpsStatus?: 'inside' | 'outside' | 'coming' | 'unknown';
     lastGpsUpdate?: FieldValue;
+    xp?: number;
+    level?: number;
+    badges?: string[];
 }
 
 export interface Group {
@@ -37,6 +40,9 @@ export interface Student {
     avatarUrl?: string;
     gpsStatus?: 'inside' | 'outside' | 'coming' | 'unknown';
     lastGpsUpdate?: FieldValue;
+    xp?: number;
+    level?: number;
+    badges?: string[];
 }
 
 export interface Subject {
@@ -139,4 +145,17 @@ export interface WorkLog {
     checkOut?: FieldValue;
     status: 'present' | 'late' | 'absent';
     totalHours?: number;
+}
+
+export interface ActivityLog {
+    id: string;
+    action: string;      // e.g., "USUARIO_CREADO", "GRUPO_ASIGNADO"
+    details: string;     // Descripción legible de la acción
+    targetId?: string;   // ID del recurso afectado (ej. ID del alumno)
+    targetType?: 'user' | 'group' | 'subject' | 'event' | 'timetable';
+    createdBy: string;   // ID del usuario que realizó la acción
+    creatorName: string; // Nombre para visualización rápida
+    creatorRole: UserRole;
+    timestamp: FieldValue;
+    ip?: string;         // Opcional: para rastro de seguridad
 }

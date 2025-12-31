@@ -14,6 +14,9 @@ import {
   Users,
   ClipboardList,
   MessageSquare,
+  ShieldCheck,
+  Clock,
+  Contact,
 } from 'lucide-react';
 
 import {
@@ -42,7 +45,9 @@ const navItems = {
     { href: '/dashboard/director/personal', icon: Users, label: 'Personal' },
     { href: '/dashboard/director/alumnos', icon: GraduationCap, label: 'Alumnos' },
     { href: '/dashboard/director/estructura', icon: School, label: 'Estructura' },
+    { href: '/dashboard/director/integridad', icon: ShieldCheck, label: 'Integridad' },
     { href: '/dashboard/director/horarios', icon: Calendar, label: 'Horarios' },
+    { href: '/dashboard/director/bitacora', icon: Clock, label: 'Bitácora' },
     { href: '/dashboard/director/mensajes', icon: MessageSquare, label: 'Mensajes' },
   ],
   orientador: [
@@ -64,6 +69,7 @@ const navItems = {
     { href: '/dashboard/alumno', icon: LayoutGrid, label: 'Panel Principal' },
     { href: '/dashboard/alumno/horario', icon: Calendar, label: 'Mi Horario' },
     { href: '/dashboard/alumno/calificaciones', icon: GraduationCap, label: 'Mis Calificaciones' },
+    { href: '/dashboard/alumno/credencial', icon: Contact, label: 'Mi Credencial' },
     { href: '/dashboard/alumno/mensajes', icon: MessageSquare, label: 'Mensajes' },
   ],
 };
