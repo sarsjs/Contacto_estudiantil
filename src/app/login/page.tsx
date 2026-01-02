@@ -25,6 +25,7 @@ const roleRoutes: Record<string, string> = {
   orientador: "/dashboard/orientador",
   profesor: "/dashboard/profesor",
   estudiante: "/dashboard/alumno",
+  alumno: "/dashboard/alumno",
   admin: "/dashboard/admin",
 };
 

@@ -8,6 +8,7 @@ import {
   fetchSubjects,
   fetchGradesByStudent,
   fetchUsers,
+  fetchGroups,
   verifyAttendanceToken,
   logActivity
 } from '@/lib/firebase/data';

@@ -24,6 +24,7 @@ export function ChatSystem() {
     const [subjects, setSubjects] = React.useState<Subject[]>([]);
     const [timetables, setTimetables] = React.useState<TimetableEntry[]>([]);
     const fileInputRef = React.useRef<HTMLInputElement>(null);
+    const isStudent = profile?.role === 'estudiante' || profile?.role === 'alumno';
 
     React.useEffect(() => {
         Promise.all([
@@ -50,10 +51,10 @@ export function ChatSystem() {
         );
 
         let finalPersonal = filtered.filter(u => ['director', 'orientador', 'profesor'].includes(u.role));
-        let finalStudents = filtered.filter(u => u.role === 'estudiante');
+        let finalStudents = filtered.filter(u => u.role === 'estudiante' || u.role === 'alumno');
 
         // Restricciones para Alumnos
-        if (profile?.role === 'estudiante') {
+        if (isStudent) {
             const myGroupId = profile.groupId;
             const myGroup = groups.find(g => g.id === myGroupId);
 
@@ -78,7 +79,7 @@ export function ChatSystem() {
         }
 
         // Filtrar estudiantes por grupo si hay uno seleccionado (solo para personal)
-        if (profile?.role !== 'estudiante' && selectedGroupId) {
+        if (!isStudent && selectedGroupId) {
             finalStudents = finalStudents.filter(s => s.groupId === selectedGroupId);
         }
 
@@ -144,9 +145,9 @@ export function ChatSystem() {
 
                     <TabsContent value="alumnos" className="flex-1 mt-0 overflow-hidden flex flex-col">
                         {/* Selector de Grupo o Lista de Alumnos */}
-                        {(selectedGroupId || profile?.role === 'estudiante') ? (
+                        {(selectedGroupId || isStudent) ? (
                             <div className="flex flex-col h-full">
-                                {profile?.role !== 'estudiante' && (
+                                {!isStudent && (
                                     <div className="p-3 bg-blue-50/50 border-b flex items-center gap-2">
                                         <Button
                                             variant="ghost"

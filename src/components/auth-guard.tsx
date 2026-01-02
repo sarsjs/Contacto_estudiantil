@@ -11,6 +11,7 @@ const roleRoutes: Record<string, string> = {
   orientador: '/dashboard/orientador',
   profesor: '/dashboard/profesor',
   estudiante: '/dashboard/alumno',
+  alumno: '/dashboard/alumno',
 };
 
 export function AuthGuard({ children }: { children: React.ReactNode }) {

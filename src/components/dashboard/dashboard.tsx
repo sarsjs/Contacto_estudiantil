@@ -72,6 +72,13 @@ const navItems = {
     { href: '/dashboard/profesor/horario', icon: Calendar, label: 'Mi Horario' },
     { href: '/dashboard/profesor/mensajes', icon: MessageSquare, label: 'Mensajes' },
   ],
+  alumno: [
+    { href: '/dashboard/alumno', icon: LayoutGrid, label: 'Panel Principal' },
+    { href: '/dashboard/alumno/horario', icon: Calendar, label: 'Mi Horario' },
+    { href: '/dashboard/alumno/calificaciones', icon: GraduationCap, label: 'Mis Calificaciones' },
+    { href: '/dashboard/alumno/credencial', icon: Contact, label: 'Mi Credencial' },
+    { href: '/dashboard/alumno/mensajes', icon: MessageSquare, label: 'Mensajes' },
+  ],
   estudiante: [
     { href: '/dashboard/alumno', icon: LayoutGrid, label: 'Panel Principal' },
     { href: '/dashboard/alumno/horario', icon: Calendar, label: 'Mi Horario' },
@@ -86,6 +93,7 @@ const viewTitles = {
   director: 'Portal del Director',
   orientador: 'Portal del Orientador',
   profesor: 'App del Profesor',
+  alumno: 'Portal del Estudiante',
   estudiante: 'Portal del Estudiante'
 };
 
@@ -191,7 +199,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
 
   React.useEffect(() => {
     if (loading || !profile) return;
-    const roleBase = profile.role === 'estudiante' ? 'alumno' : profile.role;
+    const roleBase = profile.role === 'estudiante' || profile.role === 'alumno' ? 'alumno' : profile.role;
     const expectedPath = `/dashboard/${roleBase}`;
     if (!pathname.startsWith(expectedPath)) {
       router.push(expectedPath);

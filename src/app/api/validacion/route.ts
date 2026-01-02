@@ -26,7 +26,7 @@ export async function GET(req: Request) {
         const userData = userDoc.data();
 
         // Validación de Rol
-        if (userData?.role !== 'estudiante') {
+        if (userData?.role !== 'estudiante' && userData?.role !== 'alumno') {
             return NextResponse.json({ status: "INVALID", message: "El identificador no corresponde a un estudiante." }, { status: 400 });
         }
 

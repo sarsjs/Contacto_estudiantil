@@ -45,6 +45,7 @@ const daysOfWeek: TimetableEntry["day"][] = [
 export function StudentView() {
   const { profile, loading: authLoading, signOut } = useAuth();
   const { toast } = useToast();
+  const isStudent = profile?.role === "estudiante" || profile?.role === "alumno";
   const [student, setStudent] = React.useState<Student | null>(null);
   const [timetable, setTimetable] = React.useState<TimetableEntry[]>([]);
   const [subjectsMap, setSubjectsMap] = React.useState<Record<string, string>>({});
@@ -116,7 +117,7 @@ export function StudentView() {
   }, []);
 
   React.useEffect(() => {
-    if (!profile || profile.role !== "estudiante" || !profile.email) {
+    if (!profile || !isStudent || !profile.email) {
       setStudent(null);
       setTimetable([]);
       return;
@@ -164,7 +165,7 @@ export function StudentView() {
     );
   }
 
-  if (!profile || profile.role !== "estudiante") {
+  if (!profile || !isStudent) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center gap-4 px-4">
         <Card className="w-full max-w-md p-6 text-center">
@@ -343,7 +344,7 @@ export function StudentView() {
       </Card>
 
       <div className="grid grid-cols-1 gap-6">
-        <CalendarPanel role="estudiante" />
+        <CalendarPanel role={profile.role} />
       </div>
       <GPSMonitor />
     </div>

@@ -43,7 +43,7 @@ export function GPSMonitor() {
             return () => clearInterval(interval);
         }
 
-        if (profile.role !== 'estudiante' || !profile.groupId) return;
+        if ((profile.role !== 'estudiante' && profile.role !== 'alumno') || !profile.groupId) return;
 
         const initSchedule = async () => {
             try {
@@ -142,7 +142,7 @@ export function GPSMonitor() {
                 recipientId: profile?.groupId,
                 timestamp: new Date() as any,
                 createdBy: profile?.id,
-                createdByRole: 'estudiante'
+                createdByRole: profile?.role ?? 'estudiante'
             });
             if (profile?.id) updateUserStatus(profile.id, 'coming');
             toast({ title: "Reporte Enviado", description: "Tu orientador ha recibido tu aviso." });

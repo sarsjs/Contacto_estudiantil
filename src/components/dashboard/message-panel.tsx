@@ -77,6 +77,11 @@ const ROLE_OPTIONS: Record<UserRole, RecipientOption[]> = {
     { value: "specificCounselor", label: "Mi orientador", needsTarget: "counselor" },
     { value: "director", label: "Director" },
   ],
+  alumno: [
+    { value: "specificTeacher", label: "Mis profesores", needsTarget: "teacher" },
+    { value: "specificCounselor", label: "Mi orientador", needsTarget: "counselor" },
+    { value: "director", label: "Director" },
+  ],
 };
 
 interface ScopedTargets {
@@ -421,7 +426,7 @@ async function hydrateByRole(profile: User, base: ScopedTargets): Promise<Scoped
     return scoped;
   }
 
-  if (profile.role === "estudiante") {
+  if (profile.role === "estudiante" || profile.role === "alumno") {
     const [teachers, counselor] = await Promise.all([
       fetchStudentTeachers(profile),
       fetchStudentCounselor(profile),

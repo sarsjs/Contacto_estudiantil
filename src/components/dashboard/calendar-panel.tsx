@@ -42,7 +42,7 @@ export function CalendarPanel({ role, className }: CalendarPanelProps) {
   const [visibilitySelection, setVisibilitySelection] = React.useState<CalendarVisibility[]>([]);
   const { toast } = useToast();
 
-  const canAdd = role !== 'estudiante';
+  const canAdd = role !== 'estudiante' && role !== 'alumno';
   const canDelete = role === 'director' || role === 'orientador';
 
   const formatDateKey = React.useCallback((target?: Date) => {
@@ -104,6 +104,7 @@ export function CalendarPanel({ role, className }: CalendarPanelProps) {
         orientador: 'orientadores',
         profesor: 'maestros',
         estudiante: 'alumnos',
+        alumno: 'alumnos',
       };
 
       const mapped = roleKey[profile.role];
@@ -125,7 +126,7 @@ export function CalendarPanel({ role, className }: CalendarPanelProps) {
       if (audience.includes('personal')) return event.createdBy === profile.email;
       if (profile.role === 'director') return true;
 
-      const roleKey: Record<string, string> = { orientador: 'orientadores', profesor: 'maestros', estudiante: 'alumnos' };
+      const roleKey: Record<string, string> = { orientador: 'orientadores', profesor: 'maestros', estudiante: 'alumnos', alumno: 'alumnos' };
       return audience.includes(roleKey[profile.role]);
     });
 

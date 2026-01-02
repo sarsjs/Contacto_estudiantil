@@ -250,7 +250,7 @@ export const fetchTeacherStudents = async (teacherId: string): Promise<User[]> =
         // Obtener todos los usuarios y filtrar estudiantes de esos grupos
         const allUsers = await fetchUsers();
         return allUsers.filter(user =>
-            user.role === 'estudiante' && groupIds.includes(user.groupId)
+            (user.role === 'estudiante' || user.role === 'alumno') && groupIds.includes(user.groupId)
         );
     } catch (error) {
         console.error("Error fetching teacher students:", error);
@@ -270,7 +270,7 @@ export const fetchCounselorStudents = async (counselorId: string): Promise<User[
 
         const allUsers = await fetchUsers();
         return allUsers.filter(user =>
-            user.role === 'estudiante' && groupIds.includes(user.groupId)
+            (user.role === 'estudiante' || user.role === 'alumno') && groupIds.includes(user.groupId)
         );
     } catch (error) {
         console.error("Error fetching counselor students:", error);

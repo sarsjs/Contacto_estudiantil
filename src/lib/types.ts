@@ -1,6 +1,6 @@
 import { FieldValue } from "firebase/firestore";
 
-export type UserRole = 'admin' | 'director' | 'orientador' | 'profesor' | 'estudiante';
+export type UserRole = 'admin' | 'director' | 'orientador' | 'profesor' | 'estudiante' | 'alumno';
 
 export interface User {
     id: string;
