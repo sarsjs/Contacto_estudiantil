@@ -3,7 +3,7 @@
 import * as React from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/context/auth-context';
-import { fetchSubjectsByTeacher, fetchUserByEmail } from '@/lib/firebase/data';
+import { fetchSubjectsByTeacher } from '@/lib/firebase/data';
 import type { Subject } from '@/lib/types';
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from '@/components/ui/button';
@@ -55,13 +55,12 @@ export default function ProfesorPage() {
 
       try {
         setIsLoading(true);
-        const currentUser = await fetchUserByEmail(user.email);
-        if (!currentUser || currentUser.role !== 'profesor') {
-          setError('No tienes permiso para ver esta página.');
+        if (user.role !== 'profesor') {
+          setError('No tienes permiso para ver esta pagina.');
           return;
         }
 
-        const fetchedSubjects = await fetchSubjectsByTeacher(currentUser.id);
+        const fetchedSubjects = await fetchSubjectsByTeacher(user.id);
         setSubjects(fetchedSubjects);
 
       } catch (err) {
@@ -122,3 +121,5 @@ export default function ProfesorPage() {
     </div>
   );
 }
+
+
