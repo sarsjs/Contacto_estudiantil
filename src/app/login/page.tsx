@@ -43,6 +43,10 @@ export default function LoginPage() {
     if (user && profile) {
       const destination = roleRoutes[profile.role] ?? "/dashboard";
       router.replace(destination);
+      return;
+    }
+    if (user && !profile && user.email?.toLowerCase() === "admin@school.com") {
+      router.replace("/test/rescue-admin");
     }
   }, [authLoading, profile, router, user]);
 

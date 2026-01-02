@@ -61,67 +61,39 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
 
   // Manejar la interrupción de redirección temporal
   useEffect(() => {
-    // Si estamos en una página de dashboard válida para este rol, evitar redirecciones
-    if (user && profile && pathname.startsWith('/dashboard')) {
-      const userDashboard = roleRoutes[profile.role];
-      if (pathname.startsWith(userDashboard)) {
-        setShouldRedirect(false);
-        // Reanudar redirecciones después de un breve período para evitar problemas
-        const timer = setTimeout(() => {
-          setShouldRedirect(true);
-        }, 1000);
-        return () => clearTimeout(timer);
-      }
-    }
-  }, [pathname, user, profile]);
 
-  if (loading) {
-    // Muestra 'Cargando...' si la autenticación está en curso
-    return (
-      <div className="min-h-screen w-full flex items-center justify-center">
-        <p>Cargando...</p>
-      </div>
-    );
-  }
-
-  // Lista de rutas públicas que no requieren autenticación
-  const publicRoutes = ['/test', '/validar'];
-  const isPublicRoute = publicRoutes.some(route => pathname.startsWith(route));
-
-  // Si es una ruta pública, renderizar children directamente sin validaciones de auth
-  if (isPublicRoute) {
-    return <>{children}</>;
-  }
-
-  // Si está autenticado y con perfil, y está en una ruta de dashboard, muestra el contenido
-  if (user && profile && pathname.startsWith('/dashboard')) {
-    return <>{children}</>;
-  }
-
-  // Si no está autenticado y está en la página de login, muestra el formulario
-  if (!user && pathname === '/login') {
-    return <>{children}</>;
-  }
-
-  // Si está autenticado pero no tiene perfil (posiblemente error de sincronización o usuario no registrado en Firestore)
+  // Si esta autenticado pero no tiene perfil (posible error de sincronizacion o usuario no registrado en Firestore)
   if (user && !profile) {
-    // Mostrar un mensaje de error más descriptivo y permitir cerrar sesión
+    const isAdminCandidate = user.email?.toLowerCase() === 'admin@school.com';
+    // Mostrar un mensaje de error mas descriptivo y permitir cerrar sesion
     return (
-      <div className="min-h-screen w-full flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-red-500 mb-4">No se encontró tu perfil registrado en el sistema.</p>
+      <div className=\"min-h-screen w-full flex items-center justify-center\">
+        <div className=\"text-center space-y-3\">
+          <p className=\"text-red-500\">No se encontro tu perfil registrado en el sistema.</p>
+          {isAdminCandidate && (
+            <button
+              onClick={() => {
+                if (typeof window !== 'undefined') {
+                  router.push('/test/rescue-admin');
+                }
+              }}
+              className=\"text-sm text-blue-500 underline\"
+            >
+              Ir a rescate de admin
+            </button>
+          )}
           <button
             onClick={() => {
               if (typeof window !== 'undefined') {
                 router.push('/login');
                 if (!firebaseConfigErrorMessage) {
-                  auth.signOut(); // Cerrar sesión de Firebase
+                  auth.signOut(); // Cerrar sesion de Firebase
                 }
               }
             }}
-            className="text-blue-500 underline"
+            className=\"text-blue-500 underline\"
           >
-            Cerrar sesión e intentar nuevamente
+            Cerrar sesion e intentar nuevamente
           </button>
         </div>
       </div>
@@ -156,3 +128,4 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
   // En cualquier otro caso, no renderiza nada para evitar parpadeos
   return null;
 }
+
