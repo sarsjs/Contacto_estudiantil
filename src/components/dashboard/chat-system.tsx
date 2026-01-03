@@ -7,8 +7,8 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Search, Send, MoreVertical, Phone, Video, Check, CheckCheck, MessageSquare, Paperclip, Image as ImageIcon, FileText, FileArchive, ChevronLeft, ChevronRight, Users as UsersIcon } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
-import { fetchUsers, fetchGroups, fetchSubjects, fetchAllTimetables } from '@/lib/firebase/data';
-import type { User, Group, Subject, TimetableEntry } from '@/lib/types';
+import { fetchUsers, fetchGroups, fetchSubjects, fetchAllTimetables, addChatMessage, subscribeChatMessages } from '@/lib/firebase/data';
+import type { User, Group, Subject, TimetableEntry, ChatMessage } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 
@@ -19,12 +19,17 @@ export function ChatSystem() {
     const [selectedUser, setSelectedUser] = React.useState<User | null>(null);
     const [selectedGroupId, setSelectedGroupId] = React.useState<string | null>(null);
     const [message, setMessage] = React.useState('');
+    const [messages, setMessages] = React.useState<ChatMessage[]>([]);
     const [searchTerm, setSearchTerm] = React.useState('');
     const [activeTab, setActiveTab] = React.useState('personal');
     const [subjects, setSubjects] = React.useState<Subject[]>([]);
     const [timetables, setTimetables] = React.useState<TimetableEntry[]>([]);
     const fileInputRef = React.useRef<HTMLInputElement>(null);
     const isStudent = profile?.role === 'estudiante' || profile?.role === 'alumno';
+
+    const getChatId = React.useCallback((userId: string, otherUserId: string) => {
+        return [userId, otherUserId].sort().join('_');
+    }, []);
 
     React.useEffect(() => {
         Promise.all([
@@ -39,6 +44,20 @@ export function ChatSystem() {
             setTimetables(allTimetables);
         });
     }, [profile]);
+
+    React.useEffect(() => {
+        if (!profile || !selectedUser) {
+            setMessages([]);
+            return;
+        }
+
+        const chatId = getChatId(profile.id, selectedUser.id);
+        const unsubscribe = subscribeChatMessages(chatId, (nextMessages) => {
+            setMessages(nextMessages);
+        });
+
+        return () => unsubscribe();
+    }, [profile, selectedUser, getChatId]);
 
     const getUserGroupName = (groupId?: string) => {
         if (!groupId) return null;
@@ -98,6 +117,32 @@ export function ChatSystem() {
             setMessage(`[Archivo: ${file.name}]`);
         }
     };
+
+    const handleSendMessage = async () => {
+        if (!profile || !selectedUser) return;
+        const trimmed = message.trim();
+        if (!trimmed) return;
+        const chatId = getChatId(profile.id, selectedUser.id);
+        try {
+            await addChatMessage({
+                chatId,
+                senderId: profile.id,
+                receiverId: selectedUser.id,
+                content: trimmed
+            });
+            setMessage('');
+        } catch (error) {
+            console.error("Error sending chat message:", error);
+        }
+    };
+
+    const formatTime = (value: any) => {
+        if (!value) return '';
+        const date = value.toDate ? value.toDate() : new Date(value);
+        return date.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
+    };
+
+
 
     return (
         <div className="flex h-[calc(100vh-120px)] bg-white rounded-xl shadow-lg border overflow-hidden">
@@ -235,38 +280,21 @@ export function ChatSystem() {
                         {/* Mensajes */}
                         <ScrollArea className="flex-1 p-6">
                             <div className="space-y-4">
-                                <div className="flex justify-start">
-                                    <div className="bg-white p-3 rounded-2xl rounded-tl-none shadow-sm max-w-[70%]">
-                                        <p className="text-sm">Hola, ¿ya viste el calendario oficial 2025-2026? Quedó excelente.</p>
-                                        <span className="text-[10px] text-muted-foreground mt-1 block text-right">10:30 AM</span>
-                                    </div>
-                                </div>
-
-                                <div className="flex justify-end">
-                                    <div className="bg-[#D9FDD3] p-3 rounded-2xl rounded-tr-none shadow-sm max-w-[70%] text-slate-800">
-                                        <p className="text-sm">Sí, ya está todo configurado.</p>
-                                        <div className="flex items-center justify-end gap-1 mt-1">
-                                            <span className="text-[10px] opacity-70">10:32 AM</span>
-                                            <CheckCheck className="h-3 w-3 text-blue-500" />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Ejemplo de Archivo enviado */}
-                                <div className="flex justify-start">
-                                    <div className="bg-white p-2 rounded-2xl rounded-tl-none shadow-sm max-w-[70%] min-w-[200px]">
-                                        <div className="flex items-center gap-3 p-2 bg-slate-50 rounded-xl border">
-                                            <div className="h-10 w-10 bg-blue-100 flex items-center justify-center rounded-lg text-blue-600">
-                                                <FileText className="h-6 w-6" />
+                                {messages.length == 0 ? (
+                                    <p className="text-center text-xs text-muted-foreground">No hay mensajes en este chat.</p>
+                                ) : (
+                                    messages.map((msg) => {
+                                        const isMine = msg.senderId === profile?.id;
+                                        return (
+                                            <div key={msg.id} className={`flex ${isMine ? 'justify-end' : 'justify-start'}`}>
+                                                <div className={`${isMine ? 'bg-[#D9FDD3] rounded-tr-none' : 'bg-white rounded-tl-none'} p-3 rounded-2xl shadow-sm max-w-[70%] text-slate-800`}>
+                                                    <p className="text-sm">{msg.content}</p>
+                                                    <span className="text-[10px] text-muted-foreground mt-1 block text-right">{formatTime(msg.createdAt)}</span>
+                                                </div>
                                             </div>
-                                            <div className="flex-1 min-w-0">
-                                                <p className="text-xs font-bold truncate">Horario_Grupal.pdf</p>
-                                                <p className="text-[10px] text-muted-foreground uppercase">PDF • 1.2 MB</p>
-                                            </div>
-                                        </div>
-                                        <span className="text-[10px] text-muted-foreground mt-1 block text-right px-1">11:05 AM</span>
-                                    </div>
-                                </div>
+                                        );
+                                    })
+                                )}
                             </div>
                         </ScrollArea>
 
@@ -292,10 +320,19 @@ export function ChatSystem() {
                                 className="flex-1 bg-slate-50 border-none focus-visible:ring-1 focus-visible:ring-primary h-11 px-4 text-sm"
                                 value={message}
                                 onChange={(e) => setMessage(e.target.value)}
-                                onKeyDown={(e) => e.key === 'Enter' && setMessage('')}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                        e.preventDefault();
+                                        handleSendMessage();
+                                    }
+                                }}
                             />
 
-                            <Button size="icon" className="h-11 w-11 rounded-full shadow-lg transition-transform hover:scale-110 active:scale-95">
+                            <Button
+                                size="icon"
+                                className="h-11 w-11 rounded-full shadow-lg transition-transform hover:scale-110 active:scale-95"
+                                onClick={handleSendMessage}
+                            >
                                 <Send className="h-5 w-5" />
                             </Button>
                         </div>

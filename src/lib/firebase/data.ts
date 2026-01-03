@@ -1,8 +1,8 @@
-import { collection, getDocs, addDoc, doc, deleteDoc, query, where, updateDoc, writeBatch, orderBy, serverTimestamp, getDoc, deleteField, limit } from "firebase/firestore";
+import { collection, getDocs, addDoc, doc, deleteDoc, query, where, updateDoc, writeBatch, orderBy, serverTimestamp, getDoc, deleteField, limit, onSnapshot } from "firebase/firestore";
 import { db, storage } from "./client";
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
-import type { User, Group, Subject, TimetableEntry, Attendance, Message, Grade, CalendarEvent, SubstitutionRequest, WorkLog, ActivityLog } from "@/lib/types";
+import type { User, Group, Subject, TimetableEntry, Attendance, Message, Grade, CalendarEvent, SubstitutionRequest, WorkLog, ActivityLog, ChatMessage } from "@/lib/types";
 
 const fetchData = async <T>(fetchFunction: () => Promise<T[]>, entityName: string): Promise<T[]> => {
     try {
@@ -182,6 +182,26 @@ export const fetchMessages = async (): Promise<Message[]> => fetchData(async () 
     const querySnapshot = await getDocs(q);
     return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as unknown as Message));
 }, 'messages');
+
+// Chat messages (1:1)
+export const addChatMessage = async (message: Omit<ChatMessage, "id" | "createdAt">) => {
+    return await addDoc(collection(db, "chat_messages"), {
+        ...message,
+        createdAt: serverTimestamp()
+    });
+};
+
+export const subscribeChatMessages = (chatId: string, callback: (messages: ChatMessage[]) => void) => {
+    const q = query(
+        collection(db, "chat_messages"),
+        where("chatId", "==", chatId),
+        orderBy("createdAt", "asc")
+    );
+    return onSnapshot(q, (snapshot) => {
+        const nextMessages = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as unknown as ChatMessage));
+        callback(nextMessages);
+    });
+};
 
 export const fetchEventsByDate = async (date: string): Promise<CalendarEvent[]> => fetchData(async () => {
     const q = query(

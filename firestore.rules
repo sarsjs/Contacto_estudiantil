@@ -9,7 +9,7 @@ service cloud.firestore {
         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'director' ||
         (
           get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'orientador' &&
-          resource.data.role == 'estudiante'
+          (resource.data.role == 'estudiante' || resource.data.role == 'alumno')
         )
       );
 
@@ -20,8 +20,8 @@ service cloud.firestore {
           (
             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'orientador' &&
             (
-              (request.resource != null && request.resource.data.role == 'estudiante') ||
-              (request.resource == null && resource != null && resource.data.role == 'estudiante')
+              (request.resource != null && (request.resource.data.role == 'estudiante' || request.resource.data.role == 'alumno')) ||
+              (request.resource == null && resource != null && (resource.data.role == 'estudiante' || resource.data.role == 'alumno'))
             )
           )
         );
@@ -55,6 +55,11 @@ service cloud.firestore {
                    (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'director' ||
                     get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'orientador' ||
                     get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'profesor');
+    }
+
+    // Chat messages (1:1)
+    match /chat_messages/{messageId} {
+      allow read, write: if request.auth != null;
     }
 
     // Events collection - read for all roles, write restricted to directors and counselors

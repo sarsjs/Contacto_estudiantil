@@ -57,8 +57,10 @@ export default function PersonalPage() {
     setDataLoading(true);
     try {
       const users = await fetchUsers();
-      // Filtrar para mostrar solo el personal (director, orientadores, profesores)
-      const staffMembers = users.filter(user => user.role !== 'estudiante');
+      // Filtrar para mostrar solo el personal de la escuela (director, orientadores, profesores)
+      const staffMembers = users.filter(user => (
+        user.role === 'director' || user.role === 'orientador' || user.role === 'profesor'
+      ));
       setStaffList(staffMembers);
     } catch (error) {
       console.error("Error loading Firebase data", error);

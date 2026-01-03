@@ -176,6 +176,15 @@ export interface WorkLog {
     totalHours?: number;
 }
 
+export interface ChatMessage {
+    id: string;
+    chatId: string;
+    senderId: string;
+    receiverId: string;
+    content: string;
+    createdAt: FieldValue;
+}
+
 export interface ActivityLog {
     id: string;
     action: string;      // e.g., "USUARIO_CREADO", "GRUPO_ASIGNADO"
