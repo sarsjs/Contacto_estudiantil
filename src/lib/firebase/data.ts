@@ -1,4 +1,4 @@
-import { collection, getDocs, addDoc, doc, deleteDoc, query, where, updateDoc, writeBatch, orderBy, serverTimestamp, getDoc, deleteField, limit, onSnapshot } from "firebase/firestore";
+import { collection, getDocs, addDoc, doc, deleteDoc, query, where, updateDoc, writeBatch, orderBy, serverTimestamp, getDoc, deleteField, limit, onSnapshot, arrayUnion } from "firebase/firestore";
 import { db, storage } from "./client";
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
@@ -465,6 +465,19 @@ export const updateUser = async (userId: string, data: Partial<User>) => {
 
     // Perform the update
     return await updateDoc(doc(db, "users", userId), updateData);
+};
+
+export const assignBadgeToStudent = async (studentId: string, badgeId: string) => {
+    return await updateDoc(doc(db, "users", studentId), {
+        badges: arrayUnion(badgeId)
+    });
+};
+
+export const addBadgeSuggestion = async (payload: { studentId?: string; badgeName: string; notes?: string; suggestedBy: string; suggestedByRole: User['role'] }) => {
+    return await addDoc(collection(db, "badge_suggestions"), {
+        ...payload,
+        createdAt: serverTimestamp()
+    });
 };
 export const addSubject = async (subject: Omit<Subject, "id">) => await addDoc(collection(db, "subjects"), subject);
 export const updateSubject = async (subjectId: string, data: Partial<Subject>) => await updateDoc(doc(db, "subjects", subjectId), data);

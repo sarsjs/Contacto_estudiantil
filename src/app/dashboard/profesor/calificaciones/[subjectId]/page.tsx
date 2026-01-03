@@ -8,7 +8,8 @@ import {
   fetchStudentsByGroup,
   fetchGradesBySubjectAndGroup,
   setGradeBatch,
-  logActivity
+  logActivity,
+  assignBadgeToStudent
 } from '@/lib/firebase/data';
 import { useAuth } from '@/context/auth-context';
 import type { Subject, Group, Student, Grade } from '@/lib/types';
@@ -24,7 +25,16 @@ function GradeSheet({ students, groupId, subjectId, partial }: { students: Stude
   const [grades, setGrades] = React.useState<Record<string, number | string>>({});
   const [isLoading, setIsLoading] = React.useState(true);
   const [isSaving, setIsSaving] = React.useState(false);
+  const [selectedStudentId, setSelectedStudentId] = React.useState('');
+  const [selectedBadgeId, setSelectedBadgeId] = React.useState('');
+  const [isAssigningBadge, setIsAssigningBadge] = React.useState(false);
   const { toast } = useToast();
+  const badgeOptions = [
+    { id: 'cerebro_grafeno', label: 'Cerebro de Grafeno' },
+    { id: 'reloj_precision', label: 'Reloj de Precision' },
+    { id: 'buscador_oro', label: 'Buscador de Oro' },
+    { id: 'leyenda_escolar', label: 'Leyenda Escolar' },
+  ];
 
   React.useEffect(() => {
     const loadGrades = async () => {
@@ -78,7 +88,33 @@ function GradeSheet({ students, groupId, subjectId, partial }: { students: Stude
   const handleGradeChange = (studentId: string, value: string) => {
     const numValue = value === '' ? '' : Math.max(0, Math.min(10, Number(value)));
     setGrades(prev => ({ ...prev, [studentId]: numValue }));
-  }
+  };
+
+  const handleAssignBadge = async () => {
+    if (!selectedStudentId || !selectedBadgeId) return;
+    setIsAssigningBadge(true);
+    try {
+      await assignBadgeToStudent(selectedStudentId, selectedBadgeId);
+      const target = students.find(s => s.id === selectedStudentId);
+      await logActivity({
+        action: 'INSIGNIA_OTORGADA',
+        details: `Insignia ${selectedBadgeId} otorgada a ${target?.name || selectedStudentId}.`,
+        targetId: selectedStudentId,
+        targetType: 'user',
+        createdBy: profile?.id || 'system',
+        creatorName: profile?.name || 'Profesor',
+        creatorRole: 'profesor'
+      });
+      toast({ title: 'Insignia otorgada', description: 'Se actualizo el perfil del alumno.' });
+      setSelectedStudentId('');
+      setSelectedBadgeId('');
+    } catch (err) {
+      console.error(err);
+      toast({ title: 'No se pudo asignar', description: 'Intenta nuevamente.', variant: 'destructive' });
+    } finally {
+      setIsAssigningBadge(false);
+    }
+  };
 
   if (isLoading) {
     return <p>Cargando hoja de calificaciones...</p>;
@@ -91,6 +127,37 @@ function GradeSheet({ students, groupId, subjectId, partial }: { students: Stude
         <CardDescription>Introduzca la calificación (0-10) para cada alumno.</CardDescription>
       </CardHeader>
       <CardContent>
+        <div className="mb-6 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between rounded-lg border bg-muted/40 p-4">
+          <div>
+            <p className="text-sm font-semibold">Otorgar insignia</p>
+            <p className="text-xs text-muted-foreground">Selecciona un alumno y una insignia para otorgarla.</p>
+          </div>
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+            <Select value={selectedStudentId} onValueChange={setSelectedStudentId}>
+              <SelectTrigger className="w-full sm:w-60">
+                <SelectValue placeholder="Selecciona alumno" />
+              </SelectTrigger>
+              <SelectContent>
+                {students.map((student) => (
+                  <SelectItem key={student.id} value={student.id}>{student.name}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Select value={selectedBadgeId} onValueChange={setSelectedBadgeId}>
+              <SelectTrigger className="w-full sm:w-60">
+                <SelectValue placeholder="Selecciona insignia" />
+              </SelectTrigger>
+              <SelectContent>
+                {badgeOptions.map((badge) => (
+                  <SelectItem key={badge.id} value={badge.id}>{badge.label}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Button onClick={handleAssignBadge} disabled={!selectedStudentId || !selectedBadgeId || isAssigningBadge}>
+              {isAssigningBadge ? 'Asignando...' : 'Otorgar'}
+            </Button>
+          </div>
+        </div>
         <Table>
           <TableHeader><TableRow><TableHead>Alumno</TableHead><TableHead className="text-right">Calificación</TableHead></TableRow></TableHeader>
           <TableBody>
