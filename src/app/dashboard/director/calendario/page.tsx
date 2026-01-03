@@ -11,7 +11,7 @@ export default function CalendarioPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Calendario Escolar</h1>
+        <h1 className="text-2xl font-bold">Calendario</h1>
         <p className="text-muted-foreground">
           Consulta eventos oficiales y tu agenda personal.
         </p>

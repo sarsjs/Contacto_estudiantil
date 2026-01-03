@@ -230,7 +230,7 @@ export function CalendarPanel({ role, className }: CalendarPanelProps) {
   return (
     <Card className={className}>
       <CardHeader>
-        <CardTitle>Calendario Escolar</CardTitle>
+        <CardTitle>Eventos</CardTitle>
         <CardDescription>Consulta y administra eventos importantes.</CardDescription>
       </CardHeader>
       <CardContent className="grid gap-6 xl:grid-cols-[340px_1fr] items-start">

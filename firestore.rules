@@ -10,6 +10,10 @@ service cloud.firestore {
         (
           get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'orientador' &&
           (resource.data.role == 'estudiante' || resource.data.role == 'alumno')
+        ) ||
+        (
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'profesor' &&
+          (resource.data.role == 'estudiante' || resource.data.role == 'alumno')
         )
       );
 
