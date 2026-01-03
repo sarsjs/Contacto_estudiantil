@@ -8,7 +8,6 @@ import type { Subject } from '@/lib/types';
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from '@/components/ui/button';
 import { BookMarked } from 'lucide-react';
-import { CalendarPanel } from '@/components/dashboard/calendar-panel';
 import { GPSMonitor } from '@/components/dashboard/gps-monitor';
 import { WorkAttendanceTable } from '@/components/dashboard/work-attendance-table';
 
@@ -113,9 +112,6 @@ export default function ProfesorPage() {
             </Link>
           </CardFooter>
         </Card>
-      </div>
-      <div className="grid grid-cols-1 gap-6">
-        <CalendarPanel role="profesor" />
       </div>
       <GPSMonitor />
     </div>

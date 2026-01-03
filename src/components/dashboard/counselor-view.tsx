@@ -50,7 +50,6 @@ import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/context/auth-context';
 import { SecurityAlerts } from './security-alerts';
 import { IdCard } from './id-card';
-import { CalendarPanel } from './calendar-panel';
 import { MessagePanel } from './message-panel';
 import { RealTimeAttendance } from './real-time-attendance';
 import { NotificationPanel } from './notification-panel';
@@ -494,7 +493,6 @@ export function CounselorView({ currentUser }: { currentUser: User }) {
       </div>
 
       <div className="grid grid-cols-1 gap-6">
-        <CalendarPanel role="orientador" />
       </div>
     </div>
   );

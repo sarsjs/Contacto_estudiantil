@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { useAuth } from '@/context/auth-context';
-import { fetchStudentByEmail, fetchTimetableByGroup, fetchSubjects } from '@/lib/firebase/data';
+import { fetchStudentByEmail, fetchTimetableByGroup, fetchSubjects, fetchUserById } from '@/lib/firebase/data';
 import type { TimetableEntry, Student, Subject } from '@/lib/types';
 import { StudentSchedule } from '@/components/dashboard/student-schedule';
 import { Calendar, Clock, MapPin } from 'lucide-react';
@@ -25,7 +25,13 @@ export default function StudentSchedulePage() {
     const loadSchedule = async () => {
       try {
         setLoading(true);
-        const studentRecord = await fetchStudentByEmail(profile.email);
+        let studentRecord = await fetchStudentByEmail(profile.email);
+        if (!studentRecord && profile.id) {
+          const fallback = await fetchUserById(profile.id);
+          if (fallback && (fallback.role === 'estudiante' || fallback.role === 'alumno')) {
+            studentRecord = fallback;
+          }
+        }
 
         if (!studentRecord) {
           setError('No encontramos tu expediente de estudiante.');

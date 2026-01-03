@@ -5,6 +5,7 @@ import { useAuth } from '@/context/auth-context';
 import {
     fetchStudentByEmail,
     fetchGroups,
+    fetchUserById,
 } from '@/lib/firebase/data';
 import type { Student, Group } from '@/lib/types';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -30,9 +31,15 @@ export default function CredencialPage() {
 
     React.useEffect(() => {
         const loadData = async () => {
-            if (!user?.email) return;
+            if (!user) return;
             try {
-                const currentStudent = await fetchStudentByEmail(user.email);
+                let currentStudent = user.email ? await fetchStudentByEmail(user.email) : null;
+                if (!currentStudent && user.id) {
+                    const fallback = await fetchUserById(user.id);
+                    if (fallback && (fallback.role === 'estudiante' || fallback.role === 'alumno')) {
+                        currentStudent = fallback;
+                    }
+                }
                 if (currentStudent) {
                     setStudent(currentStudent);
                     if (currentStudent.groupId) {

@@ -6,7 +6,6 @@ import { StatCard } from './stat-card';
 import { fetchUsers, fetchGroups, fetchStudents, fetchSubjects } from '@/lib/firebase/data';
 import type { Group, User, Student, Subject } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
-import { CalendarPanel } from './calendar-panel';
 import { NotificationPanel } from './notification-panel';
 import { WorkAttendanceTable } from './work-attendance-table';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -228,7 +227,6 @@ export function DirectorView() {
       </div>
 
       <div className="pt-8 border-t border-border">
-        <CalendarPanel role="director" className="w-full shadow-md border-none" />
       </div>
     </div>
   );

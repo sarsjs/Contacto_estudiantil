@@ -17,7 +17,6 @@ import {
 } from 'lucide-react';
 import { StatCard } from '@/components/dashboard/stat-card';
 import { MessagePanel } from '@/components/dashboard/message-panel';
-import { CalendarPanel } from '@/components/dashboard/calendar-panel';
 import { NotificationPanel } from '@/components/dashboard/notification-panel';
 import { RealTimeAttendance } from '@/components/dashboard/real-time-attendance';
 import { useToast } from '@/hooks/use-toast';
@@ -153,9 +152,6 @@ export default function OrientadorPage() {
       </div>
 
       {/* Calendario a pantalla completa o abajo */}
-      <div className="grid grid-cols-1 gap-6">
-        <CalendarPanel role="orientador" />
-      </div>
       <GPSMonitor />
     </div>
   );

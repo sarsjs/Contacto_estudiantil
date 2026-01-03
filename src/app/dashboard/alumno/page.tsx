@@ -8,6 +8,7 @@ import {
   fetchSubjects,
   fetchGradesByStudent,
   fetchUsers,
+  fetchUserById,
   fetchGroups,
   verifyAttendanceToken,
   logActivity
@@ -119,7 +120,13 @@ export default function AlumnoPage() {
 
       try {
         setIsLoading(true);
-        const currentStudent = await fetchStudentByEmail(user.email);
+        let currentStudent = await fetchStudentByEmail(user.email);
+        if (!currentStudent && user.id) {
+          const fallback = await fetchUserById(user.id);
+          if (fallback && (fallback.role === 'estudiante' || fallback.role === 'alumno')) {
+            currentStudent = fallback;
+          }
+        }
         if (!currentStudent) {
           setError('No se encontró tu perfil de estudiante.');
           return;

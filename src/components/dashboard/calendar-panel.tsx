@@ -42,7 +42,8 @@ export function CalendarPanel({ role, className }: CalendarPanelProps) {
   const [visibilitySelection, setVisibilitySelection] = React.useState<CalendarVisibility[]>([]);
   const { toast } = useToast();
 
-  const canAdd = role !== 'estudiante' && role !== 'alumno';
+  const canAdd = true;
+  const canSetVisibility = role !== 'estudiante' && role !== 'alumno';
   const canDelete = role === 'director' || role === 'orientador';
 
   const formatDateKey = React.useCallback((target?: Date) => {
@@ -182,17 +183,18 @@ export function CalendarPanel({ role, className }: CalendarPanelProps) {
 
     setSubmitting(true);
     try {
+      const finalVisibility = canSetVisibility ? visibilitySelection : ['personal'];
       await addEvent({
         title: newTitle.trim(),
         description: newDescription.trim(),
         date: selectedDateKey,
         createdBy: profile.email,
         createdByRole: profile.role,
-        visibility: visibilitySelection,
+        visibility: finalVisibility,
       });
       setNewTitle('');
       setNewDescription('');
-      setVisibilitySelection([]);
+      setVisibilitySelection(canSetVisibility ? [] : ['personal']);
       setReloadKey((prev) => prev + 1);
       toast({
         title: 'Evento agregado',
@@ -293,41 +295,47 @@ export function CalendarPanel({ role, className }: CalendarPanelProps) {
                 />
               </div>
 
-              <div className="space-y-3">
-                <Label className="text-[10px] font-black uppercase text-slate-400 tracking-widest pl-1">Alcance de Visibilidad</Label>
-                <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
-                  {[
-                    { value: 'orientadores', label: 'Orientadores' },
-                    { value: 'maestros', label: 'Maestros' },
-                    { value: 'alumnos', label: 'Alumnos' },
-                    { value: 'todos', label: 'Todos' },
-                  ].map((option) => (
-                    <label
-                      key={option.value}
-                      className="flex items-start gap-2 rounded-xl border border-border bg-background p-3 hover:bg-muted/50 transition-colors shadow-sm cursor-pointer"
-                    >
-                      <Checkbox
-                        checked={visibilitySelection.includes(option.value as CalendarVisibility)}
-                        onCheckedChange={(checked) => {
-                          setVisibilitySelection((prev) => {
-                            const value = option.value as CalendarVisibility;
-                            if (checked) {
-                              return prev.includes(value) ? prev : [...prev, value];
-                            }
-                            return prev.filter((item) => item !== value);
-                          });
-                        }}
-                      />
-                      <div className="flex flex-col">
-                        <span className="text-xs font-bold leading-tight text-slate-700">{option.label}</span>
-                      </div>
-                    </label>
-                  ))}
+              {canSetVisibility ? (
+                <div className="space-y-3">
+                  <Label className="text-[10px] font-black uppercase text-slate-400 tracking-widest pl-1">Alcance de Visibilidad</Label>
+                  <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+                    {[
+                      { value: 'orientadores', label: 'Orientadores' },
+                      { value: 'maestros', label: 'Maestros' },
+                      { value: 'alumnos', label: 'Alumnos' },
+                      { value: 'todos', label: 'Todos' },
+                    ].map((option) => (
+                      <label
+                        key={option.value}
+                        className="flex items-start gap-2 rounded-xl border border-border bg-background p-3 hover:bg-muted/50 transition-colors shadow-sm cursor-pointer"
+                      >
+                        <Checkbox
+                          checked={visibilitySelection.includes(option.value as CalendarVisibility)}
+                          onCheckedChange={(checked) => {
+                            setVisibilitySelection((prev) => {
+                              const value = option.value as CalendarVisibility;
+                              if (checked) {
+                                return prev.includes(value) ? prev : [...prev, value];
+                              }
+                              return prev.filter((item) => item !== value);
+                            });
+                          }}
+                        />
+                        <div className="flex flex-col">
+                          <span className="text-xs font-bold leading-tight text-slate-700">{option.label}</span>
+                        </div>
+                      </label>
+                    ))}
+                  </div>
+                  <p className="text-[10px] text-muted-foreground italic pl-1">
+                    * Si no seleccionas nada, el evento será privado.
+                  </p>
                 </div>
-                <p className="text-[10px] text-muted-foreground italic pl-1">
-                  * Si no seleccionas nada, el evento será privado.
-                </p>
-              </div>
+              ) : (
+                <div className="text-[10px] text-muted-foreground font-medium italic pl-1">
+                  * Solo puedes crear eventos personales.
+                </div>
+              )}
 
               <Button onClick={handleAddEvent} disabled={submitting} className="w-full shadow-lg shadow-primary/20 font-bold uppercase tracking-widest text-[10px] h-10">
                 {submitting ? 'Sincronizando...' : 'Publicar Evento'}

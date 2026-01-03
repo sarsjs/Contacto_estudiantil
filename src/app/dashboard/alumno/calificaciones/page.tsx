@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { useAuth } from '@/context/auth-context';
-import { fetchStudentByEmail, fetchGradesByStudent, fetchSubjects } from '@/lib/firebase/data';
+import { fetchStudentByEmail, fetchGradesByStudent, fetchSubjects, fetchUserById } from '@/lib/firebase/data';
 import type { Grade, Student, Subject } from '@/lib/types';
 import { Card, CardContent } from '@/components/ui/card';
 import { StudentGrades } from '@/components/dashboard/student-grades';
@@ -26,7 +26,13 @@ export default function StudentGradesPage() {
     const loadGrades = async () => {
       try {
         setLoading(true);
-        const studentRecord = await fetchStudentByEmail(profile.email);
+        let studentRecord = await fetchStudentByEmail(profile.email);
+        if (!studentRecord && profile.id) {
+          const fallback = await fetchUserById(profile.id);
+          if (fallback && (fallback.role === 'estudiante' || fallback.role === 'alumno')) {
+            studentRecord = fallback;
+          }
+        }
 
         if (!studentRecord) {
           setError('No encontramos tu expediente académico.');

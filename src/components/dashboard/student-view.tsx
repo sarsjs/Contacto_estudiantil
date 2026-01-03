@@ -22,7 +22,6 @@ import { CheckCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/context/auth-context";
 import { IdCard } from "@/components/dashboard/id-card";
-import { CalendarPanel } from "@/components/dashboard/calendar-panel";
 import { GPSMonitor } from "@/components/dashboard/gps-monitor";
 import {
   fetchStudentByEmail,
@@ -343,9 +342,6 @@ export function StudentView() {
         </CardContent>
       </Card>
 
-      <div className="grid grid-cols-1 gap-6">
-        <CalendarPanel role={profile.role} />
-      </div>
       <GPSMonitor />
     </div>
   );

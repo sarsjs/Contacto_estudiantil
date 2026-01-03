@@ -53,6 +53,7 @@ const navItems = {
     { href: '/dashboard/director/alumnos', icon: GraduationCap, label: 'Alumnos' },
     { href: '/dashboard/director/estructura', icon: School, label: 'Estructura' },
     { href: '/dashboard/director/integridad', icon: ShieldCheck, label: 'Integridad' },
+    { href: '/dashboard/director/calendario', icon: Calendar, label: 'Calendario' },
     { href: '/dashboard/director/horarios', icon: Calendar, label: 'Horarios' },
     { href: '/dashboard/director/bitacora', icon: Clock, label: 'Bitácora' },
     { href: '/dashboard/director/mensajes', icon: MessageSquare, label: 'Mensajes' },
@@ -61,6 +62,7 @@ const navItems = {
     { href: '/dashboard/orientador', icon: Home, label: 'Panel Principal' },
     { href: '/dashboard/orientador/grupo', icon: ClipboardList, label: 'Grupos' },
     { href: '/dashboard/orientador/alumnos', icon: GraduationCap, label: 'Alumnos' },
+    { href: '/dashboard/orientador/calendario', icon: Calendar, label: 'Calendario' },
     { href: '/dashboard/orientador/horarios', icon: Calendar, label: 'Horarios' },
     { href: '/dashboard/orientador/materias', icon: BookCopy, label: 'Materias' },
     { href: '/dashboard/orientador/mensajes', icon: MessageSquare, label: 'Mensajes' },
@@ -69,6 +71,7 @@ const navItems = {
     { href: '/dashboard/profesor', icon: LayoutGrid, label: 'Mis Clases' },
     { href: '/dashboard/profesor/asistencia', icon: ClipboardCheck, label: 'Asistencia' },
     { href: '/dashboard/profesor/calificaciones', icon: GraduationCap, label: 'Calificaciones' },
+    { href: '/dashboard/profesor/calendario', icon: Calendar, label: 'Calendario' },
     { href: '/dashboard/profesor/horario', icon: Calendar, label: 'Mi Horario' },
     { href: '/dashboard/profesor/mensajes', icon: MessageSquare, label: 'Mensajes' },
   ],
@@ -76,6 +79,7 @@ const navItems = {
     { href: '/dashboard/alumno', icon: LayoutGrid, label: 'Panel Principal' },
     { href: '/dashboard/alumno/horario', icon: Calendar, label: 'Mi Horario' },
     { href: '/dashboard/alumno/calificaciones', icon: GraduationCap, label: 'Mis Calificaciones' },
+    { href: '/dashboard/alumno/calendario', icon: Calendar, label: 'Calendario' },
     { href: '/dashboard/alumno/credencial', icon: Contact, label: 'Mi Credencial' },
     { href: '/dashboard/alumno/mensajes', icon: MessageSquare, label: 'Mensajes' },
   ],
@@ -83,6 +87,7 @@ const navItems = {
     { href: '/dashboard/alumno', icon: LayoutGrid, label: 'Panel Principal' },
     { href: '/dashboard/alumno/horario', icon: Calendar, label: 'Mi Horario' },
     { href: '/dashboard/alumno/calificaciones', icon: GraduationCap, label: 'Mis Calificaciones' },
+    { href: '/dashboard/alumno/calendario', icon: Calendar, label: 'Calendario' },
     { href: '/dashboard/alumno/credencial', icon: Contact, label: 'Mi Credencial' },
     { href: '/dashboard/alumno/mensajes', icon: MessageSquare, label: 'Mensajes' },
   ],
@@ -105,7 +110,7 @@ function AppSidebar({ user }: { user: User }) {
   // Dynamic Role Names from Config
   const getLabel = (item: { label: string; href: string }) => {
     if (!config) return item.label;
-    if (item.label === 'Alumnos' || item.label === 'Mis Calificaciones') return config.terminology.alumno + 's';
+    if (item.label === 'Alumnos') return config.terminology.alumno + 's';
     if (item.label === 'Personal') return 'Personal';
     return item.label;
   };
