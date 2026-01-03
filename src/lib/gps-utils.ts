@@ -4,23 +4,23 @@
  */
 export function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
     const R = 6371e3; // Earth radius in meters
-    const 1 = lat1 * Math.PI / 180;
-    const 2 = lat2 * Math.PI / 180;
-    const  = (lat2 - lat1) * Math.PI / 180;
-    const  = (lon2 - lon1) * Math.PI / 180;
+    const phi1 = lat1 * Math.PI / 180;
+    const phi2 = lat2 * Math.PI / 180;
+    const deltaPhi = (lat2 - lat1) * Math.PI / 180;
+    const deltaLambda = (lon2 - lon1) * Math.PI / 180;
 
-    const a = Math.sin( / 2) * Math.sin( / 2) +
-        Math.cos(1) * Math.cos(2) *
-        Math.sin( / 2) * Math.sin( / 2);
+    const a = Math.sin(deltaPhi / 2) * Math.sin(deltaPhi / 2) +
+        Math.cos(phi1) * Math.cos(phi2) *
+        Math.sin(deltaLambda / 2) * Math.sin(deltaLambda / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
     return R * c; // Distance in meters
 }
 
 export const SCHOOL_LOCATION = {
-    latitude: 19.4326, // Coordenadas de ejemplo
+    latitude: 19.4326, // Example coordinates
     longitude: -99.1332,
-    radius: 150, // Perímetro de 150 metros
+    radius: 150, // Perimeter in meters
     name: "Plantel Educativo"
 };
 
@@ -54,31 +54,27 @@ export async function verifyUserLocation(
 
     const isInside = distance <= targetRadius;
 
-    // --- Heurísticas Anti-Spoofing ---
+    // --- Anti-spoofing heuristics ---
     let isMocked = false;
     let confidence: 'high' | 'medium' | 'low' = 'high';
 
-    // 1. Precisión sospechosa (Accuracy <= 0 es imposible en dispositivos reales por hardware)
-    // También, si la precisión es EXACTAMENTE un número entero pequeño como 1 o 5 consistentemente, suele ser señal de Mock.
+    // 1. Suspicious precision (accuracy <= 1 is unrealistic on real devices)
     if (accuracy <= 1) {
         isMocked = true;
         confidence = 'low';
     }
 
-    // 2. Velocidad imposible (Si se mueve a más de 120km/h dentro o cerca de la escuela)
+    // 2. Impossible speed (over ~120 km/h near the school)
     if (speed && speed > 33.3) { // 33.3 m/s = ~120 km/h
         isMocked = true;
         confidence = 'medium';
     }
-
-    // 3. Verificación de entorno de ejecución (Solo si logramos detectar indicios de emulación)
-    // En una PWA/Navegador es limitado, pero podemos checar si el sensor de movimiento está muerto mientras hay "movimiento" GPS.
 
     return {
         isInside,
         distance,
         isMocked,
         confidence,
-        error: isMocked ? "Se detectó el uso de una ubicación simulada" : undefined
+        error: isMocked ? "Se detecto el uso de una ubicacion simulada" : undefined
     };
 }
