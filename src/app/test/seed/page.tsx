@@ -142,7 +142,7 @@ export default function SeederPage() {
                             groupId: groupId,
                             matricula: matricula,
                             curp: `CURP${matricula}MX`,
-                            avatarUrl: avatarUrl, // ✅ Foto para credencial
+                            avatarUrl: avatarUrl, //  Foto para credencial
                             status: 'activo',
                             valid_from: '2024-08-01',
                             valid_to: '2025-07-31',
@@ -206,12 +206,12 @@ export default function SeederPage() {
                 </CardHeader>
                 <CardContent className="space-y-6">
                     <div className="bg-white border rounded-lg p-4 text-sm font-mono space-y-2">
-                        <p>• 1 Director</p>
-                        <p>• {COUNSELORS.length} Orientadores</p>
-                        <p>• {TEACHERS.length} Profesores (1 por materia)</p>
-                        <p>• {SEMESTERS * GROUPS_PER_SEMESTER} Grupos (1-1 a 6-2)</p>
-                        <p>• ~360 Estudiantes (28-35 por grupo)</p>
-                        <p>• Horarios Especiales: Sem 5-6 con turnos variables</p>
+                        <p> 1 Director</p>
+                        <p> {COUNSELORS.length} Orientadores</p>
+                        <p> {TEACHERS.length} Profesores (1 por materia)</p>
+                        <p> {SEMESTERS * GROUPS_PER_SEMESTER} Grupos (1-1 a 6-2)</p>
+                        <p> ~360 Estudiantes (28-35 por grupo)</p>
+                        <p> Horarios Especiales: Sem 5-6 con turnos variables</p>
                         <p className="text-xs text-gray-500 mt-2">Materias: {SUBJECTS_LIST.join(', ')}</p>
                     </div>
 

@@ -109,7 +109,7 @@ export function NotificationPanel({ className, integrityAlerts = [] }: Notificat
     const text = content.toLowerCase();
     if (text.includes('gps') || text.includes('fuera') || text.includes('cerca')) return <MapPin className="h-4 w-4 text-orange-500" />;
     if (text.includes('profesor') || text.includes('clase') || text.includes('tarde')) return <Clock className="h-4 w-4 text-blue-500" />;
-    if (text.includes('integrid') || text.includes('🚨')) return <ShieldAlert className="h-4 w-4 text-red-600 animate-pulse" />;
+    if (text.includes('integrid') || text.includes('')) return <ShieldAlert className="h-4 w-4 text-red-600 animate-pulse" />;
     if (text.includes('error') || text.includes('alerta')) return <ShieldAlert className="h-4 w-4 text-red-500" />;
     return <Info className="h-4 w-4 text-gray-500" />;
   };
@@ -155,7 +155,7 @@ export function NotificationPanel({ className, integrityAlerts = [] }: Notificat
                     </div>
                     <div className="flex justify-between items-center pt-1">
                       <span className="text-[10px] font-black text-red-400 tracking-wider font-mono">
-                        SISTEMA • TIEMPO REAL
+                        SISTEMA  TIEMPO REAL
                       </span>
                       <Badge className="bg-red-600 text-[9px] uppercase font-black px-2 py-0 h-5">
                         CRÍTICO

@@ -30,26 +30,26 @@ export function DirectorView() {
     // 1. Alumnos sin grupo
     const studentsWithoutGroup = students.filter(s => !s.groupId || s.groupId === 'none' || s.groupId === '');
     if (studentsWithoutGroup.length > 0) {
-      alerts.push(`🚨 INTEGRIDAD: Hay ${studentsWithoutGroup.length} alumnos sin grupo asignado.`);
+      alerts.push(` INTEGRIDAD: Hay ${studentsWithoutGroup.length} alumnos sin grupo asignado.`);
     }
 
     // 2. Grupos sin orientador
     const groupsWithoutCounselor = groups.filter(g => !g.counselorId);
     if (groupsWithoutCounselor.length > 0) {
-      alerts.push(`🚨 INTEGRIDAD: ${groupsWithoutCounselor.length} grupos no tienen orientador.`);
+      alerts.push(` INTEGRIDAD: ${groupsWithoutCounselor.length} grupos no tienen orientador.`);
     }
 
     // 3. Materias sin profesor
     const subjectsWithoutTeacher = subjects.filter(s => !s.teacherId);
     if (subjectsWithoutTeacher.length > 0) {
-      alerts.push(`🚨 INTEGRIDAD: ${subjectsWithoutTeacher.length} materias no tienen profesor.`);
+      alerts.push(` INTEGRIDAD: ${subjectsWithoutTeacher.length} materias no tienen profesor.`);
     }
 
     // 4. Grupos vacíos
     const groupsWithStudents = new Set(students.map(s => s.groupId).filter(Boolean));
     const emptyGroups = groups.filter(g => !groupsWithStudents.has(g.id));
     if (emptyGroups.length > 0) {
-      alerts.push(`⚠️ AVISO: ${emptyGroups.length} grupo(s) no tienen alumnos inscritos.`);
+      alerts.push(` AVISO: ${emptyGroups.length} grupo(s) no tienen alumnos inscritos.`);
     }
 
     setIntegrityAlerts(alerts);
@@ -124,7 +124,7 @@ export function DirectorView() {
     <div className="space-y-8 max-w-[1600px] mx-auto">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-black tracking-tighter text-foreground uppercase">ADMINISTRACIÓN CENTRAL 🏢</h1>
+          <h1 className="text-3xl font-black tracking-tighter text-foreground uppercase">ADMINISTRACIÓN CENTRAL </h1>
           <p className="text-muted-foreground font-medium uppercase text-xs tracking-widest">Panel de Control Estratégico EPO 264</p>
         </div>
         <div className="px-4 py-2 bg-primary/10 rounded-full border border-primary/20">

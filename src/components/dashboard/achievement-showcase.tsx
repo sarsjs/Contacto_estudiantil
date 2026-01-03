@@ -172,7 +172,7 @@ export function AchievementShowcase({ xp = 0, level = 1, unlockedBadges = [], us
                             <div className="flex justify-between items-end">
                                 <div>
                                     <h3 className="text-2xl font-black tracking-tight uppercase">Nivel de Prestigio</h3>
-                                    <p className="text-sm text-slate-400 font-medium italic">Estudiante Erudito ✨</p>
+                                    <p className="text-sm text-slate-400 font-medium italic">Estudiante Erudito </p>
                                 </div>
                                 <div className="text-right">
                                     <p className="text-xs font-black text-primary uppercase tracking-widest">{xp} / {nextLevelXp} XP</p>

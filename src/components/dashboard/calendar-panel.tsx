@@ -377,10 +377,10 @@ export function CalendarPanel({ role, className }: CalendarPanelProps) {
                           <p className="font-black text-foreground tracking-tight">{event.title}</p>
                           <Badge variant="secondary" className="text-[9px] uppercase font-black bg-muted text-muted-foreground border-none px-2 h-4">
                             {audience.includes('todos')
-                              ? '🌎 Público'
+                              ? ' Público'
                               : audience.includes('personal')
-                                ? '🔒 Privado'
-                                : `👥 ${audience
+                                ? ' Privado'
+                                : ` ${audience
                                   .map((value) => {
                                     if (value === 'orientadores') return 'Orientadores';
                                     if (value === 'maestros') return 'Maestros';

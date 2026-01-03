@@ -122,7 +122,7 @@ export function CounselorClassControl({ groupId, groupName }: CounselorClassCont
                             <Badge variant="outline" className="bg-amber-100 text-amber-700 border-amber-200 uppercase text-[10px] font-bold">En Curso</Badge>
                             <CardTitle className="text-lg">{subjectInfo?.name || "Clase actual"}</CardTitle>
                         </div>
-                        <CardDescription>{currentClass.time} • Prof. {teacherInfo?.name || "Asignado"}</CardDescription>
+                        <CardDescription>{currentClass.time}  Prof. {teacherInfo?.name || "Asignado"}</CardDescription>
                     </div>
                 </div>
             </CardHeader>

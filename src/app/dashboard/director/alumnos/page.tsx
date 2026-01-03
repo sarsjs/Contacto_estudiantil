@@ -398,7 +398,7 @@ export default function AlumnosPage() {
                   : 'bg-orange-100 text-orange-700 hover:bg-orange-200'
                   }`}
               >
-                ⚠️ Sin Grupo <span className="ml-1.5 opacity-75">({unassignedCount})</span>
+                 Sin Grupo <span className="ml-1.5 opacity-75">({unassignedCount})</span>
               </button>
             )}
             {groupList.map(group => {
@@ -423,7 +423,7 @@ export default function AlumnosPage() {
           {filterGroup === 'unassigned' && (
             <div className="mb-4 p-4 bg-orange-50 border-l-4 border-orange-500 rounded-lg">
               <div className="flex items-center gap-2">
-                <span className="text-2xl">⚠️</span>
+                <span className="text-2xl"></span>
                 <div>
                   <p className="font-bold text-orange-900">
                     Mostrando {filteredStudents.length} alumno(s) sin grupo asignado

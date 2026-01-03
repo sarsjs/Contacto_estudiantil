@@ -186,7 +186,7 @@ export default function AlumnoPage() {
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-black tracking-tighter text-foreground">Hola, {student?.name?.split(' ')[0] || 'Estudiante'} 👋</h1>
+          <h1 className="text-3xl font-black tracking-tighter text-foreground">Hola, {student?.name?.split(' ')[0] || 'Estudiante'} </h1>
           <p className="text-muted-foreground font-medium">{config?.institutionName || 'Panel Académico Institucional EPO 264'}</p>
         </div>
         <div className="flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full border border-primary/20">

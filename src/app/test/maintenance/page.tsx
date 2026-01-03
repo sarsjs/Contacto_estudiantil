@@ -171,10 +171,10 @@ export default function MaintenancePage() {
                             <strong>Nota:</strong> Estas acciones son permanentes.
                         </p>
                         <p className="text-[10px] text-blue-700 leading-relaxed italic">
-                            ⚠️ <strong>Estatus de colecciones críticas:</strong>
-                            <br />• <strong>securityAlerts:</strong> MANTENER (Usada para alertas de GPS y seguimiento de permanencia).
-                            <br />• <strong>activity_logs:</strong> MANTENER (Sistema de auditoría universal que acabamos de implementar).
-                            <br />• <strong>users:</strong> PROTEGIDO (Contiene a todos los alumnos, profesores y directivos).
+                             <strong>Estatus de colecciones críticas:</strong>
+                            <br /> <strong>securityAlerts:</strong> MANTENER (Usada para alertas de GPS y seguimiento de permanencia).
+                            <br /> <strong>activity_logs:</strong> MANTENER (Sistema de auditoría universal que acabamos de implementar).
+                            <br /> <strong>users:</strong> PROTEGIDO (Contiene a todos los alumnos, profesores y directivos).
                         </p>
                     </div>
                 </CardContent>

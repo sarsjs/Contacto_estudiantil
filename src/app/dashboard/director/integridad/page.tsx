@@ -263,7 +263,7 @@ export default function IntegrityDashboard() {
                                                     </summary>
                                                     <ul className="mt-2 ml-4 space-y-1 text-sm">
                                                         {issue.details.slice(0, 10).map((detail, i) => (
-                                                            <li key={i} className="text-muted-foreground">• {detail}</li>
+                                                            <li key={i} className="text-muted-foreground"> {detail}</li>
                                                         ))}
                                                         {issue.details.length > 10 && (
                                                             <li className="text-muted-foreground italic">

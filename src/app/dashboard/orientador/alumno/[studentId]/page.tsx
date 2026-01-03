@@ -34,19 +34,19 @@ export default function StudentDetailPage() {
     const loadData = async () => {
       try {
         setIsLoading(true);
-        
+
         const [allStudents, allGroups, studentGrades, allSubjects, studentAttendance] = await Promise.all([
-            fetchStudents(),
-            fetchGroups(),
-            fetchGradesByStudent(studentId),
-            fetchSubjects(),
-            fetchAttendanceByStudent(studentId)
+          fetchStudents(),
+          fetchGroups(),
+          fetchGradesByStudent(studentId),
+          fetchSubjects(),
+          fetchAttendanceByStudent(studentId)
         ]);
 
         const currentStudent = allStudents.find(s => s.id === studentId);
         if (!currentStudent) {
-            setError("No se encontró al estudiante.");
-            return;
+          setError("No se encontró al estudiante.");
+          return;
         }
 
         const currentGroup = allGroups.find(g => g.id === currentStudent.groupId) || null;
@@ -82,19 +82,19 @@ export default function StudentDetailPage() {
 
   return (
     <div className="space-y-6">
-        <div className="flex items-center gap-4">
-            <Button variant="outline" size="icon" onClick={() => router.back()}>
-                <ArrowLeft className="h-4 w-4" />
-            </Button>
-            <div>
-                <h1 className="text-2xl font-bold">Perfil de: {student.name}</h1>
-                <p className="text-muted-foreground">Grupo: {group?.name || 'No asignado'}</p>
-            </div>
+      <div className="flex items-center gap-4">
+        <Button variant="outline" size="icon" onClick={() => router.back()}>
+          <ArrowLeft className="h-4 w-4" />
+        </Button>
+        <div>
+          <h1 className="text-2xl font-bold">Perfil de: {student.name}</h1>
+          <p className="text-muted-foreground">Grupo: {group?.name || 'No asignado'}</p>
+        </div>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
-          <StudentGrades grades={grades} subjects={subjects} />
-          <StudentAttendanceHistory attendanceRecords={attendance} subjects={subjects} />
+        <StudentGrades grades={grades} subjects={subjects} />
+        <StudentAttendanceHistory attendanceRecords={attendance} subjects={subjects} />
       </div>
 
     </div>

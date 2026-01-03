@@ -401,7 +401,7 @@ export default function OrientadorAlumnosPage() {
                                     : 'bg-orange-100 text-orange-700 hover:bg-orange-200'
                                     }`}
                             >
-                                ⚠️ Sin Grupo <span className="ml-1.5 opacity-75">({unassignedCount})</span>
+                                 Sin Grupo <span className="ml-1.5 opacity-75">({unassignedCount})</span>
                             </button>
                         )}
                         {groupList.map(group => {
@@ -426,7 +426,7 @@ export default function OrientadorAlumnosPage() {
                     {filterGroup === 'unassigned' && (
                         <div className="mb-4 p-4 bg-orange-50 border-l-4 border-orange-500 rounded-lg animate-in fade-in slide-in-from-top-2 duration-300">
                             <div className="flex items-center gap-2">
-                                <span className="text-2xl">⚠️</span>
+                                <span className="text-2xl"></span>
                                 <div>
                                     <p className="font-bold text-orange-900">
                                         Mostrando {filteredStudents.length} alumno(s) sin grupo asignado
@@ -592,7 +592,7 @@ export default function OrientadorAlumnosPage() {
                             <CardFooter className="flex-col items-start gap-4">
                                 {bulkResult.successCount > 0 && (
                                     <div className="w-full p-4 bg-green-50 border border-green-100 rounded-lg text-green-700 text-sm">
-                                        ✅ Importación exitosa: <strong>{bulkResult.successCount}</strong> alumnos registrados.
+                                         Importación exitosa: <strong>{bulkResult.successCount}</strong> alumnos registrados.
                                     </div>
                                 )}
                                 {bulkResult.errors.length > 0 && (

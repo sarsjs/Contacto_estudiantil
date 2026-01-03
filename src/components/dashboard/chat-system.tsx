@@ -378,7 +378,7 @@ function ContactItem({ user, selected, groupName, onClick }: { user: User, selec
                     </span>
                     {groupName && (
                         <>
-                            <span className="text-[9px] text-slate-300">•</span>
+                            <span className="text-[9px] text-slate-300"></span>
                             <span className="text-[9px] text-blue-600 font-bold uppercase truncate">
                                 {groupName}
                             </span>
