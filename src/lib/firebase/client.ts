@@ -7,13 +7,13 @@ import { getStorage, type FirebaseStorage } from "firebase/storage";
 // Configuración pública del proyecto de Firebase. Se usa como respaldo
 // Configuración pública del proyecto de Firebase. Se usa como respaldo
 const fallbackFirebaseConfig: FirebaseOptions = {
-  apiKey: "",
-  authDomain: "",
-  projectId: "",
-  storageBucket: "",
-  messagingSenderId: "",
-  appId: "",
-  measurementId: "",
+  apiKey: "AIzaSyBY6aSJYqeX2QsucoagDOg8ZkAu06gEu7k",
+  authDomain: "contacto-estudiantil.firebaseapp.com",
+  projectId: "contacto-estudiantil",
+  storageBucket: "contacto-estudiantil.firebasestorage.app",
+  messagingSenderId: "1054384089954",
+  appId: "1:1054384089954:web:8898446e0c65214b039a3b",
+  measurementId: "G-109KM3955D",
 };
 
 // Use environment variables when available, else fallback config.
