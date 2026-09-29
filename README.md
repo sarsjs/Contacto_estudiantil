@@ -60,3 +60,4 @@ npm run log-progress -- "Área" "Resumen corto" "Pendiente opcional"
 ```
 
 El script genera la marca de tiempo actual (`dd/mm/yyyy hh:mm`, horario local) y conserva el registro como parte viva del documento.
+# Educhain_v1.0
